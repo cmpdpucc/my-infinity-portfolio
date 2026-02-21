@@ -1,0 +1,85 @@
+@use '../colors' as *;
+@use '../tokens' as *;
+
+.pf-mobile-nav {
+  display: none; // Hidden on desktop
+
+  @media (max-width: 64em) {
+    display: block;
+    position: fixed;
+    bottom: space(lg);
+    left: 1rem;
+    right: 1rem;
+    margin: 0 auto;
+    width: auto;
+    max-width: 400px;
+    z-index: 50;
+    
+    // Glassmorphism specs from ui-ux-pro-max
+    background: rgba(15, 23, 42, 0.85); // darker slate-900 with opacity
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    padding: 0.25rem 0.5rem; // thiner outer padding
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.5);
+  }
+
+  &__list {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  &__button {
+    position: relative;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    font-family: inherit;
+    padding: 0.5rem 0.25rem; // reduced horizontal padding
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    transition: color 200ms ease;
+    z-index: 2;
+
+    &--active {
+      color: var(--color-text);
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  &__active-bg {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.1); // subtle highlight
+    border-radius: 9999px;
+    z-index: -1;
+  }
+}

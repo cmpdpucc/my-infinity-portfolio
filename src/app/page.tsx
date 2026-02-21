@@ -4,6 +4,7 @@ import React from "react";
 import Spotlight from "@/components/Spotlight";
 import ClickSpark from "@/components/ClickSpark";
 import Sidebar from "@/components/Sidebar";
+import MobileNav from "@/components/MobileNav";
 import { SECTIONS } from "@/data/sections.data";
 import { useScrollSpy } from "@/hooks/useScrollSpy";
 import { useDiscreteScroll } from "@/hooks/useDiscreteScroll";
@@ -38,6 +39,9 @@ export default function Home() {
         <div className="pf-layout">
           {/* LEFT: Fixed Sidebar — nav generated from sections list */}
           <Sidebar sections={SECTIONS} activeSectionId={activeSectionId} />
+          
+          {/* BOTTOM: Floating mobile nav (< 1024px) */}
+          <MobileNav sections={SECTIONS} activeSectionId={activeSectionId} />
 
           {/* RIGHT: Scroll container — one fullscreen section per item */}
           <div className="pf-scroll-container" id="scroll-container">

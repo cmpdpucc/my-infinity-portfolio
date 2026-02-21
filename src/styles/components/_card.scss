@@ -22,7 +22,7 @@
 // =====================================
 .pf-spotlight-card {
   position: relative;
-  border-radius: 12px;
+  border-radius: 0.75rem; // 12px
   border: 1px solid var(--color-border);
   background-color: var(--color-surface);
   padding: 1.5rem;
@@ -38,7 +38,7 @@
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     background: radial-gradient(
-      circle 400px at var(--mouse-x) var(--mouse-y),
+      circle 25rem at var(--mouse-x) var(--mouse-y),
       var(--spotlight-color),
       transparent 80%
     );
@@ -50,7 +50,7 @@
 
   &:hover {
     border-color: rgba(59, 130, 246, 0.4);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3); // 8px 32px
 
     &::before { opacity: 1; }
   }
