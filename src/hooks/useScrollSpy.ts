@@ -1,34 +1,48 @@
 import { useState, useEffect } from "react";
 
-export function useScrollSpy(selectors: string[], offset: number = 0) {
-  const [activeId, setActiveId] = useState<string>("");
+/**
+ * useScrollSpy
+ *
+ * Tracks which section is currently visible using IntersectionObserver.
+ * Works with an inner scrollable container (pf-scroll-container) rather
+ * than the window scroll, which is needed for the 100vh snap layout.
+ *
+ * @param sectionIds - Array of section IDs (without #) to observe
+ * @param containerId - ID of the scrollable container div (default: "scroll-container")
+ */
+export function useScrollSpy(
+  sectionIds: string[],
+  containerId: string = "scroll-container"
+): string {
+  const [activeId, setActiveId] = useState<string>(sectionIds[0] ?? "");
 
   useEffect(() => {
-    const handleScroll = () => {
-      let currentActiveId = selectors[0].replace("#", "");
+    // Strip leading # if any
+    const ids = sectionIds.map(id => id.replace(/^#/, ""));
+    if (ids.length === 0) return;
 
-      // Loop al contrario per trovare la sezione più in basso che ha sorpassato la soglia critica
-      for (let i = selectors.length - 1; i >= 0; i--) {
-        const element = document.querySelector(selectors[i]);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= window.innerHeight * 0.3) {
-            currentActiveId = element.id;
-            break;
-          }
+    const observerOptions: IntersectionObserverInit = {
+      root: document.getElementById(containerId) ?? null,
+      rootMargin: "0px",
+      threshold: 0.5, // section must be 50% visible to be "active"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveId(entry.target.id);
         }
-      }
+      });
+    }, observerOptions);
 
-      setActiveId(currentActiveId);
-    };
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Init
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [selectors, offset]);
+    return () => observer.disconnect();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [containerId, sectionIds.join(",")]);
 
   return activeId;
 }

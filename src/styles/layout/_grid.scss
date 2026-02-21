@@ -1,68 +1,127 @@
 @use '../colors' as *;
 @use '../tokens' as *;
 
+// ===================================================
+// ROOT LAYOUT: Sidebar (fixed) + Scroll Container
+// ===================================================
 .pf-layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden; // layout itself doesn't scroll
+  max-width: 1400px;
   margin: 0 auto;
-  max-width: 1280px;
-  padding: 0 space(xl);
 
   @media (max-width: 1024px) {
     flex-direction: column;
-    padding: 0 space(md);
-  }
-
-  &__sidebar {
-    position: sticky;
-    top: 0;
-    max-height: 100vh;
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: space(3xl) 0;
-
-    @media (max-width: 1024px) {
-      position: relative;
-      width: 100%;
-      max-height: auto;
-      padding: space(xl) 0;
-    }
-  }
-
-  &__content {
-    width: 50%;
-    min-height: 60vh;
-    padding: space('3xl') 0 40vh 0;
-
-    @media (max-width: 1024px) {
-      width: 100%;
-      padding: space('xl') 0 20vh 0;
-    }
+    height: auto;
+    overflow: visible;
   }
 }
 
-.pf-section {
-  min-height: 60vh;
-  margin-bottom: 6rem; /* 96px */
-  scroll-margin-top: 4rem; /* 64px */
+// ===================================================
+// SIDEBAR — fixed left column, 100vh tall
+// ===================================================
+.pf-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 45%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: space(3xl) space(xl);
+  overflow: hidden;
 
-  @media (max-width: 1024px) {
-    margin-bottom: 4rem; /* 64px */
-    scroll-margin-top: 4rem;
+  &__identity {
+    flex: 1;
   }
 
-  &__title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-text);
-    margin-bottom: space(md);
-    
-    @media (min-width: 1025px) {
-      display: none;
-    }
+  @media (max-width: 1024px) {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: space(xl) space(md);
+  }
+}
+
+// ===================================================
+// SCROLL CONTAINER — right column, 100vh per section
+// ===================================================
+.pf-scroll-container {
+  flex: 1;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  // hide native scrollbar
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+
+  @media (max-width: 1024px) {
+    height: auto;
+    overflow-y: visible;
+    scroll-snap-type: none;
+  }
+}
+
+// ===================================================
+// SCROLL SECTION — each section = 100vh
+// ===================================================
+.pf-scroll-section {
+  height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+
+  @media (max-width: 1024px) {
+    height: auto;
+    min-height: 60vh;
+    padding: space(xl) 0;
+  }
+}
+
+// ===================================================
+// SECTION CONTENT — padded inner container
+// ===================================================
+.pf-section-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: space(3xl) space(xl) space(3xl) 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  // Scrollable variant: when section's own content is taller than 100vh
+  &--scrollable {
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding-top: space(3xl);
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  @media (max-width: 1024px) {
+    padding: space(xl) space(md);
+  }
+}
+
+// ===================================================
+// LEGACY — section title (only shown mobile, sidebar hides it on desktop)
+// ===================================================
+.pf-section__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text);
+  margin-bottom: space(md);
+
+  @media (min-width: 1025px) {
+    display: none;
   }
 }
