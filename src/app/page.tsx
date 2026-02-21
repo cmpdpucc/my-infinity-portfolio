@@ -138,10 +138,23 @@ export default function Home() {
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ delay: 0.1 }}
                >
-                 <PixelCard 
-                    image="https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=1000&auto=format&fit=crop" 
-                    title="Omni IDE"
-                    description="A futuristic development environment with integrated sub-agents visualizing live architecture constraints."
+                 <ExpandableCard
+                   title="Omni IDE"
+                   subtitle="AI-Powered Development Environment"
+                   tags={["React", "WebGL", "Three.js", "Framer Motion", "WebSockets"]}
+                   details={
+                     <>
+                       <p style={{ marginBottom: "1rem" }}>
+                         Omni IDE is a next-generation development environment that breaks the boundary between code and architecture visualization. Built from scratch with a WebGL-powered canvas as its core, the IDE renders live dependency graphs, component trees, and data flows in 3D space.
+                       </p>
+                       <p style={{ marginBottom: "1rem" }}>
+                         The standout feature is the integrated AI subagent layer: multiple language models run in parallel as specialized agents, each responsible for a different domain (security analysis, performance profiling, accessibility checks) and feed their findings directly into the canvas as interactive annotations.
+                       </p>
+                       <p>
+                         This project showcases deep expertise in React architecture, real-time rendering pipelines, and human-AI collaborative interfaces — pushing the browser to its absolute limit.
+                       </p>
+                     </>
+                   }
                  />
                </motion.div>
                <motion.div
@@ -150,10 +163,23 @@ export default function Home() {
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ delay: 0.2 }}
                >
-                 <PixelCard 
-                    image="https://images.unsplash.com/photo-1629815413123-f3c5ad8043ac?q=80&w=1000&auto=format&fit=crop" 
-                    title="Orbita Trip Planner"
-                    description="Bespoke travel platform using Flowise parsing nodes and Next.js App Router for real-time booking."
+                 <ExpandableCard
+                   title="Orbita Trip Planner"
+                   subtitle="AI-Driven Bespoke Travel Platform"
+                   tags={["Next.js", "Flowise", "Supabase", "Zod", "tRPC", "OpenRouter"]}
+                   details={
+                     <>
+                       <p style={{ marginBottom: "1rem" }}>
+                         Orbita transforms trip planning from a browsing exercise into a fully guided, AI-mediated conversation. The user simply describes their ideal journey — style, budget, vibes — and Orbita's parser agents distill this into a structured, bookable itinerary in seconds.
+                       </p>
+                       <p style={{ marginBottom: "1rem" }}>
+                         Under the hood, a custom Flowise-based flow orchestrates specialized agents: one curates experiences, one cross-checks live pricing, and a third handles multi-leg booking logic with disruption management fallbacks.
+                       </p>
+                       <p>
+                         The frontend is a meticulously designed Next.js App Router SPA with glassmorphism UI, real-time streaming responses, and a KYC/verified user system backed by Supabase Auth and Row Level Security.
+                       </p>
+                     </>
+                   }
                  />
                </motion.div>
             </div>
