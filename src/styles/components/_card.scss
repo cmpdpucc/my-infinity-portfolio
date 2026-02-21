@@ -1,0 +1,18 @@
+@use '../colors' as *;
+@use '../tokens' as *;
+
+.pf-card {
+  background: var(--color-surface);
+  border-radius: radius(md);
+  padding: space(lg);
+  box-shadow: var(--shadow-md);
+  transition: all 200ms ease;
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+
+  &:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+    border-color: var(--color-primary);
+  }
+}

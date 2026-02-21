@@ -1,0 +1,40 @@
+@use 'colors';
+@use 'tokens';
+@use 'theme';
+@use 'layout/grid';
+@use 'components/button';
+@use 'components/card';
+@use 'components/page';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-sans), "DM Sans", sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif), "Space Grotesk", sans-serif;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background-color: rgba(59, 130, 246, 0.3); // Primary color tailwind blue equivalent
+  color: var(--color-text);
+}

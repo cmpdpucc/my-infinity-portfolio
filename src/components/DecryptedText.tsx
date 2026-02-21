@@ -47,7 +47,7 @@ export default function DecryptedText({ text, speed = 50 }: { text: string; spee
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="inline-block"
+      className="pf-decrypted-text"
     >
       {displayText}
     </motion.span>

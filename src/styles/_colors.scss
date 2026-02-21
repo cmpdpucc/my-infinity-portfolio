@@ -1,0 +1,14 @@
+$ux-colors: (
+  primary: #3B82F6,
+  secondary: #1E293B,
+  cta: #2563EB,
+  background: #0F172A,
+  text: #F1F5F9,
+  text-muted: #94A3B8,
+  surface: #1E293B,
+  border: #334155,
+);
+
+@function color($name) {
+  @return map-get($ux-colors, $name);
+}

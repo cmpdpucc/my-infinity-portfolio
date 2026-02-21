@@ -27,10 +27,10 @@ export default function Spotlight() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-30 transition duration-300 lg:absolute"
+      className="pf-spotlight"
       style={{
         opacity,
-        background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(20, 184, 166, 0.08), transparent 80%)`,
+        background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(37, 99, 235, 0.08), transparent 80%)`,
       }}
     />
   );

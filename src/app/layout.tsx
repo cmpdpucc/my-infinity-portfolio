@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
-import "./globals.css";
+import { DM_Sans, Space_Grotesk } from "next/font/google";
+import "../styles/main.scss";
 
-const inter = Inter({
-  variable: "--font-inter",
+const dmSans = DM_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-serif",
   subsets: ["latin"],
 });
 
@@ -23,10 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${inter.variable} ${playfair.variable} antialiased bg-black text-white font-sans selection:bg-teal-500/30`}
-      >
+    <html lang="en">
+      <body className={`${dmSans.variable} ${spaceGrotesk.variable}`}>
         {children}
       </body>
     </html>

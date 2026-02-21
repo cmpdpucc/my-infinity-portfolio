@@ -1,0 +1,14 @@
+@use 'colors' as *;
+@use 'tokens' as *;
+
+:root {
+  @each $name, $val in $ux-colors {
+    --color-#{$name}: #{$val};
+  }
+  @each $name, $val in $ux-spacing {
+    --space-#{$name}: #{$val};
+  }
+  @each $name, $val in $ux-shadows {
+    --shadow-#{$name}: #{$val};
+  }
+}

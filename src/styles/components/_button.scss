@@ -1,0 +1,37 @@
+@use '../colors' as *;
+@use '../tokens' as *;
+
+.pf-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: space(sm) space(lg);
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 200ms ease;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+
+  &--primary {
+    background: var(--color-cta);
+    color: white;
+
+    &:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+  }
+
+  &--secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+
+    &:hover {
+      background: rgba(59, 130, 246, 0.1);
+      transform: translateY(-1px);
+    }
+  }
+}
