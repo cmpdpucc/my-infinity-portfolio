@@ -1,11 +1,17 @@
+"use client";
+
 import React from "react";
 import Spotlight from "@/components/Spotlight";
 import DecryptedText from "@/components/DecryptedText";
 import Magnet from "@/components/Magnet";
 import InfiniteScroll from "@/components/InfiniteScroll";
 import PixelCard from "@/components/PixelCard";
+import { useScrollSpy } from "@/hooks/useScrollSpy";
+import { Github, Linkedin, Code } from "lucide-react";
 
 export default function Home() {
+  const activeSection = useScrollSpy(["#about", "#experience", "#projects"], 100);
+
   return (
     <div className="pf-page">
       <Spotlight />
@@ -25,23 +31,29 @@ export default function Home() {
               I build pixel-perfect, engaging, and accessible digital experiences.
             </p>
             
+            <div style={{ marginTop: "var(--space-md)" }}>
+                 <button className="pf-button pf-button--primary">
+                     <span style={{ marginRight: "var(--space-sm)" }}>Download Resume</span>
+                 </button>
+            </div>
+
             {/* Nav */}
             <nav className="pf-page__nav" aria-label="In-page jump links">
               <ul className="pf-page__nav-list">
                 <li>
-                  <a className="pf-page__nav-link" href="#about">
+                  <a className={`pf-page__nav-link ${activeSection === 'about' ? 'pf-page__nav-link--active' : ''}`} href="#about">
                     <span className="pf-page__nav-indicator"></span>
                     <span className="pf-page__nav-text">About</span>
                   </a>
                 </li>
                 <li>
-                  <a className="pf-page__nav-link" href="#experience">
+                  <a className={`pf-page__nav-link ${activeSection === 'experience' ? 'pf-page__nav-link--active' : ''}`} href="#experience">
                     <span className="pf-page__nav-indicator"></span>
                     <span className="pf-page__nav-text">Experience</span>
                   </a>
                 </li>
                 <li>
-                  <a className="pf-page__nav-link" href="#projects">
+                  <a className={`pf-page__nav-link ${activeSection === 'projects' ? 'pf-page__nav-link--active' : ''}`} href="#projects">
                     <span className="pf-page__nav-indicator"></span>
                     <span className="pf-page__nav-text">Projects</span>
                   </a>
@@ -52,9 +64,9 @@ export default function Home() {
           
           {/* Social Links */}
           <ul className="pf-page__social" aria-label="Social media">
-            <li><Magnet>Github</Magnet></li>
-            <li><Magnet>LinkedIn</Magnet></li>
-            <li><Magnet>CodePen</Magnet></li>
+            <li><Magnet><a href="#" aria-label="Github"><Github size={24} /></a></Magnet></li>
+            <li><Magnet><a href="#" aria-label="LinkedIn"><Linkedin size={24} /></a></Magnet></li>
+            <li><Magnet><a href="#" aria-label="CodePen"><Code size={24} /></a></Magnet></li>
           </ul>
         </header>
 

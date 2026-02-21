@@ -10,10 +10,10 @@ export default function InfiniteScroll({ items }: { items: string[] }) {
   return (
     <div style={{ overflow: "hidden", display: "flex", gap: "1rem" }}>
       <motion.div
-        style={{ display: "flex", gap: "1rem" }}
+        style={{ display: "flex", gap: "1rem", whiteSpace: "nowrap" }}
         animate={{ x: ["0%", "-50%"] }}
         transition={{
-          duration: 10,
+          duration: 35,
           repeat: Infinity,
           ease: "linear",
           bounce: 0,

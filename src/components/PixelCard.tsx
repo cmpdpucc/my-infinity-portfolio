@@ -9,7 +9,7 @@ export default function PixelCard({ image, title, description }: { image: string
   return (
     <div
       className="pf-card"
-      style={{ position: "relative", overflow: "hidden", height: "300px", padding: 0 }}
+      style={{ position: "relative", overflow: "hidden", aspectRatio: "16/9", padding: 0 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
