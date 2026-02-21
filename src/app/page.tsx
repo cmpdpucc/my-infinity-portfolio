@@ -2,6 +2,8 @@
 
 import React from "react";
 import Spotlight from "@/components/Spotlight";
+import AuroraBackground from "@/components/AuroraBackground";
+import BottomDock from "@/components/BottomDock";
 import DecryptedText from "@/components/DecryptedText";
 import Magnet from "@/components/Magnet";
 import InfiniteScroll from "@/components/InfiniteScroll";
@@ -11,11 +13,18 @@ import { useScrollSpy } from "@/hooks/useScrollSpy";
 import { Github, Linkedin, Code } from "lucide-react";
 import { motion } from "framer-motion";
 
+const NAV_SECTIONS = [
+  { id: "about", label: "About" },
+  { id: "experience", label: "Experience" },
+  { id: "projects", label: "Projects" },
+];
+
 export default function Home() {
   const activeSection = useScrollSpy(["#about", "#experience", "#projects"], 100);
 
   return (
     <div className="pf-page">
+      <AuroraBackground />
       <Spotlight />
       
       <div className="pf-layout">
@@ -39,29 +48,7 @@ export default function Home() {
                  </button>
             </div>
 
-            {/* Nav */}
-            <nav className="pf-page__nav" aria-label="In-page jump links">
-              <ul className="pf-page__nav-list">
-                <li>
-                  <a className={`pf-page__nav-link ${activeSection === 'about' ? 'pf-page__nav-link--active' : ''}`} href="#about">
-                    <span className="pf-page__nav-indicator"></span>
-                    <span className="pf-page__nav-text">About</span>
-                  </a>
-                </li>
-                <li>
-                  <a className={`pf-page__nav-link ${activeSection === 'experience' ? 'pf-page__nav-link--active' : ''}`} href="#experience">
-                    <span className="pf-page__nav-indicator"></span>
-                    <span className="pf-page__nav-text">Experience</span>
-                  </a>
-                </li>
-                <li>
-                  <a className={`pf-page__nav-link ${activeSection === 'projects' ? 'pf-page__nav-link--active' : ''}`} href="#projects">
-                    <span className="pf-page__nav-indicator"></span>
-                    <span className="pf-page__nav-text">Projects</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
+            {/* Note: nav moved to BottomDock */}
           </div>
           
           {/* Social Links */}
@@ -174,6 +161,9 @@ export default function Home() {
         </main>
 
       </div>
+
+      {/* BOTTOM DOCK — replaces old nav, smooth scroll */}
+      <BottomDock items={NAV_SECTIONS} activeId={activeSection} />
     </div>
   );
 }

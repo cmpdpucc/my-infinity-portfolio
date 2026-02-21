@@ -22,8 +22,8 @@ export default function ExpandableCard({ title, subtitle, details, children, tag
         onClick={() => setIsOpen(true)}
         className="pf-card"
         style={{ cursor: "pointer", position: "relative" }}
-        whileHover={{ scale: 1.02 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        whileHover={{ scale: 1.015 }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
       >
         <motion.h3 layoutId={`title-${title}`} style={{ fontSize: "1.25rem", fontWeight: 600, color: "var(--color-text)" }}>
           {title}
@@ -55,7 +55,7 @@ export default function ExpandableCard({ title, subtitle, details, children, tag
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.15 }}
             style={{
               position: "fixed",
               top: 0,
