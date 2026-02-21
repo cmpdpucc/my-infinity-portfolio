@@ -6,6 +6,7 @@ import ClickSpark from "@/components/ClickSpark";
 import Sidebar from "@/components/Sidebar";
 import { SECTIONS } from "@/data/sections.data";
 import { useScrollSpy } from "@/hooks/useScrollSpy";
+import { useDiscreteScroll } from "@/hooks/useDiscreteScroll";
 
 /**
  * page.tsx — Root portfolio page.
@@ -16,6 +17,7 @@ import { useScrollSpy } from "@/hooks/useScrollSpy";
  *
  * Each section is 100vh, rendered by iterating SECTIONS array.
  * The scroll-snap behaviour is implemented purely in SCSS (.pf-scroll-container).
+ * Discrete scroll hook intercepts wheel events for 1-to-1 section jumps.
  *
  * To add a new section from an API:
  *   const sections = await fetch("/api/sections").then(r => r.json())
@@ -23,7 +25,10 @@ import { useScrollSpy } from "@/hooks/useScrollSpy";
  */
 export default function Home() {
   const sectionIds = SECTIONS.map(s => `#${s.id}`);
-  const activeSectionId = useScrollSpy(sectionIds, 100);
+  const activeSectionId = useScrollSpy(sectionIds, "scroll-container");
+  
+  // Intercept wheel events to force section-by-section jumps
+  useDiscreteScroll(sectionIds, "scroll-container");
 
   return (
     <ClickSpark sparkColor="#3b82f6" sparkCount={10} sparkRadius={20}>

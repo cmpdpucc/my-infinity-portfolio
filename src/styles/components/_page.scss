@@ -22,26 +22,18 @@
   background-color: var(--color-background);
 
   &__title {
-    font-size: 2.25rem;
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
     font-weight: 700;
     line-height: 1.1;
     color: var(--color-text);
     margin-bottom: space(xs);
-
-    @media (min-width: 640px) {
-      font-size: 3rem;
-    }
   }
 
   &__subtitle {
-    font-size: 1.125rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
     font-weight: 500;
     color: var(--color-text);
     margin-top: space(sm);
-
-    @media (min-width: 640px) {
-      font-size: 1.25rem;
-    }
   }
 
   &__description {
@@ -71,6 +63,9 @@
       align-items: center;
       padding: space(sm) 0;
       cursor: pointer;
+      background: transparent;
+      border: none;
+      font-family: inherit;
 
       &:hover, &:focus-visible, &--active {
         .pf-page__nav-indicator {
