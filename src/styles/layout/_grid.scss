@@ -43,12 +43,12 @@
 }
 
 .pf-section {
-  margin-bottom: space(3xl);
-  scroll-margin-top: space(3xl);
+  margin-bottom: 6rem; /* 96px */
+  scroll-margin-top: 4rem; /* 64px */
 
   @media (max-width: 1024px) {
-    margin-bottom: space(xl);
-    scroll-margin-top: space(xl);
+    margin-bottom: 4rem; /* 64px */
+    scroll-margin-top: 4rem;
   }
 
   &__title {

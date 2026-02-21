@@ -23,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${dmSans.variable} ${spaceGrotesk.variable}`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${dmSans.variable} ${spaceGrotesk.variable}`} suppressHydrationWarning>
         {children}
       </body>
     </html>

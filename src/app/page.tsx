@@ -96,7 +96,7 @@ export default function Home() {
                   Built the core architecture for the new visual coding platform. Integrated AI subagents and crafted a resilient UI using BEM SCSS.
                 </p>
                 <div style={{ marginTop: "var(--space-md)" }}>
-                  <InfiniteScroll items={["React", "Next.js", "SCSS", "Framer Motion", "TypeScript", "Tailwind"]} />
+                  <InfiniteScroll items={["React", "Next.js", "SCSS", "Framer Motion", "TypeScript", "WebGL", "Three.js"]} />
                 </div>
               </div>
             </div>

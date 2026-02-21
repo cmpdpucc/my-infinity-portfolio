@@ -4,29 +4,29 @@ export function useScrollSpy(selectors: string[], offset: number = 0) {
   const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    const elements = selectors.map((sel) => document.querySelector(sel));
+    const handleScroll = () => {
+      let currentActiveId = selectors[0].replace("#", "");
 
-    elements.forEach((element) => {
-      if (element) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                setActiveId(entry.target.id);
-              }
-            });
-          },
-          { rootMargin: `-${offset}px 0px 0px 0px`, threshold: 0.6 }
-        );
-
-        observer.observe(element);
-        observers.push(observer);
+      // Loop al contrario per trovare la sezione più in basso che ha sorpassato la soglia critica
+      for (let i = selectors.length - 1; i >= 0; i--) {
+        const element = document.querySelector(selectors[i]);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= window.innerHeight * 0.3) {
+            currentActiveId = element.id;
+            break;
+          }
+        }
       }
-    });
+
+      setActiveId(currentActiveId);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Init
 
     return () => {
-      observers.forEach((obs) => obs.disconnect());
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [selectors, offset]);
 

@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import Image from "next/image";
+
 export default function PixelCard({ image, title, description }: { image: string, title: string, description: string }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -14,13 +16,14 @@ export default function PixelCard({ image, title, description }: { image: string
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Immagine di fondo */}
-      <div 
+      <Image 
+        src={image}
+        alt={title}
+        fill
+        unoptimized
         style={{
-          backgroundImage: `url(${image})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          position: "absolute",
-          inset: 0,
+          objectFit: "cover",
+          objectPosition: "center",
           opacity: 0.6,
           zIndex: 0
         }}
