@@ -5,15 +5,13 @@
 @use 'components/button';
 @use 'components/card';
 @use 'components/page';
-@use 'components/dock';
-@use 'components/aurora';
-
-html {
-  scroll-behavior: smooth;
-}
 
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
