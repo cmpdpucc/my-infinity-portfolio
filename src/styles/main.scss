@@ -11,6 +11,8 @@
 @use 'components/section-nav';
 @use 'components/profile-card';
 @use 'components/mobile-identity';
+@use 'components/animated-terminal';
+@use 'components/experience';
 
 *, *::before, *::after {
   box-sizing: border-box;

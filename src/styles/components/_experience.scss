@@ -1,0 +1,229 @@
+@use '../colors' as *;
+@use '../tokens' as *;
+
+// =====================================
+// EXPERIENCE TIMELINE — Staggered layout with central connector
+// =====================================
+
+.pf-exp-timeline {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: space(xl) 0;
+
+  // ----- CENTRAL LINE -----
+  &__line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    transform: translateX(-50%);
+    opacity: 0.4;
+    // Dashed via SVG background (performant, no pseudo-elements)
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(color(border), 0.7) 0px,
+      rgba(color(border), 0.7) 4px,
+      transparent 4px,
+      transparent 10px
+    );
+
+    @media (max-width: 64em) {
+      display: none; // Stack layout on mobile — no line needed
+    }
+  }
+
+  // ----- TIMELINE ITEMS -----
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: space(5xl);
+
+    @media (max-width: 64em) {
+      gap: space(3xl);
+    }
+  }
+
+  &__item {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+
+    @media (max-width: 64em) {
+      flex-direction: column;
+      gap: space(xl);
+    }
+  }
+
+  // ----- HALF BLOCKS -----
+  &__left,
+  &__right {
+    width: calc(50% - #{space(3xl)});
+    transition: opacity 1s ease-out, transform 1s ease-out;
+
+    &--hidden {
+      opacity: 0;
+      transform: translateY(64px);
+    }
+
+    &--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 64em) {
+      width: 100%;
+    }
+  }
+
+  // Stagger: push one side down for oblique effect
+  &__left--stagger,
+  &__right--stagger {
+    @media (min-width: 64em) {
+      margin-top: space(5xl);
+    }
+  }
+
+  // ----- CONNECTOR NODE -----
+  &__connector {
+    display: none;
+
+    @media (min-width: 64em) {
+      display: flex;
+      position: absolute;
+      top: 48px;
+      width: space(3xl);
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+
+  &__connector--left {
+    @media (min-width: 64em) {
+      right: calc(50% - 14px);
+    }
+  }
+
+  &__connector--right {
+    @media (min-width: 64em) {
+      left: calc(50% - 14px);
+      justify-content: flex-start;
+    }
+  }
+
+  &__connector-line {
+    width: 100%;
+    height: 1px;
+    background: rgba(color(border), 0.5);
+  }
+
+  &__node {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(color(border), 0.7);
+    background: var(--color-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: absolute;
+    right: -14px;
+    z-index: 2;
+  }
+
+  &__connector--right &__node {
+    right: auto;
+    left: -14px;
+  }
+
+  &__node-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(color(border), 0.5);
+    transition: background 700ms ease 500ms, box-shadow 700ms ease 500ms;
+  }
+
+  &__node-dot--active {
+    background: var(--color-cta);
+    box-shadow: 0 0 12px 3px rgba(color(cta), 0.4);
+  }
+
+  // ----- TEXT BLOCK -----
+  &__text {
+    &--right {
+      text-align: left;
+    }
+
+    &--left {
+      text-align: right;
+
+      @media (max-width: 64em) {
+        text-align: left;
+      }
+    }
+  }
+
+  &__category {
+    display: flex;
+    align-items: center;
+    gap: space(sm);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8125rem;
+    color: var(--color-cta);
+    margin-bottom: space(sm);
+  }
+
+  &__text--left &__category {
+    justify-content: flex-end;
+
+    @media (max-width: 64em) {
+      justify-content: flex-start;
+    }
+  }
+
+  &__period {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    margin-bottom: space(xs);
+  }
+
+  &__title {
+    font-size: clamp(1.5rem, 3vw, 1.875rem);
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: space(md);
+    line-height: 1.3;
+  }
+
+  &__description {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+
+  // ----- TERMINAL WRAPPER -----
+  &__terminal {
+    width: 100%;
+    display: flex;
+
+    &--right {
+      justify-content: flex-start;
+    }
+
+    &--left {
+      justify-content: flex-end;
+
+      @media (max-width: 64em) {
+        justify-content: flex-start;
+      }
+    }
+  }
+}

@@ -74,11 +74,11 @@ export default function MobileIdentityBar({ avatarUrl, name, title, handle, stat
                 handle={handle}
                 status={status}
                 contactText="Download Resume"
-                enableTilt={true}
+                enableTilt={false}
                 enableMobileTilt={true}
                 behindGlowEnabled={true}
-                behindGlowColor="rgba(59, 130, 246, 0.35)"
-                behindGlowSize="30%"
+                behindGlowColor="rgba(6, 23, 50, 0.35)"
+                behindGlowSize="15%"
                 innerGradient="linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(59, 130, 246, 0.12) 100%)"
               />
             </div>

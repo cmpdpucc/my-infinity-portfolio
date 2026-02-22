@@ -1,0 +1,550 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Terminal, Code2, Smartphone, Globe, Cpu, ChevronRight, PlayCircle, Eye, GitCommit } from 'lucide-react';
+
+// --- CUSTOM HOOK PER SCROLL REVEAL (Performance) ---
+const useScrollReveal = (options = { threshold: 0.3 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+      }
+    }, options);
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [options.threshold]);
+
+  return [ref, isVisible];
+};
+
+// --- MOCK DATA: SHOWCASE DI PRODOTTO (Non Issue/Risoluzione) ---
+const showcaseProject = {
+  title: "Nova FinTech Ecosystem",
+  type: "Web Platform & iOS App",
+  heroImage: "https://images.unsplash.com/photo-1616077168079-7e08a804797ab?auto=format&fit=crop&q=80&w=1200",
+  tagline: "Un'unica base di codice, esperienze native ovunque. Dall'infrastruttura Edge al rendering WebGL a 60fps.",
+  features: [
+    {
+      id: "feat1",
+      category: "Mobile Native",
+      title: "Architettura iOS Reattiva",
+      visualDesc: "Animazioni fluide e navigazione gestuale fluida sviluppata in SwiftUI per un'esperienza bancaria senza frizioni. Ogni transazione è renderizzata con transizioni asimmetriche personalizzate per un feeling premium.",
+      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=800",
+      terminalTitle: "ios_core_render.swift",
+      code: "struct TransactionView: View {\n  @StateObject var store = AppStore()\n  \n  var body: some View {\n    ScrollView(.vertical, showsIndicators: false) {\n      LazyVStack(spacing: 16) {\n        ForEach(store.transactions) { tx in\n          TransactionRow(tx: tx)\n            .transition(.asymmetric(insertion:\n              .move(edge: .trailing), removal: .opacity))\n        }\n      }\n    }\n  }\n}",
+      tech: "SwiftUI + Combine",
+      commands: [
+        { name: "Run UI Tests", output: "✓ 124 SwiftUI views tested in 0.8s. 0 regressions." },
+        { name: "Build Archive", output: "📦 ipa generated successfully. Size: 18.4MB" }
+      ]
+    },
+    {
+      id: "feat2",
+      category: "Web Platform",
+      title: "Data Visualization WebGL",
+      visualDesc: "Dashboard web per trader professionisti. Milioni di data-points renderizzati in tempo reale sul browser bypassando il DOM standard grazie all'accelerazione hardware diretta su Canvas.",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
+      terminalTitle: "chart_engine.ts",
+      code: "const renderCanvas = (data: Float32Array) => {\n  const gl = canvas.getContext('webgl2');\n  const program = initShaders(gl, vsSource, fsSource);\n  \n  gl.bindBuffer(gl.ARRAY_BUFFER, dataBuffer);\n  gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW);\n  \n  requestAnimationFrame(() => {\n    gl.drawArrays(gl.LINE_STRIP, 0, data.length / 2);\n  });\n};",
+      tech: "WebGL + TypeScript",
+      commands: [
+        { name: "Benchmark FPS", output: "📈 Stable at 60fps with 1.2M active data-points." },
+        { name: "Memory Profiler", output: "💾 Heap size: 24MB. Garbage Collection optimized. No leaks." }
+      ]
+    },
+    {
+      id: "feat3",
+      category: "Core Backend",
+      title: "Motore Transazionale Edge",
+      visualDesc: "Infrastruttura distribuita globale. Validazione crittografica delle transazioni in meno di 50ms in qualsiasi parte del mondo grazie all'utilizzo aggressivo di cache distribuita e validazione in-memory.",
+      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800",
+      terminalTitle: "edge_validator.rs",
+      code: "#[tokio::main]\nasync fn validate_tx(req: Request<Tx>) -> Result<Response, Error> {\n  let state = GLOBAL_CACHE.read().await;\n  \n  if req.amount > state.balance {\n    return Err(Error::InsufficientFunds);\n  }\n  \n  let signature = ed25519::verify(&req.payload, &req.sig);\n  match signature {\n    Ok(_) => commit_to_ledger(req).await,\n    Err(e) => reject_tx(e),\n  }\n}",
+      tech: "Rust + gRPC",
+      commands: [
+        { name: "Simulate Load", output: "🔥 50k req/s handled. p99 latency: 12ms. CPU: 14%" },
+        { name: "Sync Status", output: "🌍 12/12 Edge nodes fully synced via Apache Kafka." }
+      ]
+    }
+  ]
+};
+
+// --- COMPONENTE SUPPORTO: TERMINALE ANIMATO REALISTICO ---
+const AnimatedTerminal = ({ feature, isVisible }) => {
+  const [step, setStep] = useState(0); // 0: idle, 1: typing, 2: loading, 3: code revealed, 4: interactive CLI
+  const [typedText, setTypedText] = useState("");
+  const [interaction, setInteraction] = useState({ status: 'idle', command: null, output: null });
+  const fullCommand = "> executing module load...";
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    if (!isVisible || step !== 0) return;
+    
+    setStep(1);
+    let i = 0;
+    const typingInterval = setInterval(() => {
+      setTypedText(fullCommand.slice(0, i + 1));
+      i++;
+      if (i >= fullCommand.length) {
+        clearInterval(typingInterval);
+        setTimeout(() => setStep(2), 400); 
+        setTimeout(() => {
+          setStep(3);
+          // Rende il terminale interattivo dopo un breve ritardo
+          setTimeout(() => {
+            setStep(4);
+            scrollToBottom();
+          }, 800);
+        }, 900);
+      }
+    }, 40);
+
+    return () => clearInterval(typingInterval);
+  }, [isVisible, step]);
+
+  const scrollToBottom = () => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Gestore dei comandi interattivi
+  const handleCommand = (cmd) => {
+    setInteraction({ status: 'typing', command: cmd.name, output: null });
+    scrollToBottom();
+    
+    setTimeout(() => {
+      setInteraction({ status: 'running', command: cmd.name, output: null });
+      setTimeout(() => {
+        setInteraction({ status: 'done', command: cmd.name, output: cmd.output });
+        scrollToBottom();
+      }, 800); // Tempo di "elaborazione" simulato
+    }, 400); // Tempo di "digitazione" simulato
+  };
+
+  return (
+    <div className="w-full max-w-lg bg-[#0f111a] rounded-xl border border-zinc-800/50 shadow-2xl flex flex-col h-[400px] overflow-hidden transition-transform duration-700 ease-out hover:shadow-emerald-500/5 hover:-translate-y-1">
+      {/* Terminal Header macOS Style */}
+      <div className="h-12 bg-[#161b22] border-b border-zinc-800/50 flex items-center px-4 relative shrink-0">
+        <div className="flex gap-2 absolute left-4">
+          <div className="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+          <div className="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+          <div className="w-3 h-3 rounded-full bg-[#27c93f]"></div>
+        </div>
+        <div className="w-full text-center text-xs text-zinc-500 font-mono flex items-center justify-center gap-2">
+          <span>&gt;_</span> {feature.terminalTitle}
+        </div>
+      </div>
+
+      {/* Terminal Body */}
+      <div className="p-6 flex-1 overflow-y-auto font-mono text-sm relative custom-terminal-scroll flex flex-col">
+        
+        {/* riga di esecuzione e tag */}
+        <div className="flex justify-between items-center mb-6 h-8 shrink-0">
+          <div className="text-zinc-500 flex items-center gap-2">
+            <span className="text-emerald-500 font-bold">
+              {typedText}
+              {step < 3 && <span className="w-2 h-4 bg-emerald-500 inline-block animate-pulse ml-1 align-middle"></span>}
+            </span>
+          </div>
+          <div className={`transition-opacity duration-500 ${step >= 1 ? 'opacity-100' : 'opacity-0'} px-3 py-1 bg-[#1a2028] text-emerald-400 rounded-md text-xs border border-zinc-700/50`}>
+            {feature.tech}
+          </div>
+        </div>
+        
+        {/* Codice renderizzato post-caricamento */}
+        <div className={`transition-all duration-500 origin-top shrink-0 ${step >= 3 ? 'opacity-100 scale-100 blur-none' : 'opacity-0 scale-95 blur-sm'}`}>
+          <pre className="text-zinc-300 whitespace-pre-wrap leading-loose">
+            <code dangerouslySetInnerHTML={{
+              __html: feature.code
+                .replace(/(struct|var|const|let|async|fn|return|match|import|from)/g, '<span class="text-pink-500 font-medium">$1</span>')
+                .replace(/(View|String|Result|Error|Request|Response|Float32Array|ScrollView|LazyVStack|ForEach)/g, '<span class="text-yellow-300">$1</span>')
+                .replace(/(@StateObject)/g, '<span class="text-zinc-400">$1</span>')
+            }} />
+          </pre>
+        </div>
+
+        {/* --- SEZIONE INTERATTIVA (CLI) --- */}
+        <div className={`mt-6 pt-6 border-t border-zinc-800/50 transition-all duration-700 shrink-0 ${step >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none hidden'}`}>
+          
+          {interaction.status === 'idle' && (
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2 text-zinc-500 text-xs">
+                <span className="text-emerald-500 font-bold">❯</span> Interactive shell ready.
+                <span className="w-1.5 h-3 bg-zinc-500 inline-block animate-pulse"></span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {feature.commands?.map(cmd => (
+                  <button 
+                    key={cmd.name} 
+                    onClick={() => handleCommand(cmd)} 
+                    className="text-xs font-mono px-3 py-1.5 bg-[#161b22] hover:bg-zinc-800 text-emerald-400/80 hover:text-emerald-400 rounded-md border border-zinc-800 hover:border-emerald-500/50 transition-all cursor-pointer shadow-sm hover:shadow-emerald-500/10 active:scale-95"
+                  >
+                    ./{cmd.name.toLowerCase().replace(' ', '_')}.sh
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {interaction.status === 'typing' && (
+             <div className="text-zinc-300 flex items-center gap-2 text-xs">
+               <span className="text-emerald-500 font-bold">❯</span> ./{interaction.command.toLowerCase().replace(' ', '_')}.sh
+               <span className="w-1.5 h-3 bg-zinc-400 inline-block animate-pulse"></span>
+             </div>
+          )}
+
+          {interaction.status === 'running' && (
+             <div className="flex flex-col gap-1 text-xs">
+               <div className="text-zinc-400 flex items-center gap-2">
+                 <span className="text-emerald-500 font-bold">❯</span> ./{interaction.command.toLowerCase().replace(' ', '_')}.sh
+               </div>
+               <div className="text-zinc-500 pl-4 mt-2">Executing sequence... <span className="animate-pulse">⠋</span></div>
+             </div>
+          )}
+
+          {interaction.status === 'done' && (
+             <div className="text-xs">
+               <div className="text-zinc-500 flex items-center gap-2 mb-3">
+                 <span className="text-emerald-500 font-bold">❯</span> ./{interaction.command.toLowerCase().replace(' ', '_')}.sh
+               </div>
+               <div className="text-emerald-400 bg-[#0a0c10] border border-emerald-900/50 p-3 rounded-md text-xs inline-block shadow-inner w-full">
+                 {interaction.output}
+               </div>
+               <button onClick={() => setInteraction({status: 'idle'})} className="block mt-4 text-zinc-600 hover:text-zinc-400 transition-colors cursor-pointer text-[10px] uppercase tracking-wider">
+                 [ Clear Terminal ]
+               </button>
+             </div>
+          )}
+        </div>
+        
+        {/* Anchor point per lo scroll automatico */}
+        <div ref={bottomRef} className="h-4 shrink-0"></div>
+
+      </div>
+    </div>
+  );
+};
+
+// --- MIX 1: IL TERMINALE SIMBIOTICO (Sticky Sync) ---
+const SymbioticTerminal = ({ project }) => {
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  const FeatureBlock = ({ feature, index }) => {
+    const [ref, isVisible] = useScrollReveal({ threshold: 0.5 });
+    
+    useEffect(() => {
+      if (isVisible) setActiveIdx(index);
+    }, [isVisible, index]);
+
+    return (
+      <div ref={ref} className="min-h-[80vh] flex flex-col justify-center py-16 transition-opacity duration-700">
+        <div className="flex items-center gap-3 text-emerald-400 mb-4 font-mono text-sm">
+          {feature.category === 'Mobile Native' ? <Smartphone size={16}/> : feature.category === 'Web Platform' ? <Globe size={16}/> : <Cpu size={16}/>}
+          {feature.category}
+        </div>
+        <h3 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">{feature.title}</h3>
+        <p className="text-zinc-400 text-lg mb-8 max-w-lg leading-relaxed">{feature.visualDesc}</p>
+        <div className="rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl relative group">
+          <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 mix-blend-overlay" />
+          <img src={feature.image} alt={feature.title} className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-1000" />
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex flex-col lg:flex-row gap-16 relative">
+      <div className="lg:w-1/2">
+        <div className="pt-8 pb-32">
+          <h2 className="text-5xl font-extrabold mb-4">{project.title}</h2>
+          <p className="text-xl text-zinc-500">{project.tagline}</p>
+        </div>
+        {project.features.map((feat, idx) => (
+          <FeatureBlock key={feat.id} feature={feat} index={idx} />
+        ))}
+      </div>
+
+      <div className="hidden lg:block lg:w-1/2 relative">
+        <div className="sticky top-24 h-[600px] w-full bg-[#0d1117] rounded-3xl border border-zinc-800 shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden">
+          <div className="h-14 bg-[#161b22] border-b border-zinc-800 flex items-center px-4 justify-between">
+            <div className="flex gap-2">
+              <div className="w-3.5 h-3.5 rounded-full bg-[#ff5f56]"></div>
+              <div className="w-3.5 h-3.5 rounded-full bg-[#ffbd2e]"></div>
+              <div className="w-3.5 h-3.5 rounded-full bg-[#27c93f]"></div>
+            </div>
+            <div className="text-xs text-zinc-500 font-mono flex items-center gap-2">
+               <Terminal size={14} /> {project.features[activeIdx].terminalTitle}
+            </div>
+            <div className="w-10"></div> 
+          </div>
+          
+          <div className="p-8 font-mono text-sm h-full relative overflow-y-auto">
+            <div className="absolute top-8 right-8 px-3 py-1 bg-zinc-800/80 text-emerald-400 rounded text-xs border border-zinc-700/50 backdrop-blur-sm shadow-lg">
+              {project.features[activeIdx].tech}
+            </div>
+            
+            <div className="text-zinc-500 mb-6 flex items-center gap-2">
+               <span className="text-emerald-500">❯</span> executing module load...
+            </div>
+            
+            <pre className="text-zinc-300 whitespace-pre-wrap animate-in fade-in slide-in-from-bottom-4 duration-500" key={activeIdx}>
+              <code className="text-sm leading-loose" dangerouslySetInnerHTML={{
+                __html: project.features[activeIdx].code
+                  .replace(/(struct|var|const|let|async|fn|return|match|import|from)/g, '<span class="text-pink-500">$1</span>')
+                  .replace(/(View|String|Result|Error|Request|Response|Float32Array|ScrollView|LazyVStack|ForEach)/g, '<span class="text-yellow-300">$1</span>')
+                  .replace(/(@StateObject)/g, '<span class="text-zinc-400">$1</span>')
+              }} />
+            </pre>
+            
+            <div className="mt-8 flex items-center gap-2 text-zinc-500 animate-pulse">
+              <span className="w-2.5 h-5 bg-emerald-500 inline-block"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- MIX 2: STAGGERED TERMINAL TIMELINE (Aggiornato con sfalsamento e typing) ---
+const StaggeredTerminalMix = ({ project }) => {
+  return (
+    <div className="py-24 relative max-w-6xl mx-auto px-4 md:px-0">
+      
+      {/* Stili custom per la scrollbar */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .custom-terminal-scroll::-webkit-scrollbar {
+          width: 14px;
+        }
+        .custom-terminal-scroll::-webkit-scrollbar-track {
+          background: #0f111a;
+          border-left: 1px solid #1e2330;
+        }
+        .custom-terminal-scroll::-webkit-scrollbar-thumb {
+          background-color: #ffffff;
+          border: 4px solid #0f111a;
+          border-radius: 10px;
+        }
+      `}} />
+
+      <div className="text-center max-w-3xl mx-auto mb-32">
+        <h2 className="text-5xl font-extrabold mb-6 text-white">Architettura in Esecuzione</h2>
+        <p className="text-xl text-zinc-400">Scorri per esplorare come i diversi layer si integrano. UI eleganti sostenute da codice robusto.</p>
+      </div>
+
+      <div className="relative">
+        {/* Linea tratteggiata centrale */}
+        <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMiIgaGVpZ2h0PSI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIyIiBoZWlnaHQ9IjIiIGZpbGw9IiMzZjNmNDYiLz48L3N2Zz4=')] transform -translate-x-1/2 hidden md:block opacity-50" />
+
+        <div className="space-y-48">
+          {project.features.map((feat, idx) => {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const [ref, isVisible] = useScrollReveal({ threshold: 0.2 });
+            const isEven = idx % 2 === 0;
+
+            return (
+              <div key={feat.id} ref={ref} className="relative flex flex-col md:flex-row items-start justify-between w-full">
+                
+                {/* Blocco SINISTRO */}
+                <div className={`w-full md:w-[calc(50%-4rem)] flex justify-end transition-all duration-1000 ease-out ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
+                } ${!isEven ? 'md:mt-32 order-2 md:order-1' : 'order-1'}`}>
+                  
+                  {isEven ? (
+                    // TESTO A SINISTRA
+                    <div className="text-right w-full relative">
+                      {/* Connettore linea */}
+                      <div className="hidden md:flex absolute top-12 -right-[4rem] w-[4rem] items-center justify-end">
+                         <div className="w-full h-[1px] bg-zinc-700/50"></div>
+                         <div className="w-8 h-8 rounded-full border border-zinc-700 bg-[#050505] absolute -right-[1.1rem] flex items-center justify-center z-10">
+                            <div className={`w-2 h-2 rounded-full transition-colors duration-700 delay-500 ${isVisible ? 'bg-emerald-500' : 'bg-zinc-800'}`}></div>
+                         </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-emerald-500 font-mono text-sm mb-4 justify-end">
+                        <Smartphone size={16}/> {feat.category}
+                      </div>
+                      <h3 className="text-3xl font-bold text-white mb-4">{feat.title}</h3>
+                      <p className="text-zinc-400 text-lg leading-relaxed">{feat.visualDesc}</p>
+                    </div>
+                  ) : (
+                    // TERMINALE A SINISTRA
+                    <div className="w-full relative flex justify-end">
+                       <AnimatedTerminal feature={feat} isVisible={isVisible} />
+                    </div>
+                  )}
+                </div>
+
+                {/* Blocco DESTRO */}
+                <div className={`w-full md:w-[calc(50%-4rem)] flex justify-start transition-all duration-1000 ease-out delay-100 ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
+                } ${isEven ? 'md:mt-32 order-2' : 'order-1 md:order-2'}`}>
+                  
+                  {!isEven ? (
+                    // TESTO A DESTRA
+                    <div className="text-left w-full relative">
+                      {/* Connettore linea */}
+                      <div className="hidden md:flex absolute top-12 -left-[4rem] w-[4rem] items-center justify-start">
+                         <div className="w-full h-[1px] bg-zinc-700/50"></div>
+                         <div className="w-8 h-8 rounded-full border border-zinc-700 bg-[#050505] absolute -left-[1.1rem] flex items-center justify-center z-10">
+                            <div className={`w-2 h-2 rounded-full transition-colors duration-700 delay-500 ${isVisible ? 'bg-emerald-500' : 'bg-zinc-800'}`}></div>
+                         </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-emerald-500 font-mono text-sm mb-4 justify-start">
+                        <Globe size={16}/> {feat.category}
+                      </div>
+                      <h3 className="text-3xl font-bold text-white mb-4">{feat.title}</h3>
+                      <p className="text-zinc-400 text-lg leading-relaxed">{feat.visualDesc}</p>
+                    </div>
+                  ) : (
+                    // TERMINALE A DESTRA
+                    <div className="w-full relative flex justify-start">
+                      <AnimatedTerminal feature={feat} isVisible={isVisible} />
+                    </div>
+                  )}
+                </div>
+
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- MIX 3: SEQUENZA DI BOOT (Cinematic Boot) ---
+const BootSequenceMix = ({ project }) => {
+  
+  const BootModule = ({ feature, index }) => {
+    const [ref, isVisible] = useScrollReveal({ threshold: 0.4 });
+    
+    return (
+      <div ref={ref} className="relative min-h-[400px] py-12">
+        <div className={`font-mono text-xl md:text-2xl text-emerald-500 flex items-center gap-4 transition-all duration-700 absolute top-12 left-0
+          ${isVisible ? 'opacity-0 -translate-y-8 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
+          <span>❯</span> systemctl start module_{feature.id}.service...
+          <span className="w-3 h-6 bg-emerald-500 animate-pulse inline-block"></span>
+        </div>
+
+        <div className={`transition-all duration-1000 delay-300 origin-top
+          ${isVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-12 pointer-events-none'}`}>
+          
+          <div className="flex flex-col xl:flex-row bg-zinc-900/40 border border-zinc-800/60 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-sm">
+            
+            <div className="xl:w-1/2 relative min-h-[300px]">
+              <img src={feature.image} alt={feature.title} className="absolute inset-0 w-full h-full object-cover opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent p-8 flex flex-col justify-end">
+                <h3 className="text-3xl font-bold text-white mb-2">{feature.title}</h3>
+                <p className="text-zinc-300">{feature.visualDesc}</p>
+              </div>
+            </div>
+
+            <div className="xl:w-1/2 p-8 lg:p-12 bg-zinc-950 flex flex-col justify-center font-mono">
+               <div className="flex items-center gap-3 text-zinc-500 mb-8 border-b border-zinc-800 pb-4">
+                 <PlayCircle size={20} className="text-emerald-500" />
+                 <span>Process: <span className="text-white">{feature.terminalTitle}</span></span>
+                 <span className="ml-auto px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs border border-emerald-500/20">{feature.tech}</span>
+               </div>
+               
+               <pre className="text-sm text-zinc-400 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                 <code dangerouslySetInnerHTML={{
+                    __html: feature.code
+                      .replace(/({|})/g, '<span class="text-zinc-600">$1</span>')
+                  }} />
+               </pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="max-w-5xl mx-auto space-y-12 py-16">
+      <div className="font-mono text-zinc-500 mb-16 text-center">
+        $ ./run_showcase.sh --target="Nova Ecosystem"
+      </div>
+      
+      {project.features.map((feat, idx) => (
+        <BootModule key={feat.id} feature={feat} index={idx} />
+      ))}
+      
+      <div className="font-mono text-zinc-500 mt-24 text-center animate-pulse">
+        [ Process completed. System idle. ]
+      </div>
+    </div>
+  );
+};
+
+
+// --- MAIN APP COMPONENT ---
+export default function App() {
+  const [activeLayout, setActiveLayout] = useState('staggered'); // Impostato di default sulla nuova vista
+
+  return (
+    <div className="min-h-screen bg-[#050505] text-zinc-50 p-4 md:p-8 font-sans selection:bg-emerald-500/30 overflow-x-hidden">
+      
+      <div className="max-w-6xl mx-auto mb-16 mt-8 space-y-8">
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-sm mb-6 font-mono">
+            <Code2 size={14} /> Showcase: Cinematic + Terminal Mix
+          </div>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
+            Design <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">Ibrido</span> per Ingegneri.
+          </h1>
+          <p className="text-zinc-400 max-w-2xl text-lg">
+            Scegli come combinare l'impatto visivo di un prodotto finito con la cruda bellezza del codice sorgente che lo fa funzionare.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-2 bg-zinc-900/50 p-2 rounded-2xl w-fit border border-zinc-800 backdrop-blur-md">
+          {[
+            { id: 'symbiotic', icon: <ChevronRight size={18}/>, label: '1. Sticky Sync' },
+            { id: 'staggered', icon: <GitCommit size={18}/>, label: '2. Staggered Terminal' }, // Tab Aggiornata
+            { id: 'boot', icon: <Terminal size={18}/>, label: '3. Boot Sequence' }
+          ].map(layout => (
+            <button
+              key={layout.id}
+              onClick={() => setActiveLayout(layout.id)}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                activeLayout === layout.id 
+                  ? 'bg-emerald-500 text-zinc-950 shadow-lg' 
+                  : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+              }`}
+            >
+              {layout.icon} {layout.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <main className="max-w-6xl mx-auto pb-32">
+        <div className="relative w-full">
+          {activeLayout === 'symbiotic' && (
+            <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+               <SymbioticTerminal project={showcaseProject} />
+            </div>
+          )}
+          
+          {activeLayout === 'staggered' && (
+            <div className="animate-in fade-in zoom-in-95 duration-700">
+              <StaggeredTerminalMix project={showcaseProject} />
+            </div>
+          )}
+          
+          {activeLayout === 'boot' && (
+            <div className="animate-in fade-in slide-in-from-bottom-12 duration-1000">
+              <BootSequenceMix project={showcaseProject} />
+            </div>
+          )}
+        </div>
+      </main>
+
+    </div>
+  );
+}
