@@ -20,100 +20,13 @@
 .pf-page {
   position: relative;
   background-color: var(--color-background);
+}
 
-  &__title {
-    font-size: clamp(2.25rem, 6vw, 3.5rem);
-    font-weight: 700;
-    line-height: 1.1;
-    color: var(--color-text);
-    margin-bottom: space(xs);
-  }
-
-  &__subtitle {
-    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-    font-weight: 500;
-    color: var(--color-text);
-    margin-top: space(sm);
-  }
-
-  &__description {
-    max-width: 320px;
-    margin-top: space(md);
-    color: var(--color-text-muted);
-    line-height: 1.5;
-  }
-
-  &__nav {
-    display: none;
-    margin-top: space(3xl);
-
-    @media (min-width: 1024px) {
-      display: block;
-    }
-
-    &-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      width: max-content;
-    }
-
-    &-link {
-      display: flex;
-      align-items: center;
-      padding: space(sm) 0;
-      cursor: pointer;
-      background: transparent;
-      border: none;
-      font-family: inherit;
-
-      &:hover, &:focus-visible, &--active {
-        .pf-page__nav-indicator {
-          width: 4rem;
-          background-color: var(--color-cta);
-        }
-        .pf-page__nav-text {
-          color: var(--color-text);
-        }
-      }
-    }
-
-    &-indicator {
-      display: inline-block;
-      height: 1px;
-      width: 2rem;
-      background-color: var(--color-border);
-      margin-right: space(md);
-      transition: all 200ms ease;
-    }
-
-    &-text {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--color-text-muted);
-      transition: color 200ms ease;
-    }
-  }
-
-  &__social {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: space(xl) 0 0 0;
-
-    li {
-      margin-right: space(lg);
-      font-size: 0.875rem;
-      color: var(--color-text-muted);
-      cursor: pointer;
-      transition: color 200ms ease;
-
-      &:hover {
-        color: var(--color-text);
-      }
-    }
+// =====================================
+// SCROLL INDICATOR — "Scroll to explore"
+// =====================================
+.pf-scroll-indicator {
+  @media (max-width: 64em) {
+    display: none !important; // Mobile has MobileNav for navigation cue
   }
 }

@@ -52,15 +52,17 @@ export default function AboutSection() {
         />
       </motion.div>
 
-      {/* Guida verso la sezione successiva */}
+      {/* Scroll indicator — hidden on mobile (MobileNav provides navigation cue) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
+        className="pf-scroll-indicator"
         style={{
           position: "absolute",
           bottom: "2.5rem",
-          left: 0,
+          left: "50%",
+          transform: "translateX(-50%)",
           display: "flex",
           alignItems: "center",
           gap: "0.5rem",

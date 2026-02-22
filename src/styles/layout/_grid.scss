@@ -34,13 +34,8 @@
   padding: space(3xl) space(xl);
   overflow: hidden;
 
-  &__identity {
-    flex: 1;
-    margin-top: 33vh;
-  }
-
   @media (max-width: 64em) {
-    display: none; // HIDE on mobile, MobileNav will replace it
+    display: none; // Hidden on mobile — DevIdentity hero + MobileNav replace it
   }
 }
 

@@ -7,6 +7,8 @@
 @use 'components/page';
 @use 'components/mobile-nav';
 @use 'components/pixel-ripple';
+@use 'components/identity';
+@use 'components/section-nav';
 
 *, *::before, *::after {
   box-sizing: border-box;

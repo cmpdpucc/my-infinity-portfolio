@@ -3,7 +3,8 @@
 import React from "react";
 import Spotlight from "@/components/Spotlight";
 import ClickSpark from "@/components/ClickSpark";
-import Sidebar from "@/components/Sidebar";
+import DevIdentity from "@/components/DevIdentity";
+import SectionNav from "@/components/SectionNav";
 import MobileNav from "@/components/MobileNav";
 import { SECTIONS } from "@/data/sections.data";
 import { useScrollSpy } from "@/hooks/useScrollSpy";
@@ -13,21 +14,16 @@ import { useDiscreteScroll } from "@/hooks/useDiscreteScroll";
  * page.tsx — Root portfolio page.
  *
  * Architecture:
- * - Left column: Sidebar (fixed, 50% width) with dynamic nav from SECTIONS
- * - Right column: scroll container with full-viewport sections
+ * - Desktop: left sidebar (DevIdentity + SectionNav) + right scroll container
+ * - Mobile: DevIdentity hero header inside scroll container + floating MobileNav
  *
  * Each section is 100vh, rendered by iterating SECTIONS array.
- * The scroll-snap behaviour is implemented purely in SCSS (.pf-scroll-container).
  * Discrete scroll hook intercepts wheel events for 1-to-1 section jumps.
- *
- * To add a new section from an API:
- *   const sections = await fetch("/api/sections").then(r => r.json())
- *   Replace SECTIONS with the API response (same SectionConfig shape).
  */
 export default function Home() {
   const sectionIds = SECTIONS.map(s => `#${s.id}`);
   const activeSectionId = useScrollSpy(sectionIds, "scroll-container");
-  
+
   // Intercept wheel events to force section-by-section jumps
   useDiscreteScroll(sectionIds, "scroll-container");
 
@@ -37,14 +33,20 @@ export default function Home() {
         <Spotlight />
 
         <div className="pf-layout">
-          {/* LEFT: Fixed Sidebar — nav generated from sections list */}
-          <Sidebar sections={SECTIONS} activeSectionId={activeSectionId} />
-          
+          {/* LEFT: Desktop sidebar — Identity + Nav (hidden < 64em) */}
+          <aside className="pf-sidebar">
+            <DevIdentity variant="sidebar" />
+            <SectionNav sections={SECTIONS} activeSectionId={activeSectionId} />
+          </aside>
+
           {/* BOTTOM: Floating mobile nav (< 1024px) */}
           <MobileNav sections={SECTIONS} activeSectionId={activeSectionId} />
 
           {/* RIGHT: Scroll container — one fullscreen section per item */}
           <div className="pf-scroll-container" id="scroll-container">
+            {/* Mobile hero: DevIdentity shown as first element in scroll flow */}
+            <DevIdentity variant="hero" />
+
             {SECTIONS.map(({ id, component: SectionComponent }) => (
               <section
                 key={id}
@@ -61,3 +63,4 @@ export default function Home() {
     </ClickSpark>
   );
 }
+

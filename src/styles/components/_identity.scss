@@ -1,0 +1,116 @@
+@use '../colors' as *;
+@use '../tokens' as *;
+
+// =====================================
+// DEVELOPER IDENTITY — branding card
+// =====================================
+.pf-identity {
+  display: flex;
+  flex-direction: column;
+
+  // ─── Sidebar variant (desktop) ───
+  &--sidebar {
+    justify-content: space-between;
+    height: 100%;
+
+    .pf-identity__info {
+      flex: 1;
+      margin-top: 33vh;
+    }
+
+    @media (max-width: 64em) {
+      display: none; // Hidden on mobile — hero variant shown instead
+    }
+  }
+
+  // ─── Hero variant (mobile/tablet) ───
+  &--hero {
+    display: none; // Hidden on desktop
+
+    @media (max-width: 64em) {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      padding: space(2xl) space(lg) space(lg);
+      gap: space(sm);
+
+      .pf-identity__info {
+        width: 100%;
+      }
+
+      .pf-identity__name {
+        font-size: clamp(1.75rem, 5vw, 2.5rem);
+      }
+
+      .pf-identity__title {
+        font-size: clamp(0.85rem, 2vw, 1rem);
+      }
+
+      .pf-identity__tagline {
+        max-width: 100%;
+        font-size: 0.875rem;
+      }
+
+      .pf-identity__cta {
+        margin-top: space(md);
+      }
+
+      .pf-identity__social {
+        justify-content: center;
+        margin-top: space(md);
+      }
+    }
+  }
+
+  // ─── Child elements ───
+  &__name {
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--color-text);
+    margin-bottom: space(xs);
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+
+  &__title {
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    font-weight: 500;
+    color: var(--color-text);
+    margin-top: space(sm);
+  }
+
+  &__tagline {
+    max-width: 20rem;
+    margin-top: space(md);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  &__cta {
+    margin-top: space(md);
+  }
+
+  &__social {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: space(xl) 0 0 0;
+
+    li {
+      margin-right: space(lg);
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: color 200ms ease;
+
+      &:hover {
+        color: var(--color-text);
+      }
+    }
+  }
+}

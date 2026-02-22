@@ -1,0 +1,61 @@
+@use '../colors' as *;
+@use '../tokens' as *;
+
+// =====================================
+// SECTION NAV — desktop sidebar navigation
+// =====================================
+.pf-section-nav {
+  display: none;
+  margin-top: space(3xl);
+
+  @media (min-width: 64em) {
+    display: block;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: max-content;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    padding: space(sm) 0;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+
+    &:hover,
+    &:focus-visible,
+    &--active {
+      .pf-section-nav__indicator {
+        width: 4rem;
+        background-color: var(--color-cta);
+      }
+      .pf-section-nav__text {
+        color: var(--color-text);
+      }
+    }
+  }
+
+  &__indicator {
+    display: inline-block;
+    height: 1px;
+    width: 2rem;
+    background-color: var(--color-border);
+    margin-right: space(md);
+    transition: all 200ms ease;
+  }
+
+  &__text {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    transition: color 200ms ease;
+  }
+}
