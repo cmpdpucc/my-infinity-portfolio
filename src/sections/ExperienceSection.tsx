@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Code2, Globe, Cpu, Smartphone } from "lucide-react";
 import { motion } from "framer-motion";
 import { EXPERIENCES, type Experience } from "@/data/experiences.data";
@@ -12,6 +12,8 @@ import AnimatedTerminal from "@/components/AnimatedTerminal";
  *
  * Each experience entry alternates text ↔ terminal in a staggered layout
  * with a central dashed connector line (desktop only).
+ *
+ * Text appears first; terminal animation starts 400ms later (stagger delay).
  */
 
 const ICON_MAP: Record<Experience["icon"], React.ReactNode> = {
@@ -23,7 +25,15 @@ const ICON_MAP: Record<Experience["icon"], React.ReactNode> = {
 
 function TimelineItem({ experience, index }: { experience: Experience; index: number }) {
   const [ref, isVisible] = useScrollReveal(0.2);
+  const [isTerminalReady, setIsTerminalReady] = useState(false);
   const isEven = index % 2 === 0;
+
+  // Stagger: terminal starts 400ms after text becomes visible
+  useEffect(() => {
+    if (!isVisible) return;
+    const timer = setTimeout(() => setIsTerminalReady(true), 400);
+    return () => clearTimeout(timer);
+  }, [isVisible]);
 
   const visibilityClass = isVisible
     ? "pf-exp-timeline__left--visible"
@@ -43,17 +53,17 @@ function TimelineItem({ experience, index }: { experience: Experience; index: nu
 
   const terminalBlock = (
     <div className={`pf-exp-timeline__terminal pf-exp-timeline__terminal--${isEven ? "right" : "left"}`}>
-      <AnimatedTerminal feature={experience} isVisible={isVisible} />
+      <AnimatedTerminal feature={experience} isVisible={isTerminalReady} />
     </div>
   );
 
-  // Connector node between the halves
+  // Connector node between the halves (flex child, not absolute)
   const connector = (
-    <div className={`pf-exp-timeline__connector pf-exp-timeline__connector--${isEven ? "left" : "right"}`}>
-      <div className="pf-exp-timeline__connector-line" />
+    <div className="pf-exp-timeline__connector">
       <div className="pf-exp-timeline__node">
         <div className={`pf-exp-timeline__node-dot ${isVisible ? "pf-exp-timeline__node-dot--active" : ""}`} />
       </div>
+      <div className="pf-exp-timeline__connector-line" />
     </div>
   );
 
@@ -71,7 +81,7 @@ function TimelineItem({ experience, index }: { experience: Experience; index: nu
       {/* Right half */}
       <div
         className={`pf-exp-timeline__right ${visibilityClass} ${isEven ? "pf-exp-timeline__right--stagger" : ""}`}
-        style={{ transitionDelay: "100ms" }}
+        style={{ transitionDelay: "150ms" }}
       >
         {isEven ? terminalBlock : textBlock}
       </div>

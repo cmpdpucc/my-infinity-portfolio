@@ -91,8 +91,9 @@ export default function Home() {
               <section
                 key={id}
                 id={id}
-                className="pf-scroll-section"
+                className={`pf-scroll-section${id === "experience" ? " pf-scroll-section--free" : ""}`}
                 aria-label={id}
+                {...(id === "experience" ? { "data-free-scroll": "true" } : {})}
               >
                 <SectionComponent />
               </section>

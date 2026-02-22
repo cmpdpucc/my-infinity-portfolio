@@ -35,6 +35,7 @@ export default function AnimatedTerminal({ feature, isVisible }: AnimatedTermina
     output: null,
   });
   const bottomRef = useRef<HTMLDivElement>(null);
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   // Step 1→4 animation sequence triggered by isVisible
   useEffect(() => {
@@ -47,18 +48,25 @@ export default function AnimatedTerminal({ feature, isVisible }: AnimatedTermina
       i++;
       if (i >= FULL_COMMAND.length) {
         clearInterval(typingInterval);
-        setTimeout(() => setStep(2), 400);
-        setTimeout(() => {
+
+        const t1 = setTimeout(() => setStep(2), 400);
+        const t2 = setTimeout(() => {
           setStep(3);
-          setTimeout(() => {
+          const t3 = setTimeout(() => {
             setStep(4);
             scrollToBottom();
           }, 800);
+          timeoutsRef.current.push(t3);
         }, 900);
+        timeoutsRef.current.push(t1, t2);
       }
     }, 40);
 
-    return () => clearInterval(typingInterval);
+    return () => {
+      clearInterval(typingInterval);
+      timeoutsRef.current.forEach(clearTimeout);
+      timeoutsRef.current = [];
+    };
   }, [isVisible, step]);
 
   const scrollToBottom = useCallback(() => {
@@ -70,13 +78,15 @@ export default function AnimatedTerminal({ feature, isVisible }: AnimatedTermina
       setInteraction({ status: "typing", command: cmd.name, output: null });
       scrollToBottom();
 
-      setTimeout(() => {
+      const t1 = setTimeout(() => {
         setInteraction({ status: "running", command: cmd.name, output: null });
-        setTimeout(() => {
+        const t2 = setTimeout(() => {
           setInteraction({ status: "done", command: cmd.name, output: cmd.output });
           scrollToBottom();
         }, 800);
+        timeoutsRef.current.push(t2);
       }, 400);
+      timeoutsRef.current.push(t1);
     },
     [scrollToBottom]
   );
