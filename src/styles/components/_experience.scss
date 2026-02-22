@@ -9,7 +9,11 @@
   position: relative;
   max-width: 1100px;
   margin: 0 auto;
-  padding: space(xl) space(md);
+  padding: space(lg) space(md);
+
+  @media (min-width: 64em) {
+    padding: space(xl) space(md);
+  }
 
   // ----- CENTRAL LINE -----
   &__line {
@@ -37,10 +41,10 @@
   &__items {
     display: flex;
     flex-direction: column;
-    gap: clamp(#{space(3xl)}, 8vw, #{space(5xl)});
+    gap: space(3xl); // MOBILE: moderate spacing
 
-    @media (max-width: 64em) {
-      gap: space(3xl);
+    @media (min-width: 64em) {
+      gap: clamp(4rem, 10vw, 8rem); // DESKTOP: generous breathing room
     }
   }
 
@@ -48,23 +52,30 @@
   &__item {
     position: relative;
     display: flex;
-    align-items: flex-start;
-    width: 100%;
+    flex-direction: column; // MOBILE-FIRST: stack vertically
+    gap: space(lg);
 
-    @media (max-width: 64em) {
-      flex-direction: column;
-      gap: space(lg);
+    @media (min-width: 64em) {
+      flex-direction: row; // DESKTOP: side-by-side
+      align-items: flex-start;
+      gap: 0;
     }
   }
 
   // ----- HALF BLOCKS -----
   &__left,
   &__right {
-    width: calc(50% - #{space(3xl)});
-    min-width: 0;              // FIX: prevents flex child from expanding
-    max-width: calc(50% - 2rem); // FIX: hard cap at half
-    flex-shrink: 0;
+    // MOBILE-FIRST: full width
+    width: 100%;
     transition: opacity 1s ease-out, transform 1s ease-out;
+
+    // DESKTOP: 50% each
+    @media (min-width: 64em) {
+      width: calc(50% - #{space(3xl)});
+      min-width: 0;
+      max-width: calc(50% - 2rem);
+      flex-shrink: 0;
+    }
 
     &--hidden {
       opacity: 0;
@@ -75,14 +86,9 @@
       opacity: 1;
       transform: translateY(0);
     }
-
-    @media (max-width: 64em) {
-      width: 100%;
-      max-width: 100%;
-    }
   }
 
-  // Stagger: push one side down for oblique effect
+  // Stagger: push one side down for oblique effect (desktop only)
   &__left--stagger,
   &__right--stagger {
     @media (min-width: 64em) {
@@ -90,9 +96,9 @@
     }
   }
 
-  // ----- CONNECTOR NODE (flex child, NOT absolute) -----
+  // ----- CONNECTOR NODE (flex child, desktop only) -----
   &__connector {
-    display: none;
+    display: none; // MOBILE: hidden
 
     @media (min-width: 64em) {
       display: flex;
@@ -101,7 +107,7 @@
       justify-content: flex-start;
       width: 80px;
       flex-shrink: 0;
-      padding-top: 24px; // visual alignment with title line
+      padding-top: 24px;
       position: relative;
     }
   }
@@ -144,15 +150,13 @@
 
   // ----- TEXT BLOCK -----
   &__text {
-    &--right {
-      text-align: left;
-    }
+    // MOBILE-FIRST: always left-aligned
+    text-align: left;
 
+    // DESKTOP: side-specific alignment
     &--left {
-      text-align: right;
-
-      @media (max-width: 64em) {
-        text-align: left;
+      @media (min-width: 64em) {
+        text-align: right;
       }
     }
   }
@@ -168,10 +172,8 @@
   }
 
   &__text--left &__category {
-    justify-content: flex-end;
-
-    @media (max-width: 64em) {
-      justify-content: flex-start;
+    @media (min-width: 64em) {
+      justify-content: flex-end;
     }
   }
 
@@ -204,16 +206,11 @@
   &__terminal {
     width: 100%;
     display: flex;
-
-    &--right {
-      justify-content: flex-start;
-    }
+    // MOBILE-FIRST: always left-aligned
 
     &--left {
-      justify-content: flex-end;
-
-      @media (max-width: 64em) {
-        justify-content: flex-start;
+      @media (min-width: 64em) {
+        justify-content: flex-end;
       }
     }
   }

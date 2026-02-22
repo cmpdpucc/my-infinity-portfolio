@@ -12,17 +12,23 @@ $terminal-radius: 12px;
 $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 
 .pf-terminal {
+  // MOBILE-FIRST: base styles = mobile
   width: 100%;
-  max-width: 480px;
   background: $terminal-bg;
   border-radius: $terminal-radius;
   border: 1px solid rgba(color(border), 0.5);
   box-shadow: shadow(xl), 0 0 40px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  height: 400px;
+  height: 280px;
   overflow: hidden;
   transition: transform 700ms ease-out, box-shadow 300ms ease;
+
+  // DESKTOP: wider but still compact
+  @media (min-width: 64em) {
+    max-width: 520px;
+    height: 320px;
+  }
 
   &:hover {
     box-shadow: shadow(xl), 0 0 60px rgba(color(cta), 0.05);
@@ -72,13 +78,18 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 
   // ----- BODY -----
   &__body {
-    padding: space(lg);
+    padding: space(md);
     flex: 1;
     overflow-y: auto;
     font-family: $terminal-font;
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     display: flex;
     flex-direction: column;
+
+    @media (min-width: 64em) {
+      padding: space(lg);
+      font-size: 0.8125rem;
+    }
 
     // Custom scrollbar
     &::-webkit-scrollbar {
@@ -167,8 +178,13 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 
     code {
       color: var(--color-text-muted);
-      line-height: 1.7;
-      font-size: 0.8125rem;
+      line-height: 1.5;
+      font-size: 0.6875rem;
+
+      @media (min-width: 64em) {
+        line-height: 1.6;
+        font-size: 0.75rem;
+      }
     }
   }
 
@@ -322,10 +338,13 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
     flex-shrink: 0;
   }
 
-  // ----- RESPONSIVE -----
-  @media (max-width: 64em) {
-    max-width: 100%;
-    height: 360px;
+  // Header compact on mobile
+  &__header {
+    height: 36px;
+
+    @media (min-width: 64em) {
+      height: 42px;
+    }
   }
 }
 
