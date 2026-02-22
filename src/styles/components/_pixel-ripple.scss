@@ -1,0 +1,29 @@
+@use '../colors' as *;
+@use '../tokens' as *;
+
+// =====================================
+// PIXEL CANVAS RIPPLE — idle animation overlay
+// =====================================
+.pf-pixel-ripple {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  transition: opacity 700ms ease-in-out;
+
+  // Radial mask: dissolve pixels at edges for premium aesthetic
+  mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
+  -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
+
+  &__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  // Accessibility: disable animation for users with motion sensitivity
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    transition: none;
+  }
+}

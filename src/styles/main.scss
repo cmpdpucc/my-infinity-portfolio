@@ -6,6 +6,7 @@
 @use 'components/card';
 @use 'components/page';
 @use 'components/mobile-nav';
+@use 'components/pixel-ripple';
 
 *, *::before, *::after {
   box-sizing: border-box;
