@@ -1,0 +1,101 @@
+@use '../colors' as *;
+@use '../tokens' as *;
+
+// =====================================
+// MOBILE IDENTITY BAR — collapsed pill + fullscreen modal
+// =====================================
+
+// Collapsed pill — top-left corner
+.pf-mobile-identity {
+  display: none; // Hidden on desktop
+
+  @media (max-width: 64em) {
+    display: flex;
+    align-items: center;
+    gap: space(sm);
+    position: fixed;
+    top: space(md);
+    left: space(md);
+    z-index: 45; // Above scroll content, below modal
+    padding: space(xs) space(md) space(xs) space(xs);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    cursor: pointer;
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: background 200ms ease, transform 200ms ease;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba(255, 255, 255, 0.14);
+      transform: scale(1.02);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  // Mini avatar circle
+  &__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    flex-shrink: 0;
+  }
+
+  &__name {
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+
+  // Fullscreen modal overlay
+  &__modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    transform-origin: top left;
+    padding: space(xl);
+  }
+
+  // Close button
+  &__close {
+    position: absolute;
+    top: space(lg);
+    right: space(lg);
+    z-index: 101;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: background 200ms ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  // Card container inside modal
+  &__card-container {
+    max-width: 340px;
+    width: 100%;
+  }
+}

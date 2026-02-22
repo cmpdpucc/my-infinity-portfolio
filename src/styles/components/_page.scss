@@ -23,10 +23,12 @@
 }
 
 // =====================================
-// SCROLL INDICATOR — "Scroll to explore"
+// SCROLL INDICATOR — "Scroll to explore" button
 // =====================================
 .pf-scroll-indicator {
-  @media (max-width: 64em) {
-    display: none !important; // Mobile has MobileNav for navigation cue
+  transition: color 200ms ease, opacity 200ms ease;
+
+  &:hover {
+    color: var(--color-text) !important;
   }
 }

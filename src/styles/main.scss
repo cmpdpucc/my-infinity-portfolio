@@ -9,6 +9,8 @@
 @use 'components/pixel-ripple';
 @use 'components/identity';
 @use 'components/section-nav';
+@use 'components/profile-card';
+@use 'components/mobile-identity';
 
 *, *::before, *::after {
   box-sizing: border-box;

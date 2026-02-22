@@ -52,12 +52,18 @@ export default function AboutSection() {
         />
       </motion.div>
 
-      {/* Scroll indicator — hidden on mobile (MobileNav provides navigation cue) */}
-      <motion.div
+      {/* Scroll to next section — clickable button, visible on all viewports */}
+      <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
         className="pf-scroll-indicator"
+        onClick={() => {
+          const nextSection = document.getElementById("experience");
+          if (nextSection) nextSection.scrollIntoView({ behavior: "smooth" });
+        }}
+        type="button"
+        aria-label="Scroll to experience section"
         style={{
           position: "absolute",
           bottom: "2.5rem",
@@ -70,6 +76,11 @@ export default function AboutSection() {
           fontSize: "0.7rem",
           letterSpacing: "0.12em",
           textTransform: "uppercase",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          fontFamily: "inherit",
+          padding: "0.5rem 1rem",
         }}
       >
         <motion.span
@@ -79,7 +90,7 @@ export default function AboutSection() {
           <ArrowDown size={13} />
         </motion.span>
         Scroll to explore
-      </motion.div>
+      </motion.button>
     </div>
   );
 }
