@@ -100,4 +100,41 @@ export const EXPERIENCES: Experience[] = [
     ],
     icon: "globe",
   },
+  {
+    id: "uderlyy",
+    category: "Full-Stack",
+    title: "UI/UX Engineer · Uderly",
+    period: "2022 — 2024",
+    description:
+      "Built a multi-locale e-commerce frontend covering cart, checkout and wishlist flows. " +
+      "Established the SCSS/BEM design system still used in production. " +
+      "Integrated i18n with 4 locales and real-time Supabase sync for inventory management.",
+    terminalTitle: "commerce_engine.ts",
+    code:
+`async function processCheckout(
+  cart: CartItem[],
+  locale: Locale
+): Promise<OrderResult> {
+  const validated = await validateInventory(cart);
+  const pricing = applyLocaleRules(validated, locale);
+
+  const order = await supabase
+    .from('orders')
+    .insert({
+      items: pricing.items,
+      total: pricing.total,
+      currency: locale.currency,
+    })
+    .select()
+    .single();
+
+  return { success: true, orderId: order.data.id };
+}`,
+    tech: "React + Supabase + i18n",
+    commands: [
+      { name: "E2E Suite", output: "✓ 64 Playwright scenarios passed. Cart → Checkout → Payment flow OK." },
+      { name: "Locale Check", output: "🌍 4/4 locales verified: EN, IT, DE, FR. RTL: N/A." },
+    ],
+    icon: "globe",
+  },
 ];

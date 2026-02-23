@@ -10,10 +10,9 @@ import AnimatedTerminal from "@/components/AnimatedTerminal";
 /**
  * ExperienceSection — Staggered Terminal Timeline.
  *
- * Each experience entry alternates text ↔ terminal in a staggered layout
- * with a central dashed connector line (desktop only).
- *
- * Text appears first; terminal animation starts 400ms later (stagger delay).
+ * Z-pattern: text ↔ terminal alternate sides on desktop.
+ * Mobile: text ALWAYS first, terminal second (via CSS order).
+ * Stagger delay: text appears → 400ms → terminal animation starts.
  */
 
 const ICON_MAP: Record<Experience["icon"], React.ReactNode> = {
@@ -57,30 +56,49 @@ function TimelineItem({ experience, index }: { experience: Experience; index: nu
     </div>
   );
 
-  // Connector node between the halves (flex child, not absolute)
+  // Connector node — now position:absolute, centered on dashed line
   const connector = (
     <div className="pf-exp-timeline__connector">
       <div className="pf-exp-timeline__node">
         <div className={`pf-exp-timeline__node-dot ${isVisible ? "pf-exp-timeline__node-dot--active" : ""}`} />
       </div>
-      <div className="pf-exp-timeline__connector-line" />
     </div>
   );
 
+  /*
+   * Layout logic:
+   * isEven (0, 2, 4...): left = TEXT,     right = TERMINAL (text-first)
+   * isOdd  (1, 3, 5...): left = TERMINAL, right = TEXT     (terminal-first)
+   *
+   * On mobile, CSS order forces text always before terminal regardless
+   * of which div it's in. On desktop, order is unset = natural flow.
+   */
+
+  // Mobile order classes
+  const leftOrderClass = isEven
+    ? "pf-exp-timeline__left--text-first"      // text is in left → order:1
+    : "pf-exp-timeline__left--terminal-first";  // terminal is in left → order:2 (mobile) / unset (desktop)
+
+  const rightOrderClass = isEven
+    ? "pf-exp-timeline__right--text-first"      // terminal in right → order:2
+    : "pf-exp-timeline__right--terminal-first"; // text in right → order:1 (mobile) / unset (desktop)
+
+  // Stagger: terminal side gets pushed down on desktop
+  const leftStagger = !isEven ? "pf-exp-timeline__left--stagger" : "";  // odd: terminal in left → stagger down
+  const rightStagger = isEven ? "pf-exp-timeline__right--stagger" : ""; // even: terminal in right → stagger down
+
   return (
     <div ref={ref} className="pf-exp-timeline__item">
+      {connector}
+
       {/* Left half */}
-      <div
-        className={`pf-exp-timeline__left ${visibilityClass} ${!isEven ? "pf-exp-timeline__left--stagger" : ""}`}
-      >
+      <div className={`pf-exp-timeline__left ${visibilityClass} ${leftOrderClass} ${leftStagger}`}>
         {isEven ? textBlock : terminalBlock}
       </div>
 
-      {connector}
-
       {/* Right half */}
       <div
-        className={`pf-exp-timeline__right ${visibilityClass} ${isEven ? "pf-exp-timeline__right--stagger" : ""}`}
+        className={`pf-exp-timeline__right ${visibilityClass} ${rightOrderClass} ${rightStagger}`}
         style={{ transitionDelay: "150ms" }}
       >
         {isEven ? terminalBlock : textBlock}
