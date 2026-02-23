@@ -23,16 +23,17 @@ export function useScrollSpy(
 
     const observerOptions: IntersectionObserverInit = {
       root: document.getElementById(containerId) ?? null,
-      rootMargin: "0px",
-      threshold: 0.5, // section must be 50% visible to be "active"
+      rootMargin: "-45% 0px -45% 0px", // Extremely thin 10% tripwire
+      threshold: 0, 
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setActiveId(entry.target.id);
-        }
-      });
+      // Find all intersecting entries
+      const intersecting = entries.filter(e => e.isIntersecting);
+      if (intersecting.length > 0) {
+        // If multiple intersect the thin wire, pick the first one (most likely scrolling down into it)
+        setActiveId(intersecting[0].target.id);
+      }
     }, observerOptions);
 
     ids.forEach(id => {

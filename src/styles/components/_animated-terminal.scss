@@ -20,13 +20,13 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   box-shadow: shadow(xl), 0 0 40px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  height: 280px;
+  height: 240px; // MOBILE: compact terminal
   overflow: hidden;
   transition: transform 700ms ease-out, box-shadow 300ms ease;
 
   // DESKTOP: wider but still compact
   @media (min-width: 64em) {
-    max-width: 520px;
+    max-width: min(520px, 100%);
     height: 320px;
   }
 

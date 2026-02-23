@@ -4,13 +4,16 @@ import { useEffect, useRef } from 'react';
  * useDiscreteScroll — Hybrid scroll: snap sections + free-scroll zones.
  *
  * Sections marked with `data-free-scroll="true"` allow native scrolling.
- * The hook detects when the user has scrolled past the free-scroll content
- * and then resumes snap behavior to the next/previous section.
+ * When the user reaches the boundary of a free-scroll zone, scrolling
+ * STOPS (wall). The user must scroll again to trigger snap to next section.
  */
 export function useDiscreteScroll(sectionIds: string[], containerId: string = "scroll-container") {
   const isScrolling = useRef(false);
   const scrollAccumulator = useRef(0);
+  const wallHitTime = useRef(0);         // Timestamp of when the wall was hit
+  const wallCooldown = useRef(false);     // Is the wall active?
   const THRESHOLD = 30;
+  const WALL_DELAY_MS = 400;             // Must pause this long at wall before snap
 
   useEffect(() => {
     const container = document.getElementById(containerId);
@@ -26,7 +29,6 @@ export function useDiscreteScroll(sectionIds: string[], containerId: string = "s
       const sectionHeight = container.clientHeight;
       const scrollTop = container.scrollTop;
 
-      // Find the section that overlaps the most with the viewport
       for (let i = ids.length - 1; i >= 0; i--) {
         const el = document.getElementById(ids[i]);
         if (!el) continue;
@@ -47,7 +49,7 @@ export function useDiscreteScroll(sectionIds: string[], containerId: string = "s
 
       const { index: currentIndex, element: currentEl, isFreeScroll } = getCurrentSectionInfo();
 
-      // FREE-SCROLL ZONE: allow native scrolling, detect boundary exits
+      // FREE-SCROLL ZONE
       if (isFreeScroll && currentEl) {
         const sectionTop = currentEl.offsetTop;
         const sectionBottom = sectionTop + currentEl.scrollHeight;
@@ -56,14 +58,32 @@ export function useDiscreteScroll(sectionIds: string[], containerId: string = "s
         const scrollingDown = e.deltaY > 0;
         const scrollingUp = e.deltaY < 0;
 
-        // If scrolling down and viewport bottom has reached section bottom → snap to next
-        if (scrollingDown && viewportBottom >= sectionBottom - 2) {
+        // ---- WALL AT BOTTOM: scrolling down past last item ----
+        if (scrollingDown && Math.ceil(viewportBottom) >= Math.floor(sectionBottom) - 20) {
           e.preventDefault();
-          scrollAccumulator.current += e.deltaY;
 
+          const now = Date.now();
+
+          // First hit → activate wall, record time
+          if (!wallCooldown.current) {
+            wallCooldown.current = true;
+            wallHitTime.current = now;
+            scrollAccumulator.current = 0;
+            return; // Block — wall is up
+          }
+
+          // Wall is active — check if enough time has passed
+          if (now - wallHitTime.current < WALL_DELAY_MS) {
+            // Still within cooldown — block scroll
+            return;
+          }
+
+          // Cooldown expired — user is intentionally scrolling again → snap
+          scrollAccumulator.current += e.deltaY;
           if (Math.abs(scrollAccumulator.current) >= THRESHOLD) {
             const nextIndex = Math.min(currentIndex + 1, ids.length - 1);
             if (nextIndex !== currentIndex) {
+              wallCooldown.current = false;
               snapToSection(container, ids, nextIndex);
             }
             scrollAccumulator.current = 0;
@@ -71,14 +91,28 @@ export function useDiscreteScroll(sectionIds: string[], containerId: string = "s
           return;
         }
 
-        // If scrolling up and viewport top is at or above section top → snap to previous
-        if (scrollingUp && viewportTop <= sectionTop + 2) {
+        // ---- WALL AT TOP: scrolling up past first item ----
+        if (scrollingUp && Math.floor(viewportTop) <= Math.ceil(sectionTop) + 20) {
           e.preventDefault();
-          scrollAccumulator.current += e.deltaY;
 
+          const now = Date.now();
+
+          if (!wallCooldown.current) {
+            wallCooldown.current = true;
+            wallHitTime.current = now;
+            scrollAccumulator.current = 0;
+            return;
+          }
+
+          if (now - wallHitTime.current < WALL_DELAY_MS) {
+            return;
+          }
+
+          scrollAccumulator.current += e.deltaY;
           if (Math.abs(scrollAccumulator.current) >= THRESHOLD) {
             const prevIndex = Math.max(currentIndex - 1, 0);
             if (prevIndex !== currentIndex) {
+              wallCooldown.current = false;
               snapToSection(container, ids, prevIndex);
             }
             scrollAccumulator.current = 0;
@@ -86,12 +120,14 @@ export function useDiscreteScroll(sectionIds: string[], containerId: string = "s
           return;
         }
 
-        // Otherwise: allow native scroll within the free-scroll zone
+        // ---- INSIDE FREE ZONE: clear wall state, allow native scroll ----
+        wallCooldown.current = false;
         return;
       }
 
-      // SNAP MODE: hijack scroll for section-by-section navigation
+      // ---- SNAP MODE: standard section-by-section ----
       e.preventDefault();
+      wallCooldown.current = false;
 
       scrollAccumulator.current += e.deltaY;
 
