@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { EXPERIENCES, type Experience } from "@/data/experiences.data";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import AnimatedTerminal from "@/components/AnimatedTerminal";
+import NodeSpark from "@/components/NodeSpark";
 
 /**
  * ExperienceSection — Staggered Terminal Timeline.
@@ -56,11 +57,23 @@ function TimelineItem({ experience, index }: { experience: Experience; index: nu
     </div>
   );
 
-  // Connector node — now position:absolute, centered on dashed line
+  // Connector node — position:absolute, centered on dashed line
+  // NodeSpark fires radial burst when node becomes visible
   const connector = (
     <div className="pf-exp-timeline__connector">
-      <div className="pf-exp-timeline__node">
+      {/* overflow:visible so spark canvas isn't clipped by 28px bounds */}
+      <div
+        className="pf-exp-timeline__node"
+        style={{ position: "relative", overflow: "visible" }}
+      >
         <div className={`pf-exp-timeline__node-dot ${isVisible ? "pf-exp-timeline__node-dot--active" : ""}`} />
+        <NodeSpark
+          triggered={isVisible}
+          nodeSize={28}
+          color="#2563eb"
+          count={12}
+          duration={700}
+        />
       </div>
     </div>
   );
