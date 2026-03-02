@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { smoothScrollTo, easings } from "@/utils/smoothScroll";
 import type { SectionConfig } from "@/data/sections.data";
 
 /**
@@ -19,7 +20,15 @@ interface SectionNavProps {
 export default function SectionNav({ sections, activeSectionId }: SectionNavProps) {
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    const container = document.getElementById("scroll-container");
+    if (el && container) {
+      smoothScrollTo({
+        container,
+        targetY: el.offsetTop,
+        duration: 950,
+        easing: easings.easeInOutQuart,
+      });
+    }
   };
 
   return (

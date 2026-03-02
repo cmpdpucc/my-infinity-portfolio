@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { User, Briefcase, Layers } from "lucide-react";
+import { smoothScrollTo, easings } from "@/utils/smoothScroll";
 import type { SectionConfig } from "@/data/sections.data";
 
 interface MobileNavProps {
@@ -20,7 +21,15 @@ const iconMap: Record<string, React.ReactNode> = {
 export default function MobileNav({ sections, activeSectionId }: MobileNavProps) {
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    const container = document.getElementById("scroll-container");
+    if (el && container) {
+      smoothScrollTo({
+        container,
+        targetY: el.offsetTop,
+        duration: 950,
+        easing: easings.easeInOutQuart,
+      });
+    }
   };
 
   return (

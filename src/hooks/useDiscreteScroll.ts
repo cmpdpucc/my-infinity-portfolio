@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { smoothScrollTo, easings } from '@/utils/smoothScroll';
 
 /**
  * useDiscreteScroll — Hybrid scroll: snap sections + free-scroll zones.
@@ -148,15 +149,17 @@ export function useDiscreteScroll(sectionIds: string[], containerId: string = "s
       const targetElement = document.getElementById(sectionIds[targetIndex]);
 
       if (targetElement) {
-        cont.scrollTo({
-          top: targetElement.offsetTop,
-          behavior: 'smooth'
+        smoothScrollTo({
+          container: cont,
+          targetY: targetElement.offsetTop,
+          duration: 850,
+          easing: easings.easeInOutCubic,
+          onComplete: () => {
+            // Free the scroll lock strictly when animation physically completes
+            isScrolling.current = false;
+            scrollAccumulator.current = 0;
+          }
         });
-
-        setTimeout(() => {
-          isScrolling.current = false;
-          scrollAccumulator.current = 0;
-        }, 750);
       } else {
         isScrolling.current = false;
         scrollAccumulator.current = 0;
