@@ -14,7 +14,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 
 // Developer profile data — centralized so all components share the same source
 const DEV_PROFILE = {
-  avatarUrl: "https://avatar.iran.liara.run/public",
+  avatarUrl: "/avatar.svg",
   name: "Developer Name",
   title: "Senior Software Engineer & Product Designer",
   handle: "devname",

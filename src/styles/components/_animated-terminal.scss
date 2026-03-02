@@ -188,19 +188,15 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
     }
   }
 
-  // Syntax highlighting
-  &__kw {
-    color: #f472b6;
-    font-weight: 500;
-  }
-
-  &__type {
-    color: #fde047;
-  }
-
-  &__decorator {
-    color: var(--color-text-muted);
-  }
+  // Syntax highlighting (VSCode Dark theme inspired)
+  &__kw { color: #c678dd; font-weight: 500; }          // Keywords: Purple
+  &__type { color: #e5c07b; }                          // Types/Classes: Yellow
+  &__decorator { color: var(--color-text-muted); }     // Decorators: Gray
+  &__str { color: #98c379; }                           // Strings: Green
+  &__func { color: #61afef; }                          // Functions: Blue
+  &__comment { color: #5c6370; font-style: italic; }   // Comments: Muted Gray
+  &__op { color: #56b6c2; }                            // Operators: Cyan
+  &__bool { color: #d19a66; }                          // Booleans/Numbers: Orange
 
   // ----- INTERACTIVE CLI -----
   &__cli {

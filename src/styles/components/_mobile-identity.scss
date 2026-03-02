@@ -18,9 +18,9 @@
     left: space(md);
     z-index: 45; // Above scroll content, below modal
     padding: space(xs) space(md) space(xs) space(xs);
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(13, 17, 23, 0.85); // Dark solid base to prevent scroll bleed-through
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 50px;
     cursor: pointer;
     color: var(--color-text);

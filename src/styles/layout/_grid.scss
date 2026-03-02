@@ -114,8 +114,8 @@
   }
 
   @media (max-width: 64em) { // 1024px
-    padding: space(xl) space(lg); // more side padding on mobile
-    padding-bottom: space(4xl);
+    // Safe areas to clear MobileIdentityBar (top) and MobileNav (bottom)
+    padding: 7rem space(lg) 7rem space(lg); 
   }
 }
 

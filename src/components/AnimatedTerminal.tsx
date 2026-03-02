@@ -91,21 +91,33 @@ export default function AnimatedTerminal({ feature, isVisible }: AnimatedTermina
     [scrollToBottom]
   );
 
-  /** Syntax highlight via regex — no external libs */
-  const highlightCode = (raw: string): string =>
-    raw
-      .replace(
-        /(const|let|var|async|await|function|return|import|from|export|interface|type|new)/g,
-        '<span class="pf-terminal__kw">$1</span>'
-      )
-      .replace(
-        /(Promise|CartItem|Locale|OrderResult|ThemeProvider|GridLayout|Section|RefObject)/g,
-        '<span class="pf-terminal__type">$1</span>'
-      )
-      .replace(
-        /(@\w+)/g,
-        '<span class="pf-terminal__decorator">$1</span>'
-      );
+  /** Syntax highlight via regex — zero bundle size cost */
+  const highlightCode = (raw: string): string => {
+    let highlighted = raw;
+    // 1. Strings (single and double quotes, basic)
+    highlighted = highlighted.replace(/(["'])(?:(?=(\\?))\2.)*?\1/g, '<span class="pf-terminal__str">$&</span>');
+    // 2. Functions (word followed by open paren - avoiding inside HTML class="...")
+    highlighted = highlighted.replace(/\b([a-zA-Z_]\w*)(?=\s*\()/g, '<span class="pf-terminal__func">$1</span>');
+    // 3. Keywords
+    highlighted = highlighted.replace(
+      /\b(const|let|var|async|await|function|return|import|from|export|interface|type|new|if|else|switch|case|break|default)\b/g,
+      '<span class="pf-terminal__kw">$1</span>'
+    );
+    // 4. Types and Capitalized Classes (e.g., Promise, CustomType)
+    highlighted = highlighted.replace(
+      /\b([A-Z][a-zA-Z0-9_]*)\b/g,
+      '<span class="pf-terminal__type">$1</span>'
+    );
+    // 5. Booleans & specific globals
+    highlighted = highlighted.replace(
+      /\b(true|false|null|undefined|console)\b/g,
+      '<span class="pf-terminal__bool">$1</span>'
+    );
+    // 6. Decorators
+    highlighted = highlighted.replace(/(@\w+)/g, '<span class="pf-terminal__decorator">$1</span>');
+    
+    return highlighted;
+  };
 
   const cmdSlug = (name: string) => name.toLowerCase().replace(/\s+/g, "_");
 

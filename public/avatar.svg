@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="200" height="200" fill="url(#bg)"/>
+  
+  <!-- Outer Ring -->
+  <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
+  <circle cx="100" cy="100" r="75" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
+  
+  <!-- Developer/Abstract Core -->
+  <path d="M100 45 L145 130 L55 130 Z" fill="url(#accent)" opacity="0.9"/>
+  <path d="M100 155 L55 70 L145 70 Z" fill="rgba(59, 130, 246, 0.4)" opacity="0.8"/>
+  
+  <!-- Code Brackets Overlay -->
+  <path d="M70 100 L85 85 M70 100 L85 115" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M130 100 L115 85 M130 100 L115 115" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
