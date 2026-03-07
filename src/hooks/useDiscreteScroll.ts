@@ -43,6 +43,9 @@ export function useDiscreteScroll(sectionIds: string[], containerId: string = "s
     };
 
     const handleWheel = (e: WheelEvent) => {
+      // If a child element (e.g. Swiper) already handled the scroll, ignore it.
+      if (e.defaultPrevented) return;
+
       if (isScrolling.current) {
         e.preventDefault();
         return;

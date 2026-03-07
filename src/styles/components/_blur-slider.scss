@@ -1,0 +1,172 @@
+// ============================================================
+// blur-slider — BEM Component
+// Horizontal scroll showcase with blur/scale Swiper transitions.
+// All theming via CSS custom props from portfolio design system.
+// ============================================================
+
+// ─── Component-scoped animation tokens ───────────────────────
+// Exposed as CSS custom props so the parent can override them.
+.blur-slider {
+  --bs-transition-duration: 1.5s;
+  --bs-transition-timing: ease;
+  --bs-base-scale: 0.5;
+  --bs-active-scale: 2;
+  --bs-next-scale: 1.6;
+  --bs-next-plus-scale: 0.9;
+  --bs-base-blur: 20px;
+  --bs-next-blur: 0px;
+  --bs-next-plus-blur: 10px;
+  --bs-blur-halo: 60px;
+
+  // ─── Root Layout ────────────────────────────────────────────
+  position: relative;
+  width: 100vw;
+  height: 100dvh; // Absorbs the vertical scroll while Swiper is active
+  overflow: visible; // Allow left-side bleed so outgoing slides aren't abruptly cut
+  background-color: transparent;
+
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+
+  // ─── Swiper container ───────────────────────────────────────
+  &__swiper {
+    width: 100vw;
+    height: 100%;
+    margin-left: 0;
+    overflow: visible; // Spills slides into the left margin (under sidebar) where parent mask fades them
+
+    @media (min-width: 64em) {
+      width: calc(100vw - var(--sidebar-width));
+      margin-left: var(--sidebar-width);
+    }
+  }
+
+  // ─── Each slide ─────────────────────────────────────────────
+  &__slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: transform var(--bs-transition-duration) var(--bs-transition-timing);
+
+    // ─── Main image thumbnail (default: small + blurred) ──────
+    &-image-container {
+      position: relative;
+      z-index: 2;
+      width: 300px;
+      aspect-ratio: 1;
+      flex-shrink: 0;
+      border-radius: 24px;
+      overflow: hidden;
+      filter: blur(var(--bs-base-blur));
+      scale: var(--bs-base-scale);
+      opacity: 1;
+      transform: translateX(50%);
+      transition: all var(--bs-transition-duration) var(--bs-transition-timing);
+    }
+
+    &-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    // ─── Background halo (default: hidden) ────────────────────
+    &-image-halo-container {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--bs-transition-duration) ease-in-out;
+    }
+
+    &-image-halo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(var(--bs-blur-halo));
+      scale: var(--bs-active-scale);
+      transform-origin: center;
+      border-radius: 50%;
+    }
+
+    // ─── Textual / renderItem content (default: hidden) ───────
+    &-content {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateY(-50%) translateX(-50%);
+      width: 35vw;
+      min-width: 280px;
+      padding: 0 var(--space-xl);
+      z-index: 10;
+      opacity: 0;
+      filter: blur(20px);
+      pointer-events: none;
+      transition:
+        opacity var(--bs-transition-duration) ease-in-out,
+        filter var(--bs-transition-duration) ease-in-out,
+        transform var(--bs-transition-duration) var(--bs-transition-timing);
+    }
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // SWIPER STATE MAGIC — Semantic standard (Active = Hero)
+  // ──────────────────────────────────────────────────────────────────────
+
+  // PREV slide (outgoing): image scales huge + exits left, fades out
+  .swiper-slide-prev .blur-slider__slide-image-container {
+    scale: var(--bs-active-scale);
+    transform: translateX(-60%);
+    opacity: 0;
+  }
+
+  // ACTIVE slide (the hero): image is full-size and sharp, perfectly centered by Swiper natively
+  .swiper-slide-active {
+    transform: translateX(0%); // Natural Swiper positioning
+    z-index: 5; // ensure it's above prev/next
+  }
+
+  .swiper-slide-active .blur-slider__slide-image-container {
+    filter: blur(0);
+    scale: 1;
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  // ACTIVE: background halo glow appears
+  .swiper-slide-active .blur-slider__slide-image-halo-container {
+    opacity: 0.35;
+  }
+
+  // ACTIVE: text/renderItem content reveals
+  .swiper-slide-active .blur-slider__slide-content {
+    transform: translateY(-50%) translateX(-50%); // Perfectly centered absolutely
+    opacity: 1;
+    filter: blur(0);
+    pointer-events: auto;
+  }
+
+  // NEXT slide (preview): small preview slide peeking from the right
+  .swiper-slide-next {
+    transform: translateX(0); // On mobile, no forced shift
+    @media (min-width: 64em) {
+      transform: translateX(calc(10% + var(--sidebar-width) / 2));
+    }
+  }
+
+  .swiper-slide-next .blur-slider__slide-image-container {
+    filter: blur(var(--bs-next-plus-blur));
+    scale: var(--bs-next-plus-scale);
+    opacity: 1;
+  }
+
+  .swiper-slide-next + .swiper-slide .blur-slider__slide-image-container {
+    filter: blur(var(--bs-next-plus-blur));
+    scale: var(--bs-next-plus-scale);
+    opacity: 1;
+  }
+}

@@ -13,6 +13,7 @@
 @use 'components/mobile-identity';
 @use 'components/animated-terminal';
 @use 'components/experience';
+@use 'components/blur-slider';
 
 *, *::before, *::after {
   box-sizing: border-box;
