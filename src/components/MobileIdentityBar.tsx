@@ -34,8 +34,8 @@ export default function MobileIdentityBar({ avatarUrl, name, title, handle, stat
             layoutId="profile-container"
             initial={{ opacity: 0, x: -20, borderRadius: 9999 }}
             animate={{ opacity: 1, x: 0, borderRadius: 9999 }}
-            exit={{ opacity: 0, transition: { duration: 0.2 } }}
-            transition={{ duration: 0.4, type: "spring", stiffness: 300, damping: 30 }}
+            exit={{ opacity: 0, transition: { duration: 0.15 } }}
+            transition={{ duration: 0.35, type: "tween", ease: "easeInOut" }}
             className="pf-mobile-identity"
             onClick={() => setIsExpanded(true)}
             aria-label="View developer profile"
@@ -63,7 +63,7 @@ export default function MobileIdentityBar({ avatarUrl, name, title, handle, stat
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.35, ease: "easeInOut" }}
             />
 
             <motion.button
@@ -74,7 +74,7 @@ export default function MobileIdentityBar({ avatarUrl, name, title, handle, stat
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, transition: { duration: 0.15 } }}
-              transition={{ duration: 0.3, delay: 0.1 }}
+              transition={{ duration: 0.2, delay: 0.15, ease: "easeOut" }}
             >
               <X size={24} />
             </motion.button>
@@ -83,7 +83,7 @@ export default function MobileIdentityBar({ avatarUrl, name, title, handle, stat
               layoutId="profile-container"
               className="pf-mobile-identity__card-container"
               style={{ borderRadius: 24, overflow: 'hidden', padding: 0 }}
-              transition={{ duration: 0.4, type: "spring", stiffness: 300, damping: 30 }}
+              transition={{ duration: 0.35, type: "tween", ease: "easeInOut" }}
             >
               <ProfileCard
                 avatarUrl={avatarUrl}

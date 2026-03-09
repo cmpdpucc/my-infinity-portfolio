@@ -12,12 +12,12 @@
   @media (max-width: 64em) {
     display: flex;
     align-items: center;
-    gap: space(sm);
+    gap: space(md);
     position: fixed;
     top: space(md);
     left: space(md);
     z-index: 45; // Above scroll content, below modal
-    padding: space(xs) space(md) space(xs) space(xs);
+    padding: space(sm) space(lg) space(sm) space(sm);
     background: rgba(13, 17, 23, 0.85); // Dark solid base to prevent scroll bleed-through
     backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -25,7 +25,7 @@
     cursor: pointer;
     color: var(--color-text);
     font-family: inherit;
-    font-size: 0.85rem;
+    font-size: 1.15rem;
     font-weight: 600;
     transition: background 200ms ease;
 
@@ -37,8 +37,8 @@
 
   // Mini avatar circle
   &__avatar {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.15);
