@@ -36,8 +36,7 @@
   transition: color 200ms ease, opacity 200ms ease;
 
   @media (max-width: 64em) {
-    // Lift above the floating MobileNav (which is around bottom: 1.5rem + ~3rem height)
-    bottom: 5.5rem;
+    bottom: 2.5rem;
   }
 
   &:hover {
