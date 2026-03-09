@@ -8,13 +8,26 @@
 // ===================================================
 // ROOT LAYOUT: Sidebar (fixed) + Scroll Container
 // ===================================================
-.pf-layout {
+
+// Wrapper to constrain the maximum width of the portfolio on ultra-wide screens
+body {
   display: flex;
+  justify-content: center;
+  background-color: var(--color-bg); // Ensure background bleeds nicely if content doesn't
+}
+
+.pf-layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
   height: 100vh;
-  overflow: hidden; 
   width: 100%;
+  max-width: 1750px; // Prevent stretching on ultra-wide monitors
+  background-color: var(--color-bg);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5); // Add subtle depth against body bg
+  overflow: hidden;
 
   @media (max-width: 64em) {
+    display: flex;
     flex-direction: column;
     height: 100dvh; // Force mobile viewport
     overflow: hidden; // Prevent body scroll
@@ -24,16 +37,11 @@
 
 
 // ===================================================
-// SIDEBAR — absolute overlay over 100vw container
+// SIDEBAR — Column 1 of the Desktop Grid
 // ===================================================
 .pf-sidebar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 20;
   height: 100vh;
-  width: var(--sidebar-width);
-  flex-shrink: 0;
+  width: var(--sidebar-width); // Grid respects this implicitly, but it's good for internal sizing
   display: flex;
   flex-direction: column;
   padding: space(xl) space(lg);
@@ -57,13 +65,14 @@
 }
 
 // ===================================================
-// SCROLL CONTAINER — right column, 100vh per section
+// SCROLL CONTAINER — right column (1fr), 100vh per section
 // ===================================================
 .pf-scroll-container {
-  flex: 1;
-  width: 100vw; // Force 100vw since layout is flex and sidebar is absolute overlay
+  width: 100%; // Takes up exactly it's 1fr grid track
+  min-width: 0; // Prevent flex/grid blowouts from wide children (like Sliders)
   height: 100vh;
   overflow-y: scroll;
+  overflow-x: hidden; // Keep horizontal tight
   -webkit-overflow-scrolling: touch;
   // NOTE: scroll-snap-type removed — snap handled entirely by useDiscreteScroll JS
 
@@ -113,8 +122,7 @@
   max-width: 90rem; // Cap the readable content width
   margin: 0 auto; // Center it inside the fluid section container
   height: 100%;
-  // We add padding-left to push the normal section content out of the sidebar's way
-  padding: space(3xl) space(xl) space(3xl) calc(var(--sidebar-width) + space(xl));
+  padding: space(3xl) space(xl); // Removed legacy padding-left calc hack
   display: flex;
   flex-direction: column;
   justify-content: center; // Vertical center based on content
