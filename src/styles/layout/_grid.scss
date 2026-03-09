@@ -9,19 +9,13 @@
 // ROOT LAYOUT: Sidebar (fixed) + Scroll Container
 // ===================================================
 
-// Wrapper to constrain the maximum width of the portfolio on ultra-wide screens
-body {
-  display: flex;
-  justify-content: center;
-  background-color: var(--color-bg); // Ensure background bleeds nicely if content doesn't
-}
-
 .pf-layout {
   display: grid;
   grid-template-columns: var(--sidebar-width) 1fr;
   height: 100vh;
   width: 100%;
-  max-width: 1750px; // Prevent stretching on ultra-wide monitors
+  max-width: 1550px; // Prevent stretching on ultra-wide monitors
+  margin: 0 auto; // ⬅️ THIS dynamically centers the grid horizontally within its parent
   background-color: var(--color-bg);
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5); // Add subtle depth against body bg
   overflow: hidden;
