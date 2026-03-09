@@ -38,6 +38,7 @@
   width: var(--sidebar-width); // Grid respects this implicitly, but it's good for internal sizing
   display: flex;
   flex-direction: column;
+  justify-content: center; // Vertically center the card and the nav within the sidebar
   padding: space(xl) space(lg);
   overflow: hidden;
   gap: space(md);
