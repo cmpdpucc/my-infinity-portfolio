@@ -2,6 +2,7 @@
 
 import React from "react";
 import ScrollVelocity from "@/components/ScrollVelocity";
+import { smoothScrollTo, easings } from "@/utils/smoothScroll";
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 
@@ -60,7 +61,17 @@ export default function AboutSection() {
         className="pf-scroll-indicator"
         onClick={() => {
           const nextSection = document.getElementById("experience");
-          if (nextSection) nextSection.scrollIntoView({ behavior: "smooth" });
+          const container = document.getElementById("scroll-container");
+          if (nextSection && container) {
+            smoothScrollTo({
+              container,
+              targetY: nextSection.offsetTop,
+              duration: 850,
+              easing: easings.easeInOutCubic,
+            });
+          } else if (nextSection) {
+            nextSection.scrollIntoView({ behavior: "smooth" });
+          }
         }}
         type="button"
         aria-label="Scroll to experience section"
