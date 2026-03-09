@@ -31,10 +31,9 @@ export default function MobileIdentityBar({ avatarUrl, name, title, handle, stat
         {!isExpanded && (
           <motion.button
             key="collapsed-pill"
-            layoutId="profile-container"
-            initial={{ opacity: 0, x: -20, borderRadius: 9999 }}
-            animate={{ opacity: 1, x: 0, borderRadius: 9999 }}
-            exit={{ opacity: 0, transition: { duration: 0.15 } }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.15 } }}
             transition={{ duration: 0.35, type: "tween", ease: "easeInOut" }}
             className="pf-mobile-identity"
             onClick={() => setIsExpanded(true)}
@@ -42,7 +41,6 @@ export default function MobileIdentityBar({ avatarUrl, name, title, handle, stat
             type="button"
           >
             <motion.img
-              layoutId="profile-avatar"
               src={avatarUrl}
               alt={`${name} avatar`}
               className="pf-mobile-identity__avatar"
@@ -80,10 +78,11 @@ export default function MobileIdentityBar({ avatarUrl, name, title, handle, stat
             </motion.button>
 
             <motion.div 
-              layoutId="profile-container"
               className="pf-mobile-identity__card-container"
-              style={{ borderRadius: 24, overflow: 'hidden', padding: 0 }}
-              transition={{ duration: 0.35, type: "tween", ease: "easeInOut" }}
+              initial={{ opacity: 0, scale: 0.85, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.2 } }}
+              transition={{ duration: 0.35, type: "tween", ease: "easeOut" }}
             >
               <ProfileCard
                 avatarUrl={avatarUrl}
