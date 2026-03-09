@@ -57,21 +57,27 @@ export default function MobileIdentityBar({ avatarUrl, name, title, handle, stat
       {/* Expanded fullscreen modal */}
       <AnimatePresence>
         {isExpanded && (
-          <motion.div
-            className="pf-mobile-identity__modal"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <button
+          <div className="pf-mobile-identity__modal">
+            <motion.div
+              className="pf-mobile-identity__backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+
+            <motion.button
               className="pf-mobile-identity__close"
               onClick={() => setIsExpanded(false)}
               aria-label="Close profile"
               type="button"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.15 } }}
+              transition={{ duration: 0.3, delay: 0.1 }}
             >
               <X size={24} />
-            </button>
+            </motion.button>
 
             <motion.div 
               layoutId="profile-container"
@@ -94,7 +100,7 @@ export default function MobileIdentityBar({ avatarUrl, name, title, handle, stat
                 innerGradient="linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(59, 130, 246, 0.12) 100%)"
               />
             </motion.div>
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>

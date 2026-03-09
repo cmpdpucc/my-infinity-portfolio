@@ -50,7 +50,7 @@
     letter-spacing: 0.02em;
   }
 
-  // Fullscreen modal overlay
+  // Fullscreen modal wrapper
   &__modal {
     position: fixed;
     inset: 0;
@@ -58,9 +58,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(12px);
     padding: space(xl);
+  }
+
+  // Independent blurry backdrop layer
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 10, 20, 0.15); // Less opaque to allow blur to show through
+    backdrop-filter: blur(8px);
+    z-index: 1;
   }
 
   // Close button
@@ -68,7 +75,7 @@
     position: absolute;
     top: space(lg);
     right: space(lg);
-    z-index: 101;
+    z-index: 3;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -89,7 +96,7 @@
 
   // Card container inside modal
   &__card-container {
-    max-width: 340px;
-    width: 100%;
+    position: relative;
+    z-index: 2;
   }
 }
