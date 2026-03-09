@@ -7,7 +7,7 @@
 // ─── Component-scoped animation tokens ───────────────────────
 // Exposed as CSS custom props so the parent can override them.
 .blur-slider {
-  --bs-transition-duration: 0.8s;
+  --bs-transition-duration: 0.6s;
   --bs-transition-timing: ease;
   --bs-base-scale: 0.5;
   --bs-active-scale: 2;

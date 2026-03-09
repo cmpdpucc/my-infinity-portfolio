@@ -41,7 +41,7 @@ function BlurSlider<T extends BlurSliderItem>({
       modules: swiperModules,
       loop: false, // Disabled — only 5 slides, loop requires 2× slidesPerView
       grabCursor: true, // Visual drag affordance
-      speed: 800,
+      speed: 600,
       spaceBetween: 0,
       centeredSlides: true,
       mousewheel: {
