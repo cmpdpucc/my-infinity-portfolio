@@ -204,7 +204,7 @@
     transform: translateX(-50%);
 
     @media (max-width: 40em) {
-      bottom: 5rem !important; // Above mobile bottom nav
+      bottom: 7.5rem !important; // Moved up to float exactly between the card and the fixed bottom nav
       background: rgba(10, 14, 36, 0.6);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
