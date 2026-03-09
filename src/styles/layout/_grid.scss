@@ -109,6 +109,7 @@
 .pf-section-content {
   position: relative;
   width: 100%;
+  min-width: 100%; // ensures it doesn't shrink-wrap inside center-aligned parents
   max-width: 90rem; // Cap the readable content width
   margin: 0 auto; // Center it inside the fluid section container
   height: 100%;

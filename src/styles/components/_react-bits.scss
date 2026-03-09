@@ -53,6 +53,9 @@
 .pf-scroll-velocity {
   overflow: hidden;
   padding: 0.5rem 0;
+  // Create a soft fade-out at the horizontal edges
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 
   &__parallax {
     position: relative;

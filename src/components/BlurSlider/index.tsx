@@ -2,10 +2,11 @@
 
 import React, { useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Mousewheel } from "swiper/modules";
+import { Mousewheel, Pagination } from "swiper/modules";
 
 // ⚠️ Base Swiper CSS — required for the slideX transitions to work
 import "swiper/css";
+import "swiper/css/pagination";
 
 import { BlurSliderItem, BlurSliderProps } from "./types";
 
@@ -16,7 +17,7 @@ import { BlurSliderItem, BlurSliderProps } from "./types";
  *   via Swiper's `mousewheel.releaseOnEdges`.
  * - Accepts any data shape via the generic T extends BlurSliderItem.
  * - Renders slide content via the `renderItem` render prop, keeping this component
- *   fully decoupled from PixelCard or any specific UI.
+ *   fully decoupled from ProjectCard or any specific UI.
  * - Styling is provided by the global BEM stylesheet `_blur-slider.scss`
  *   (imported via main.scss — consistent with the rest of the portfolio).
  *
@@ -25,7 +26,7 @@ import { BlurSliderItem, BlurSliderProps } from "./types";
  * @example
  * <BlurSlider
  *   items={PROJECTS}
- *   renderItem={(p) => <PixelCard image={p.imageUrl} title={p.title} description={p.description} />}
+ *   renderItem={(p) => <ProjectCard title={p.title} description={p.description} ... />}
  * />
  */
 function BlurSlider<T extends BlurSliderItem>({
@@ -33,12 +34,13 @@ function BlurSlider<T extends BlurSliderItem>({
   renderItem,
   className = "",
 }: BlurSliderProps<T>) {
-  const swiperModules = useMemo(() => [Mousewheel], []);
+  const swiperModules = useMemo(() => [Mousewheel, Pagination], []);
 
   const swiperParams = useMemo(
     () => ({
       modules: swiperModules,
-      loop: true,
+      loop: false, // Disabled — only 5 slides, loop requires 2× slidesPerView
+      grabCursor: true, // Visual drag affordance
       speed: 1500,
       spaceBetween: 0,
       centeredSlides: true,
@@ -50,16 +52,19 @@ function BlurSlider<T extends BlurSliderItem>({
         forceToAxis: false, // Explicitly false so both vertical/horizontal mouse wheel events work
         thresholdDelta: 50,
       },
-      // Responsive breakpoints
+      pagination: {
+        clickable: true,
+      },
+      // Responsive breakpoints — refined for better card sizing
       breakpoints: {
         0: {
           slidesPerView: 1.2,
         },
         640: {
-          slidesPerView: 2,
+          slidesPerView: 1.8,
         },
         1024: {
-          slidesPerView: 4,
+          slidesPerView: 3,
         },
       },
     }),
@@ -80,37 +85,33 @@ function BlurSlider<T extends BlurSliderItem>({
             className="blur-slider__slide"
           >
             {/*
-              Background halo: a blurred duplicate of the image that glows
-              behind the active slide. Purely decorative.
-            */}
-            <div className="blur-slider__slide-image-halo-container" aria-hidden="true">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={item.imageUrl}
-                alt=""
-                className="blur-slider__slide-image-halo"
-              />
-            </div>
-
-            {/*
-              Main image thumbnail — this element is the one that
-              scales and blurs via Swiper's class hooks in the SCSS.
-            */}
-            <div className="blur-slider__slide-image-container">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={item.imageUrl}
-                alt=""
-                className="blur-slider__slide-image"
-              />
-            </div>
-
-            {/*
               Polymorphic content panel — receives the output of renderItem().
-              For ProjectsSection this is a <PixelCard />.
+              For ProjectsSection this is a <ProjectCard />.
               The panel is hidden by default and revealed on swiper-slide-next.
             */}
             <div className="blur-slider__slide-content">
+              {/*
+                Project icon — clickable link to the project.
+                Visible only on the active slide (controlled via SCSS).
+                Will be replaced with actual .ico files in the future.
+              */}
+              <a
+                href={item.projectUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="blur-slider__slide-icon"
+                aria-label={`Visit project`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={item.iconUrl}
+                  alt=""
+                  width={64}
+                  height={64}
+                  className="blur-slider__slide-icon-img"
+                />
+              </a>
+
               {renderItem(item)}
             </div>
           </SwiperSlide>
@@ -121,3 +122,4 @@ function BlurSlider<T extends BlurSliderItem>({
 }
 
 export default BlurSlider;
+

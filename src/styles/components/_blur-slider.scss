@@ -16,7 +16,7 @@
   --bs-base-blur: 20px;
   --bs-next-blur: 0px;
   --bs-next-plus-blur: 10px;
-  --bs-blur-halo: 60px;
+  --bs-blur-halo: 40px; // Reduced from 60px — less pixelated halo
 
   // ─── Root Layout ────────────────────────────────────────────
   position: relative;
@@ -27,6 +27,12 @@
 
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+
+  // Softer mask on mobile — less aggressive edge fade
+  @media (max-width: 40em) {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  }
 
   // ─── Swiper container ───────────────────────────────────────
   &__swiper {
@@ -49,47 +55,35 @@
     position: relative;
     transition: transform var(--bs-transition-duration) var(--bs-transition-timing);
 
-    // ─── Main image thumbnail (default: small + blurred) ──────
-    &-image-container {
-      position: relative;
-      z-index: 2;
-      width: 300px;
-      aspect-ratio: 1;
-      flex-shrink: 0;
-      border-radius: 24px;
-      overflow: hidden;
-      filter: blur(var(--bs-base-blur));
-      scale: var(--bs-base-scale);
-      opacity: 1;
-      transform: translateX(50%);
-      transition: all var(--bs-transition-duration) var(--bs-transition-timing);
-    }
-
-    &-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    // ─── Background halo (default: hidden) ────────────────────
-    &-image-halo-container {
+    // ─── Project icon (default: hidden until slide is active) ─────
+    &-icon {
       position: absolute;
-      inset: 0;
-      z-index: 0;
+      top: -32px; // Exactly half of the 64px icon height
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity var(--bs-transition-duration) ease-in-out;
-    }
+      // Delay the fade-in so icon appears AFTER the card animation
+      transition: opacity 0.5s ease var(--bs-transition-duration);
 
-    &-image-halo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: blur(var(--bs-blur-halo));
-      scale: var(--bs-active-scale);
-      transform-origin: center;
-      border-radius: 50%;
+      &-img {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        object-fit: cover;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      &:hover &-img {
+        transform: scale(1.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      }
     }
 
     // ─── Textual / renderItem content (default: hidden) ───────
@@ -109,6 +103,18 @@
         opacity var(--bs-transition-duration) ease-in-out,
         filter var(--bs-transition-duration) ease-in-out,
         transform var(--bs-transition-duration) var(--bs-transition-timing);
+
+      // Mobile: slightly narrower card to allow adjacent cards to peek in
+      @media (max-width: 40em) {
+        width: 78vw;
+        min-width: unset;
+        padding: 0 var(--space-sm);
+      }
+
+      // Tablet: wider cards
+      @media (min-width: 40em) and (max-width: 64em) {
+        width: 55vw;
+      }
     }
   }
 
@@ -116,30 +122,33 @@
   // SWIPER STATE MAGIC — Semantic standard (Active = Hero)
   // ──────────────────────────────────────────────────────────────────────
 
-  // PREV slide (outgoing): image scales huge + exits left, fades out
-  .swiper-slide-prev .blur-slider__slide-image-container {
-    scale: var(--bs-active-scale);
-    transform: translateX(-60%);
-    opacity: 0;
-  }
-
-  // ACTIVE slide (the hero): image is full-size and sharp, perfectly centered by Swiper natively
-  .swiper-slide-active {
-    transform: translateX(0%); // Natural Swiper positioning
-    z-index: 5; // ensure it's above prev/next
-  }
-
-  .swiper-slide-active .blur-slider__slide-image-container {
-    filter: blur(0);
-    scale: 1;
-    transform: translateX(0);
-    opacity: 1;
+  // PREV slide: semi-visible peek for continuity
+  .swiper-slide-prev .blur-slider__slide-content {
+    opacity: 0.15;
+    filter: blur(4px);
     pointer-events: none;
+    @media (max-width: 40em) {
+      opacity: 0.25; // More visible on mobile
+    }
   }
 
-  // ACTIVE: background halo glow appears
-  .swiper-slide-active .blur-slider__slide-image-halo-container {
-    opacity: 0.35;
+  // PREV slide: icon hidden
+  .swiper-slide-prev .blur-slider__slide-icon {
+    opacity: 0;
+    pointer-events: none;
+    transition-delay: 0s; // Hide immediately on exit
+  }
+
+  // ACTIVE slide (the hero)
+  .swiper-slide-active {
+    transform: translateX(0%);
+    z-index: 5;
+  }
+
+  // ACTIVE: icon appears magically AFTER card animation
+  .swiper-slide-active .blur-slider__slide-icon {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   // ACTIVE: text/renderItem content reveals
@@ -150,7 +159,7 @@
     pointer-events: auto;
   }
 
-  // NEXT slide (preview): small preview slide peeking from the right
+  // NEXT slide (preview): peeking from the right for continuity
   .swiper-slide-next {
     transform: translateX(0); // On mobile, no forced shift
     @media (min-width: 64em) {
@@ -158,15 +167,65 @@
     }
   }
 
-  .swiper-slide-next .blur-slider__slide-image-container {
-    filter: blur(var(--bs-next-plus-blur));
-    scale: var(--bs-next-plus-scale);
-    opacity: 1;
+  .swiper-slide-next .blur-slider__slide-content {
+    opacity: 0.15;
+    filter: blur(4px);
+    pointer-events: none;
+    @media (max-width: 40em) {
+      opacity: 0.25; // More visible on mobile
+    }
   }
 
-  .swiper-slide-next + .swiper-slide .blur-slider__slide-image-container {
-    filter: blur(var(--bs-next-plus-blur));
-    scale: var(--bs-next-plus-scale);
-    opacity: 1;
+  // NEXT slide: icon hidden
+  .swiper-slide-next .blur-slider__slide-icon {
+    opacity: 0;
+    pointer-events: none;
+    transition-delay: 0s;
+  }
+
+  // Slides beyond next: content faintly visible
+  .swiper-slide-next + .swiper-slide .blur-slider__slide-content {
+    opacity: 0.08;
+    filter: blur(6px);
+    pointer-events: none;
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // PAGINATION DOTS — Glassmorphism style
+  // ──────────────────────────────────────────────────────────────────────
+  .swiper-pagination {
+    bottom: 2rem !important;
+    z-index: 30;
+    // Glass pill container for mobile visibility
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    width: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%);
+
+    @media (max-width: 40em) {
+      bottom: 5rem !important; // Above mobile bottom nav
+      background: rgba(10, 14, 36, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    &-bullet {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      opacity: 1;
+      transition: all 0.3s ease;
+      margin: 0 4px !important;
+    }
+
+    &-bullet-active {
+      background: var(--color-cta, #2563eb);
+      width: 24px;
+      border-radius: 4px;
+    }
   }
 }
+

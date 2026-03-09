@@ -26,7 +26,19 @@
 // SCROLL INDICATOR — "Scroll to explore" button
 // =====================================
 .pf-scroll-indicator {
+  position: absolute;
+  left: 50%;
+  bottom: 2.5rem;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   transition: color 200ms ease, opacity 200ms ease;
+
+  @media (max-width: 64em) {
+    // Lift above the floating MobileNav (which is around bottom: 1.5rem + ~3rem height)
+    bottom: 5.5rem;
+  }
 
   &:hover {
     color: var(--color-text) !important;

@@ -9,6 +9,10 @@ export interface BlurSliderItem {
   id: string | number;
   /** Used internally for the background glow/blur halo of the active slide */
   imageUrl: string;
+  /** Small icon/favicon URL displayed above the active card */
+  iconUrl: string;
+  /** External project URL — icon links here */
+  projectUrl: string;
 }
 
 /**

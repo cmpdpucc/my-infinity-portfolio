@@ -8,9 +8,10 @@
 
 .pf-exp-timeline {
   position: relative;
-  max-width: 1100px;
+  width: 100%;
+  max-width: 1200px; // Expanded to use more of the screen
   margin: 0 auto;
-  padding: space(4xl) space(sm) space(lg) space(sm); // MOBILE: top padding to clear identity bar 
+  padding: space(4xl) space(sm) space(lg) space(sm);
 
   @media (min-width: 64em) {
     padding: space(xl) space(md);
@@ -58,10 +59,10 @@
     gap: space(lg);
 
     @media (min-width: 64em) {
-      flex-direction: row; // DESKTOP: side-by-side
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       align-items: flex-start;
-      // gap = connector width (28px) + breathing room on each side (clamp)
-      gap: clamp(48px, 8vw, 100px);
+      gap: clamp(48px, 8vw, 120px);
     }
   }
 
@@ -73,8 +74,7 @@
     transition: opacity 1s ease-out, transform 1s ease-out;
 
     @media (min-width: 64em) {
-      flex: 1 1 0;           // Equal share of remaining space
-      min-width: 0;          // Allow shrinking below content size (needed for text wrapping)
+      min-width: 0;          // Allow shrinking below content size
       overflow-wrap: break-word;
       word-break: break-word;
     }
