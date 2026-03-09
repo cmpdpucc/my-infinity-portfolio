@@ -27,16 +27,11 @@
     font-family: inherit;
     font-size: 0.85rem;
     font-weight: 600;
-    transition: background 200ms ease, transform 200ms ease;
+    transition: background 200ms ease;
 
     &:hover,
     &:focus-visible {
       background: rgba(255, 255, 255, 0.14);
-      transform: scale(1.02);
-    }
-
-    &:active {
-      transform: scale(0.98);
     }
   }
 
@@ -65,7 +60,6 @@
     justify-content: center;
     background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(12px);
-    transform-origin: top left;
     padding: space(xl);
   }
 
