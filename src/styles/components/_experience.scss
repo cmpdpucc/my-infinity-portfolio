@@ -17,26 +17,26 @@
     padding: space(xl) space(md);
   }
 
-  // ----- CENTRAL LINE (desktop only) -----
+  // ----- CENTRAL LINE -----
   &__line {
-    display: none;
+    display: block; // Visible on mobile
+    position: absolute;
+    left: 15px;     // Grounded to the left on mobile
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    transform: translateX(-50%);
+    opacity: 0.4;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(color(border), 0.7) 0px,
+      rgba(color(border), 0.7) 4px,
+      transparent 4px,
+      transparent 10px
+    );
 
     @media (min-width: 64em) {
-      display: block;
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 2px;
-      transform: translateX(-50%);
-      opacity: 0.4;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        rgba(color(border), 0.7) 0px,
-        rgba(color(border), 0.7) 4px,
-        transparent 4px,
-        transparent 10px
-      );
+      left: 50%; // Centered on desktop
     }
   }
 
@@ -57,8 +57,10 @@
     display: flex;
     flex-direction: column; // MOBILE-FIRST: stack vertically
     gap: space(lg);
+    padding-left: 30px;     // Offset container from left timeline
 
     @media (min-width: 64em) {
+      padding-left: 0;      // Reset offset for desktop
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: flex-start;
@@ -142,17 +144,18 @@
   }
 
   // ----- CONNECTOR NODE -----
-  // Positioned absolute at the center of the timeline, sits ON the dashed line
+  // Positioned absolute at the left of the mobile timeline, sits ON the dashed line
   &__connector {
-    display: none; // MOBILE: hidden
+    display: block; // Visible on mobile
+    position: absolute;
+    left: -9px;
+    top: 42px;      // Aligned with job title offset by tags atop
+    transform: translateX(-50%);
+    z-index: 2;
 
     @media (min-width: 64em) {
-      display: block;
-      position: absolute;
       left: 50%;
-      top: 24px; // aligned with title text baseline
-      transform: translateX(-50%);
-      z-index: 2;
+      top: 24px;    // Desktop aligned with title text baseline without tag offset issues
     }
   }
 
