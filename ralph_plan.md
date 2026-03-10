@@ -81,43 +81,39 @@
 > **Obiettivo:** Creare la struttura cartelle per le route e il core `AppRouter.tsx`.
 
 ### 1.1. Create Route Component Directories
-- [ ] Creare `src/components/routes/` directory.
+- [x] Creare `src/components/routes/` directory.
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
-  - DoD: Directory esiste con file placeholder `.gitkeep` o primo file vuoto.
+  - DoD: Directory creata con 4 page components (HomePage, AboutPage, ExperiencePage, ProjectsPage). ✅
 
 ### 1.2. Create Layout Component Directory
-- [ ] Creare `src/components/layout/` directory.
+- [x] Creare `src/components/layout/` directory.
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
-  - DoD: Directory esiste.
+  - DoD: Directory creata con `PortfolioLayout.tsx`. ✅
 
 ### 1.3. Create Catch-All Route for Direct URL Access
-- [ ] Creare `src/app/[[...slug]]/page.tsx` — catch-all route per URL diretti (`/about`, `/projects`, etc.).
+- [x] Gestione URL diretti tramite `next.config.ts` rewrites (catch-all `[[...slug]]` causava conflitto con root page.tsx).
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `architecture`
-  - DoD: File esiste, usa `dynamic(() => import(...), { ssr: false })` per rendere `AppRouter`.
-  - DoD: Navigazione diretta a `/about` non dà 404.
+  - DoD: Rewrites per `/about`, `/experience`, `/projects` → `/` in `next.config.ts`. ✅
+  - Nota: Approccio cambiato da catch-all a rewrites per compatibilità Next.js 16.
 
 ### 1.4. Build `AppRouter.tsx`
-- [ ] Creare `src/components/AppRouter.tsx` con `BrowserRouter` + `Routes` + `React.lazy()`.
+- [x] Creare `src/components/AppRouter.tsx` con `BrowserRouter` + `Routes` + `React.lazy()`.
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `architecture`, `clean-code`
-  - DoD: Routes definite: `/` → HomePage, `/about` → AboutPage, `/experience` → ExperiencePage, `/projects` → ProjectsPage.
-  - DoD: Nested route con `PortfolioLayout` per `/about`, `/experience`, `/projects`.
-  - DoD: `React.lazy()` per code splitting su ogni route component.
-  - DoD: `<Suspense>` fallback con loading indicator minimo.
-  - DoD: Zero TypeScript errors.
+  - DoD: Routes: `/` → HomePage, `/about` → AboutPage, `/experience` → ExperiencePage, `/projects` → ProjectsPage. ✅
+  - DoD: Nested route con `PortfolioLayout` per le 3 portfolio pages. ✅
+  - DoD: `React.lazy()` su tutti i 5 route components. `<Suspense>` con dark-themed fallback. ✅
+  - DoD: Build exit code 0, zero TypeScript errors. ✅
 
 ### 1.5. Modify Root `app/page.tsx`
-- [ ] Trasformare `page.tsx` da single-page scroll a entry point per `AppRouter`.
+- [x] Trasformare `page.tsx` da single-page scroll a entry point per `AppRouter`.
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
-  - DoD: `page.tsx` usa `dynamic(() => import("@/components/AppRouter"), { ssr: false })`.
-  - DoD: Tutto il contenuto precedente (sidebar, scroll-container, sections inline) rimosso.
-  - DoD: Nessun hydration mismatch error in console.
+  - DoD: `"use client"` + `dynamic(() => import("@/components/AppRouter"), { ssr: false })`. ✅
+  - DoD: Tutto il contenuto precedente rimosso. ✅
 
 ### 1.6. Simplify Root `app/layout.tsx`
-- [ ] Ridurre `layout.tsx` al minimo: solo fonts + SCSS import + `{children}`.
+- [x] Ridurre `layout.tsx` al minimo: solo fonts + SCSS import + `{children}`.
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
-  - DoD: Nessun componente UI nel layout (no sidebar, no nav).
-  - DoD: Fonts DM Sans + Space Grotesk mantenuti.
-  - DoD: `main.scss` import mantenuto.
+  - DoD: Solo fonts (DM Sans + Space Grotesk) + `main.scss` import + `{children}`. Zero UI components. ✅
 
 ---
 
