@@ -1,40 +1,443 @@
-# 🚀 RALPH PLAN — BlurSlider Integration
 
-> **Obiettivo:** Stravolgere la sezione Projects implementando il `BlurSlider` polimorfo con scroll orizzontale e scroll-lock verticale, integrato perfettamente nel design system (BEM/SCSS) e pronto a renderizzare i `PixelCard` attuali.
-> **Supervisori:** `@orchestrator` e `@project-planner`
+# 🚀 RALPH PLAN — INFINITY PORTFOLIO: Multi-Page Restructuring
+
+> **Nome in codice:** INFINITY PORTFOLIO v2
+> **Core Objective:** Trasformare il portfolio single-page scroll in un'app multi-page con react-router-dom, Home page immersiva con FloatingLines, navigazione premium e transizioni Apple-style.
+> **Ultimo Aggiornamento:** 2026-03-10 18:40 JST
+> **Questo file traccia l'avanzamento. Segna i task come completati `[x]` quando la DoD è soddisfatta.**
+
+---
+
+## LEGACY — Fasi Completate (BlurSlider Integration)
+
+<details>
+<summary>✅ Click per espandere le fasi legacy già completate</summary>
+
+### Phase 1 — Foundation e Typescript (BlurSlider)
+- [x] `BlurSlider/types.ts` — interfacce generiche.
+- [x] `BlurSlider.scss` — architettura SCSS BEM.
+
+### Phase 2 — Core Component Development & Scroll Hijack
+- [x] `BlurSlider.tsx` con `swiper/react`.
+- [x] Scroll Locking & Handling (`releaseOnEdges`).
+- [x] Transizioni ed Effetti Visivi (scaling, blur background).
+
+### Phase 3 — Projects Section Integration
+- [x] Rifattorizzato `ProjectsSection.tsx` con BlurSlider.
+- [x] `PixelCard` iniettato tramite polimorfismo.
+
+### Phase 4 — Testing & Polish
+- [x] Responsiveness multi-breakpoint.
+- [x] QA Visuale & Prestazioni.
+
+</details>
 
 ---
 
-## Phase 1 — Foundation e Typescript
-> **Agente Esecutore:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
-- [ ] Creare `src/components/BlurSlider/types.ts` con interfacce generiche `BlurSliderItem` e `BlurSliderProps<T>`.
-  - **DoD**: Type generico supporta `renderItem?: (item: T, isActive: boolean) => React.ReactNode` e campi base necessari (id, imageURL).
-- [ ] Riscrivere e ottimizzare l'architettura base SCSS in `src/components/BlurSlider/BlurSlider.scss`.
-  - **DoD**: SCSS utilizza le variabili globali di tema (es. `--color-text`, `--color-bg`), usa convenzioni BEM strette e include il reset `pf-section` necessario. Nessun colore hardcoded.
+# 🌌 INFINITY PORTFOLIO v2 — PIANO DI RISTRUTTURAZIONE
 
-## Phase 2 — Core Component Development & Scroll Hijack
-> **Agente Esecutore:** `@frontend-specialist` | Skills: `react-patterns`, `ui-ux-pro-max`, `frontend-design`
-- [x] Sviluppare `BlurSlider.tsx` utilizzando `swiper/react` e limitando ai moduli minimi essenziali (es. `Mousewheel`, `EffectCreative` se necessario).
-  - **DoD**: Componente accetta items e usa `renderItem` per instanziare i children. Logica swiper attivata al mount.
-- [x] Implementare "Scroll Locking & Handling".
-  - **DoD**: Wrapper del componente occupa `100vh`, intercetta lo scroll verticale bloccandolo all'interno della section finche' non si raggiunge l'inizio o la fine dello slider (`mousewheel: { releaseOnEdges: true }`).
-- [ ] Transizioni ed Effetti Visivi.
-  - **DoD**: Scaling interattivo ed effetto blur di sfondo integrati tramite classi Swiper (es. `.swiper-slide-active`, `.swiper-slide-next`) per garantire che lo scale incida sulla container list e non causi clipping.
+> Ogni Fase ha un **Agente Supervisore** e ogni subtask ha il proprio **Agente Esecutore** con le skill specifiche.
 
-## Phase 3 — Projects Section Integration
-> **Agente Esecutore:** `@frontend-specialist` | Skills: `react-patterns`, `architecture`
-- [x] Rifattorizzare `src/sections/ProjectsSection.tsx`.
-  - **DoD**: La Bento Grid corrente viene rimossa. Il `BlurSlider` viene importato e instanziato usando l'attuale array `PROJECTS`.
-- [x] Iniettare `<PixelCard />` tramite polimorfismo.
-  - **DoD**: La funzione `renderItem` per ogni elemento della lista istanzia un `<PixelCard image={item.image} title={item.title} description={item.description} />`.
-  - **DoD**: Evitare collisioni visuali: l'ombra Blur di background di BlurSlider non interferisce o si sovrappone male con la Canvas idle di PixelCard. (PixelCard ha il Canvas in overlay).
-
-## Phase 4 — Testing & Polish
-> **Agente Esecutore:** `@test-engineer` | Skills: `webapp-testing`, `performance-profiling`, `mobile-design`
-- [ ] Verifica Responsiveness.
-  - **DoD**: Breakpoints corretti re-istruendo Swiper: `{ 320: { slidesPerView: 1.2 }, 768: { slidesPerView: 2.5 }, 1024: { slidesPerView: 4 } }`. Nessun overflow orizzontale su device da 375px.
-- [ ] QA Visuale & Prestazioni.
-  - **DoD**: Nessun jank ("scattosità") durante lo scroll orizzontale. Lo `z-index` del Canvas del PixelCard non oscura il contenuto dello slide successvio di BlurSlider.
+> **🛡️ PROTOCOLLO GIT:**
+>
+> | Branch | Scopo |
+> |--------|-------|
+> | `main` | Produzione stabile |
+> | `feat/multipage-restructure` | Branch di lavoro per tutta la ristrutturazione |
+>
+> **Regole:**
+> 1. **Branch da `main`:** `git checkout main && git checkout -b feat/multipage-restructure`.
+> 2. **Commit Atomici:** Conventional Commits (`feat:`, `fix:`, `refactor:`, `chore:`).
+> 3. **📝 COMMIT CHECKPOINT:** Ogni task `[x]` → commit immediato con DoD nel body.
+> 4. **Merge → main:** Solo dopo Phase 7 (QA completa) + approvazione utente.
+>
+> **Agente Responsabile:** `@devops-engineer`
 
 ---
-> **Nota Operativa per OpenCode / Antigravity**: Questa planimetria e' ottimizzata per minimizzare la riscrittura del codice e fare leva sia sul lavoro Canvas della PixelCard gia' in essere, sia l'adattamento BEM preparato in precedenza da Gemini via Canvas. Segnare `[x]` solo al run in UI pulito.
+
+## Phase 0 — Pre-Flight & Dependency Setup
+> **🎯 Supervisore:** `@devops-engineer` (skills: `deployment-procedures`, `server-management`)
+> **Obiettivo:** Preparare l'ambiente, installare dipendenze, creare branch di lavoro.
+
+### 0.1. Git Branch & Environment
+- [ ] Creare branch `feat/multipage-restructure` da `main`.
+  - **Agente:** `@devops-engineer` | Skills: `deployment-procedures`
+  - DoD: Branch creato, working tree pulita, `git status` verde.
+
+### 0.2. Install react-router-dom
+- [ ] `npm install react-router-dom@^6` nel progetto portfolio.
+  - **Agente:** `@devops-engineer` | Skills: `deployment-procedures`
+  - DoD: `react-router-dom` in `package.json` dependencies, `npm ls react-router-dom` OK.
+
+### 0.3. Verify Build Baseline
+- [ ] `npm run build` passa senza errori PRIMA di qualsiasi modifica.
+  - **Agente:** `@devops-engineer` | Skills: `deployment-procedures`
+  - DoD: Build exit code 0, nessun TypeScript error.
+
+---
+
+## Phase 1 — Folder Structure & Routing Core
+> **🎯 Supervisore:** `@project-planner` (skills: `architecture`, `plan-writing`)
+> **Obiettivo:** Creare la struttura cartelle per le route e il core `AppRouter.tsx`.
+
+### 1.1. Create Route Component Directories
+- [ ] Creare `src/components/routes/` directory.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
+  - DoD: Directory esiste con file placeholder `.gitkeep` o primo file vuoto.
+
+### 1.2. Create Layout Component Directory
+- [ ] Creare `src/components/layout/` directory.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
+  - DoD: Directory esiste.
+
+### 1.3. Create Catch-All Route for Direct URL Access
+- [ ] Creare `src/app/[[...slug]]/page.tsx` — catch-all route per URL diretti (`/about`, `/projects`, etc.).
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `architecture`
+  - DoD: File esiste, usa `dynamic(() => import(...), { ssr: false })` per rendere `AppRouter`.
+  - DoD: Navigazione diretta a `/about` non dà 404.
+
+### 1.4. Build `AppRouter.tsx`
+- [ ] Creare `src/components/AppRouter.tsx` con `BrowserRouter` + `Routes` + `React.lazy()`.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `architecture`, `clean-code`
+  - DoD: Routes definite: `/` → HomePage, `/about` → AboutPage, `/experience` → ExperiencePage, `/projects` → ProjectsPage.
+  - DoD: Nested route con `PortfolioLayout` per `/about`, `/experience`, `/projects`.
+  - DoD: `React.lazy()` per code splitting su ogni route component.
+  - DoD: `<Suspense>` fallback con loading indicator minimo.
+  - DoD: Zero TypeScript errors.
+
+### 1.5. Modify Root `app/page.tsx`
+- [ ] Trasformare `page.tsx` da single-page scroll a entry point per `AppRouter`.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
+  - DoD: `page.tsx` usa `dynamic(() => import("@/components/AppRouter"), { ssr: false })`.
+  - DoD: Tutto il contenuto precedente (sidebar, scroll-container, sections inline) rimosso.
+  - DoD: Nessun hydration mismatch error in console.
+
+### 1.6. Simplify Root `app/layout.tsx`
+- [ ] Ridurre `layout.tsx` al minimo: solo fonts + SCSS import + `{children}`.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
+  - DoD: Nessun componente UI nel layout (no sidebar, no nav).
+  - DoD: Fonts DM Sans + Space Grotesk mantenuti.
+  - DoD: `main.scss` import mantenuto.
+
+---
+
+## Phase 2 — Home Page (Landing con FloatingLines)
+> **🎯 Supervisore:** `@orchestrator` (skills: `parallel-agents`, `behavioral-modes`)
+> **Obiettivo:** Creare la Home page immersiva con FloatingLines background, hero overlay e bento skill showcase.
+
+### 2.1. Build `HomePage.tsx` — Hero Section
+- [ ] Creare `src/components/routes/HomePage.tsx` con hero full-viewport.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`, `ui-ux-pro-max`
+  - DoD: `FloatingLines` come background full-viewport (z-0).
+  - DoD: Content overlay (z-10): status pill ("Available for new projects"), hero title (grande, typography di impatto), subtitle.
+  - DoD: **CTA 1**: "View Projects" → naviga a `/projects` (usa `react-router-dom` `Link`).
+  - DoD: **CTA 2**: "Contact Me" → azione di contatto (mailto o modal, TBD).
+  - DoD: FadeIn animations con stagger delay (ispirato da `inspirationLandingPage.tsx`).
+  - DoD: Responsivo: `clamp()` per font-size, layout flex che si adatta a mobile.
+
+### 2.2. Build `HomePage.tsx` — Bento Skill Showcase Section
+- [ ] Aggiungere sezione bento grid sotto l'hero (scrollabile).
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`, `ui-ux-pro-max`
+  - DoD: Grid bento con card skill (ispirato dalla sezione "expertise" di `inspirationLandingPage.tsx`).
+  - DoD: Card con icone Lucide (NO emoji), titolo, descrizione, tags.
+  - DoD: FadeIn/scroll-reveal per ogni card con stagger.
+  - DoD: Layout responsivo: 1 colonna mobile, 3 colonne desktop.
+
+### 2.3. Home Page SCSS
+- [ ] Creare `src/styles/components/_home.scss` con tutti gli stili della landing page.
+  - **Agente:** `@frontend-specialist` | Skills: `frontend-design`, `clean-code`
+  - DoD: `.pf-home` full viewport container.
+  - DoD: `.pf-home__hero` — overlay posizionamento centrato.
+  - DoD: `.pf-home__title` — typography responsiva con `clamp()`.
+  - DoD: `.pf-home__cta-group` — button row con hover glow e transizioni.
+  - DoD: `.pf-home__bento` — grid per skill showcase.
+  - DoD: Usa variabili CSS da `_colors.scss` e `_tokens.scss`, zero colori hardcoded.
+  - DoD: Import aggiunto in `main.scss`.
+
+---
+
+## Phase 3 — Portfolio Layout & Sidebar Controller
+> **🎯 Supervisore:** `@frontend-specialist` (skills: `react-patterns`, `frontend-design`)
+> **Obiettivo:** Creare il layout condiviso per le pagine portfolio (About, Experience, Projects) con sidebar persistente.
+
+### 3.1. Build `PortfolioLayout.tsx`
+- [ ] Creare `src/components/layout/PortfolioLayout.tsx` — layout con sidebar + `<Outlet />`.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `architecture`
+  - DoD: Desktop: sidebar (ProfileCard + RouteNav) + main area con `<Outlet />`.
+  - DoD: Mobile: MobileIdentityBar + `<Outlet />` + MobileNav (bottom).
+  - DoD: Sidebar FUORI da qualsiasi transition wrapper → persiste tra route changes.
+  - DoD: CSS grid: `var(--sidebar-width) 1fr` (riusa `_grid.scss` esistente).
+
+### 3.2. Build `SidebarController.tsx`
+- [ ] Creare `src/components/layout/SidebarController.tsx` — sidebar con visibilità scroll/route-aware.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`
+  - DoD: Su Home (`/`): sidebar nascosta nell'hero, appare con scroll (opacity + translateX `useTransform`).
+  - DoD: Trigger di apparizione: quando utente scrolla al ~60% del primo viewport (sezione bento).
+  - DoD: Su portfolio pages (`/about`, `/experience`, `/projects`): sidebar sempre visibile.
+  - DoD: `position: fixed` — nessun layout reflow (CLS = 0).
+  - DoD: Animazione fluida: `opacity 0→1`, `translateX -100→0`, durata ~400ms.
+
+### 3.3. Adapt `_grid.scss` for Route-Based Layout
+- [ ] Modificare `src/styles/layout/_grid.scss` per supportare il nuovo layout.
+  - **Agente:** `@frontend-specialist` | Skills: `frontend-design`, `clean-code`
+  - DoD: Rimuovere `.pf-scroll-container` e `.pf-scroll-section` (non più necessari).
+  - DoD: Aggiungere `.pf-portfolio-layout` per il grid sidebar + content.
+  - DoD: Mantenere stili sidebar desktop esistenti.
+  - DoD: Adattare mobile styles per il layout route-based.
+  - DoD: Nessun breaking change su classi ancora usate dai componenti attivi.
+
+---
+
+## Phase 4 — Navigation Components
+> **🎯 Supervisore:** `@frontend-specialist` (skills: `react-patterns`, `ui-ux-pro-max`)
+> **Obiettivo:** Costruire la top nav bar globale e convertire le nav esistenti a route-based.
+
+### 4.1. Build `NavigationBar.tsx`
+- [ ] Creare `src/components/layout/NavigationBar.tsx` — top nav bar frosted glass.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`, `ui-ux-pro-max`
+  - DoD: Presente su TUTTE le pagine (Home inclusc).
+  - DoD: Su Home: inizia trasparente, frosted glass on scroll (`backdrop-blur: 20px`).
+  - DoD: Su portfolio pages: sempre frosted glass.
+  - DoD: Links: Home, About, Experience, Projects (usa `NavLink` da react-router-dom).
+  - DoD: Active state tramite `NavLink` `isActive` prop.
+  - DoD: Mobile: logo solo, navigazione delegata a MobileNav bottom.
+  - DoD: Transizione opacità smooth (300ms ease).
+
+### 4.2. Convert `SectionNav.tsx` → Route-Based
+- [ ] Modificare `src/components/SectionNav.tsx` per usare `react-router-dom` `Link` invece di `smoothScrollTo`.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
+  - DoD: `smoothScrollTo()` rimosso, sostituito con `<Link to="/about">`.
+  - DoD: Active state via `useLocation().pathname` al posto di `useScrollSpy`.
+  - DoD: Animated indicator (`pf-section-nav__indicator`) mantenuto.
+  - DoD: JSDoc aggiornato.
+
+### 4.3. Convert `MobileNav.tsx` → Route-Based
+- [ ] Modificare `src/components/MobileNav.tsx` per routing + aggiungere Home.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `mobile-design`, `clean-code`
+  - DoD: `smoothScrollTo()` rimosso, sostituito con `<Link>` da react-router-dom.
+  - DoD: Aggiunto item "Home" (🏠 icona `Home` da Lucide) come primo elemento.
+  - DoD: Active state via `useLocation().pathname`.
+  - DoD: Spring-animated `layoutId` indicator mantenuto.
+  - DoD: Nascosto su Home (`/`), visibile su `/about`, `/experience`, `/projects`.
+  - DoD: JSDoc aggiornato.
+
+### 4.4. Navigation SCSS
+- [ ] Creare `src/styles/components/_navigation.scss`.
+  - **Agente:** `@frontend-specialist` | Skills: `frontend-design`, `clean-code`
+  - DoD: `.pf-nav-bar` — frosted glass top bar, posizionamento fixed.
+  - DoD: `.pf-nav-bar--transparent` modifier per stato hero Home.
+  - DoD: `.pf-nav-bar__link--active` — indicatore attivo con underline animata.
+  - DoD: `.pf-sidebar-controller` — sidebar con transform-driven visibility.
+  - DoD: Responsive breakpoints coerenti con il resto del sistema (`64em`).
+  - DoD: Usa variabili CSS da `_colors.scss`, zero hardcoded.
+  - DoD: Import aggiunto in `main.scss`.
+
+---
+
+## Phase 5 — Route Page Wrappers & Section Cleanup
+> **🎯 Supervisore:** `@frontend-specialist` (skills: `react-patterns`, `clean-code`)
+> **Obiettivo:** Creare i wrapper per ogni route e pulire le sezioni dal vecchio scroll-based code.
+
+### 5.1. Create `AboutPage.tsx`
+- [ ] Creare `src/components/routes/AboutPage.tsx`.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`
+  - DoD: Importa e renderizza `<AboutSection />`.
+  - DoD: Wrappa con `PageTransition` (se Option A/C) o div semplice (se Option B).
+
+### 5.2. Create `ExperiencePage.tsx`
+- [ ] Creare `src/components/routes/ExperiencePage.tsx`.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`
+  - DoD: Importa e renderizza `<ExperienceSection />`.
+  - DoD: Stessi criteri di 5.1.
+
+### 5.3. Create `ProjectsPage.tsx`
+- [ ] Creare `src/components/routes/ProjectsPage.tsx`.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`
+  - DoD: Importa e renderizza `<ProjectsSection />`.
+  - DoD: BlurSlider funziona correttamente nella route dedicata.
+
+### 5.4. Clean `AboutSection.tsx`
+- [ ] Rimuovere il bottone "Scroll to explore" da `AboutSection.tsx` (righe 57-97).
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
+  - DoD: Bottone rimosso.
+  - DoD: Nessun import orfano (rimuovere `ArrowDown` se non usato altrove).
+  - DoD: Il resto del componente funziona identicamente.
+
+### 5.5. Deprecate Single-Page Hooks
+- [ ] Marcare come deprecated `useDiscreteScroll.ts` e `useScrollSpy.ts`.
+  - **Agente:** `@frontend-specialist` | Skills: `clean-code`
+  - DoD: Aggiungere commento `@deprecated` JSDoc in cima a ciascun hook.
+  - DoD: Rimuovere tutti gli import di questi hook da `page.tsx` (già modificato in Phase 1.5).
+  - DoD: NON cancellare i file — solo deprecare (potenziale uso futuro).
+
+---
+
+## Phase 6 — Page Transitions (VTA Hybrid + framer-motion)
+> **🎯 Supervisore:** `@frontend-specialist` (skills: `react-patterns`, `ui-ux-pro-max`, `frontend-design`)
+> **Obiettivo:** Implementare transizioni Apple-style tra le pagine.
+
+### 6.1. Implement View Transitions API Integration
+- [ ] Aggiungere `viewTransition` prop ai `<Link>` e `<NavLink>` di react-router-dom.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`
+  - DoD: Tutti i link di navigazione usano `viewTransition={true}`.
+  - DoD: Navigazione programmatica (`useNavigate`) usa `{ viewTransition: true }`.
+
+### 6.2. Create View Transitions CSS
+- [ ] Creare `src/styles/components/_view-transitions.scss` con keyframes Apple-style.
+  - **Agente:** `@frontend-specialist` | Skills: `frontend-design`, `ui-ux-pro-max`
+  - DoD: `::view-transition-old(root)` → slide-fade-out (300ms, ease-in).
+  - DoD: `::view-transition-new(root)` → slide-fade-in (500ms, cubic-bezier `[0.22, 1, 0.36, 1]`).
+  - DoD: Blur effect: `filter: blur(4px)` in/out.
+  - DoD: `@media (prefers-reduced-motion: reduce)` → durata azzerata.
+  - DoD: Import aggiunto in `main.scss`.
+
+### 6.3. Create `PageTransition.tsx` (framer-motion micro-animations)
+- [ ] Creare `src/components/PageTransition.tsx` per animazioni intra-page.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`
+  - DoD: Wrapper `motion.div` con `initial/animate` variants (NO exit — VTA gestisce il page-level).
+  - DoD: `staggerChildren: 0.08` per animazione sequenziale dei figli.
+  - DoD: Cubic bezier Apple: `[0.22, 1, 0.36, 1]`.
+  - DoD: Children animati: content slides up + de-blur.
+
+### 6.4. Scroll Restoration
+- [ ] Implementare scroll restoration su route change.
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`
+  - DoD: Usare `<ScrollRestoration />` di react-router-dom OPPURE `useEffect` con `window.scrollTo(0, 0)` su pathname change.
+  - DoD: Ogni pagina inizia dal top.
+  - DoD: Browser back/forward gestisce lo scroll correttamente.
+
+---
+
+## Phase 7 — SCSS Integration & Cleanup
+> **🎯 Supervisore:** `@frontend-specialist` (skills: `frontend-design`, `clean-code`)
+> **Obiettivo:** Integrare tutti i nuovi SCSS, pulire i vecchi stili, garantire coerenza.
+
+### 7.1. Update `main.scss`
+- [ ] Aggiungere import per tutti i nuovi partial SCSS.
+  - **Agente:** `@frontend-specialist` | Skills: `clean-code`
+  - DoD: `@use 'components/navigation'`, `@use 'components/home'`, `@use 'components/view-transitions'` aggiunti.
+  - DoD: Nessun import orfano o duplicato.
+
+### 7.2. Final Grid Cleanup
+- [ ] Rimuovere stili dead code da `_grid.scss` e `_page.scss`.
+  - **Agente:** `@frontend-specialist` | Skills: `clean-code`
+  - DoD: Classi `pf-scroll-container`, `pf-scroll-section` rimosse se non più referenziate.
+  - DoD: `pf-section-content` adattato per il nuovo layout route-based.
+  - DoD: Verificare con `grep -r` che nessun componente attivo usa le classi rimosse.
+
+### 7.3. MobileIdentityBar Visibility Update
+- [ ] Aggiornare `MobileIdentityBar` per nascondersi su Home (`/`).
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`
+  - DoD: Componente legge `useLocation().pathname` e ritorna `null` su `/`.
+  - DoD: Visibile su `/about`, `/experience`, `/projects`.
+
+---
+
+## Phase 8 — Testing, QA & Verification
+> **🎯 Supervisore:** `@test-engineer` (skills: `testing-patterns`, `webapp-testing`)
+> **Obiettivo:** Verificare TUTTO: build, routing, transizioni, responsive, performance.
+
+### 8.1. Build Verification
+- [ ] `npm run build` passa senza errori.
+  - **Agente:** `@test-engineer` | Skills: `testing-patterns`
+  - DoD: Exit code 0, zero TypeScript errors, zero linting errors.
+
+### 8.2. Route Navigation Testing
+- [ ] Verificare tutte le route nel browser.
+  - **Agente:** `@qa-automation-engineer` | Skills: `webapp-testing`
+  - DoD: `/` → Home con FloatingLines + hero.
+  - DoD: `/about` → About section con sidebar visibile.
+  - DoD: `/experience` → Timeline con NodeSpark + AnimatedTerminal.
+  - DoD: `/projects` → BlurSlider con project cards.
+  - DoD: Direct URL access (digitare `/experience` nella barra) → funziona.
+  - DoD: Browser back/forward → transizioni corrette.
+
+### 8.3. Page Transitions QA
+- [ ] Verificare transizioni tra tutte le route.
+  - **Agente:** `@qa-automation-engineer` | Skills: `webapp-testing`
+  - DoD: VTA crossfade fluida tra Home → About → Experience → Projects.
+  - DoD: No flicker, no double animation, no layout shift.
+  - DoD: `prefers-reduced-motion` → transizioni istantanee.
+
+### 8.4. Home Page Scroll Behavior
+- [ ] Verificare sidebar reveal on scroll nella Home.
+  - **Agente:** `@qa-automation-engineer` | Skills: `webapp-testing`
+  - DoD: Hero → sidebar nascosta.
+  - DoD: Scroll a bento section → sidebar appare con animazione fluida.
+  - DoD: Nessun layout shift (CLS = 0).
+  - DoD: Back from portfolio page → sidebar nascosta di nuovo su Home.
+
+### 8.5. Mobile QA
+- [ ] Verificare responsive su mobile (< 1024px).
+  - **Agente:** `@qa-automation-engineer` | Skills: `webapp-testing`, `mobile-design`
+  - DoD: Bottom nav visibile su `/about`, `/experience`, `/projects`.
+  - DoD: Bottom nav nascosto su `/`.
+  - DoD: MobileIdentityBar visibile su portfolio pages, nascosto su Home.
+  - DoD: Active indicator segue la route.
+  - DoD: No horizontal overflow a 375px.
+  - DoD: Home hero leggibile e CTA cliccabili su mobile.
+
+### 8.6. Performance & WebGL Audit
+- [ ] Verificare che FloatingLines non causi memory leak.
+  - **Agente:** `@performance-optimizer` | Skills: `performance-profiling`
+  - DoD: FloatingLines renderizza SOLO su Home (`/`).
+  - DoD: Navigare via da Home → Three.js resources disposed (geometry, material, renderer).
+  - DoD: DevTools Memory tab: nessun leak dopo 5 navigazioni Home↔About.
+  - DoD: `will-change` usato con parsimonia.
+
+---
+
+## Phase 9 — Documentation & Commit
+> **🎯 Supervisore:** `@documentation-writer` (skills: `documentation-templates`)
+> **Obiettivo:** Documentare i cambiamenti e fare commit/push finale.
+
+### 9.1. Update Component JSDoc
+- [ ] Aggiornare JSDoc per tutti i file nuovi e modificati.
+  - **Agente:** `@documentation-writer` | Skills: `documentation-templates`
+  - DoD: `AppRouter.tsx`, `HomePage.tsx`, `PortfolioLayout.tsx`, `SidebarController.tsx`, `NavigationBar.tsx` hanno JSDoc con descrizione, props, e architettura.
+
+### 9.2. Final Commit & Push
+- [ ] Commit atomico con tutti i cambiamenti su `feat/multipage-restructure`.
+  - **Agente:** `@devops-engineer` | Skills: `deployment-procedures`
+  - DoD: Commit message: `feat(portfolio): restructure to multi-page SPA with react-router-dom`.
+  - DoD: Body elenca i DoD principali raggiunti.
+  - DoD: Push su remote.
+
+---
+
+## 📊 Orchestration Summary
+
+| Dominio | Agente | Skills |
+|---------|--------|--------|
+| Planning | `@project-planner` | `architecture`, `plan-writing` |
+| Frontend/UI | `@frontend-specialist` | `react-patterns`, `frontend-design`, `ui-ux-pro-max`, `clean-code`, `mobile-design` |
+| Routing/Arch | `@frontend-specialist` | `react-patterns`, `architecture` |
+| Styling | `@frontend-specialist` | `frontend-design`, `clean-code` |
+| Testing | `@test-engineer` | `testing-patterns`, `webapp-testing` |
+| E2E QA | `@qa-automation-engineer` | `webapp-testing`, `mobile-design` |
+| Performance | `@performance-optimizer` | `performance-profiling` |
+| DevOps | `@devops-engineer` | `deployment-procedures` |
+| Documentation | `@documentation-writer` | `documentation-templates` |
+| Orchestration | `@orchestrator` | `parallel-agents`, `behavioral-modes` |
+
+> **📊 Totale Fasi:** 10 (0-9) | **Agenti Coinvolti:** 7/20 | **Skills Attivate:** 14
+> **Priorità di esecuzione:** 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9
+> **Nota:** Phase 2, 3, 4 possono avere parallelismo parziale (SCSS di Phase 2 e 4 in parallelo).
+
+---
+
+## Processi Attivi
+
+| PID | Tipo | Porta | Stato |
+|-----|------|-------|-------|
+| — | — | — | Nessun processo attivo |
+
+## Log Decisioni
+
+| Data | Decisione | Motivazione |
+|------|-----------|-------------|
+| 2026-03-10 | react-router-dom v6 al posto di Next.js App Router | Pieno controllo sulle transizioni, animazioni exit, pattern SPA familiare |
+| 2026-03-10 | View Transitions API (Hybrid) per transizioni pagina | Nativo nel browser, zero JS overhead, built-in in react-router-dom v6.4+ |
+| 2026-03-10 | framer-motion per micro-animazioni intra-page | Già installato, usato ovunque, staggered children + scroll reveals |
+| 2026-03-10 | Sidebar scroll-reveal su Home | UX premium: immersione hero → reveal graduale su scroll |
+| 2026-03-10 | CTA: "View Projects" + "Contact Me" | Focus su portfolio e contattabilità, non GitHub |
