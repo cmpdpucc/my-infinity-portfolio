@@ -17,8 +17,10 @@ export default function PortfolioLayout() {
   return (
     <div className="pf-page">
       <div className="pf-layout">
-        {/* Sidebar will be added in Phase 3 */}
-        <main style={{ width: "100%", height: "100vh", overflowY: "auto" }}>
+        {/* Sidebar placeholder - keeps CSS Grid aligned so <main> goes into the 1fr column */}
+        <aside className="pf-sidebar"></aside>
+        
+        <main className="pf-scroll-container" style={{ width: "100%", height: "100vh", overflowY: "auto", overflowX: "hidden" }}>
           <Outlet />
         </main>
       </div>
