@@ -2,6 +2,7 @@
 
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { PORTFOLIO_ROUTES } from "@/data/routes.config";
 
 /**
  * AppRouter — Core SPA routing using react-router-dom.
@@ -17,9 +18,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
  */
 
 const HomePage = lazy(() => import("@/components/routes/HomePage"));
-const AboutPage = lazy(() => import("@/components/routes/AboutPage"));
-const ExperiencePage = lazy(() => import("@/components/routes/ExperiencePage"));
-const ProjectsPage = lazy(() => import("@/components/routes/ProjectsPage"));
 const PortfolioLayout = lazy(() => import("@/components/layout/PortfolioLayout"));
 
 /**
@@ -56,9 +54,13 @@ export default function AppRouter() {
 
           {/* Portfolio pages — share sidebar layout via PortfolioLayout */}
           <Route element={<PortfolioLayout />}>
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/experience" element={<ExperiencePage />} />
-            <Route path="/projects" element={<ProjectsPage />} />
+            {PORTFOLIO_ROUTES.map((route) => (
+              <Route 
+                key={route.id} 
+                path={route.path} 
+                element={<route.component />} 
+              />
+            ))}
           </Route>
         </Routes>
       </Suspense>
