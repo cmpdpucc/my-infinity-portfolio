@@ -60,19 +60,19 @@
 > **Obiettivo:** Preparare l'ambiente, installare dipendenze, creare branch di lavoro.
 
 ### 0.1. Git Branch & Environment
-- [ ] Creare branch `feat/multipage-restructure` da `main`.
+- [x] Creare branch `feat/multipage-restructure` da `main`.
   - **Agente:** `@devops-engineer` | Skills: `deployment-procedures`
   - DoD: Branch creato, working tree pulita, `git status` verde.
 
 ### 0.2. Install react-router-dom
-- [ ] `npm install react-router-dom@^6` nel progetto portfolio.
+- [x] `npm install react-router-dom@^6` nel progetto portfolio.
   - **Agente:** `@devops-engineer` | Skills: `deployment-procedures`
-  - DoD: `react-router-dom` in `package.json` dependencies, `npm ls react-router-dom` OK.
+  - DoD: `react-router-dom@6.30.3` in `package.json` dependencies, `npm ls react-router-dom` OK. ✅
 
 ### 0.3. Verify Build Baseline
-- [ ] `npm run build` passa senza errori PRIMA di qualsiasi modifica.
+- [x] `npm run build` passa senza errori PRIMA di qualsiasi modifica.
   - **Agente:** `@devops-engineer` | Skills: `deployment-procedures`
-  - DoD: Build exit code 0, nessun TypeScript error.
+  - DoD: Build exit code 0, TypeScript compiled in 12.9s, static pages generated. ✅
 
 ---
 
