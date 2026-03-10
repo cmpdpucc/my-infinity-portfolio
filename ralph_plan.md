@@ -122,7 +122,7 @@
 > **Obiettivo:** Creare la Home page immersiva con FloatingLines background, hero overlay e bento skill showcase.
 
 ### 2.1. Build `HomePage.tsx` — Hero Section
-- [ ] Creare `src/components/routes/HomePage.tsx` con hero full-viewport.
+- [x] Creare `src/components/routes/HomePage.tsx` con hero full-viewport.
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`, `ui-ux-pro-max`
   - DoD: `FloatingLines` come background full-viewport (z-0).
   - DoD: Content overlay (z-10): status pill ("Available for new projects"), hero title (grande, typography di impatto), subtitle.
@@ -132,7 +132,7 @@
   - DoD: Responsivo: `clamp()` per font-size, layout flex che si adatta a mobile.
 
 ### 2.2. Build `HomePage.tsx` — Bento Skill Showcase Section
-- [ ] Aggiungere sezione bento grid sotto l'hero (scrollabile).
+- [x] Aggiungere sezione bento grid sotto l'hero (scrollabile).
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`, `ui-ux-pro-max`
   - DoD: Grid bento con card skill (ispirato dalla sezione "expertise" di `inspirationLandingPage.tsx`).
   - DoD: Card con icone Lucide (NO emoji), titolo, descrizione, tags.
@@ -140,7 +140,7 @@
   - DoD: Layout responsivo: 1 colonna mobile, 3 colonne desktop.
 
 ### 2.3. Home Page SCSS
-- [ ] Creare `src/styles/components/_home.scss` con tutti gli stili della landing page.
+- [x] Creare `src/styles/components/_home.scss` con tutti gli stili della landing page.
   - **Agente:** `@frontend-specialist` | Skills: `frontend-design`, `clean-code`
   - DoD: `.pf-home` full viewport container.
   - DoD: `.pf-home__hero` — overlay posizionamento centrato.
@@ -157,7 +157,7 @@
 > **Obiettivo:** Creare il layout condiviso per le pagine portfolio (About, Experience, Projects) con sidebar persistente.
 
 ### 3.1. Build `PortfolioLayout.tsx`
-- [ ] Creare `src/components/layout/PortfolioLayout.tsx` — layout con sidebar + `<Outlet />`.
+- [x] Creare `src/components/layout/PortfolioLayout.tsx` — layout con sidebar + `<Outlet />`.
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `architecture`
   - DoD: Desktop: sidebar (ProfileCard + RouteNav) + main area con `<Outlet />`.
   - DoD: Mobile: MobileIdentityBar + `<Outlet />` + MobileNav (bottom).
@@ -165,7 +165,7 @@
   - DoD: CSS grid: `var(--sidebar-width) 1fr` (riusa `_grid.scss` esistente).
 
 ### 3.2. Build `SidebarController.tsx`
-- [ ] Creare `src/components/layout/SidebarController.tsx` — sidebar con visibilità scroll/route-aware.
+- [x] Creare `src/components/layout/SidebarController.tsx` — sidebar con visibilità scroll/route-aware.
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`
   - DoD: Su Home (`/`): sidebar nascosta nell'hero, appare con scroll (opacity + translateX `useTransform`).
   - DoD: Trigger di apparizione: quando utente scrolla al ~60% del primo viewport (sezione bento).
@@ -174,7 +174,7 @@
   - DoD: Animazione fluida: `opacity 0→1`, `translateX -100→0`, durata ~400ms.
 
 ### 3.3. Adapt `_grid.scss` for Route-Based Layout
-- [ ] Modificare `src/styles/layout/_grid.scss` per supportare il nuovo layout.
+- [x] Modificare `src/styles/layout/_grid.scss` per supportare il nuovo layout.
   - **Agente:** `@frontend-specialist` | Skills: `frontend-design`, `clean-code`
   - DoD: Rimuovere `.pf-scroll-container` e `.pf-scroll-section` (non più necessari).
   - DoD: Aggiungere `.pf-portfolio-layout` per il grid sidebar + content.

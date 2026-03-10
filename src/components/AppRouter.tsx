@@ -49,11 +49,9 @@ export default function AppRouter() {
     <BrowserRouter>
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
-          {/* Home — standalone route, no sidebar/layout shell */}
-          <Route path="/" element={<HomePage />} />
-
-          {/* Portfolio pages — share sidebar layout via PortfolioLayout */}
+          {/* All pages — share the global PortfolioLayout structure */}
           <Route element={<PortfolioLayout />}>
+            <Route path="/" element={<HomePage />} />
             {PORTFOLIO_ROUTES.map((route) => (
               <Route 
                 key={route.id} 

@@ -9,41 +9,41 @@
 // ROOT LAYOUT: Sidebar (fixed) + Scroll Container
 // ===================================================
 
-.pf-layout {
-  display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
-  height: 100vh;
+.pf-page-layout {
+  display: flex;
   width: 100%;
-  max-width: 1550px; // Prevent stretching on ultra-wide monitors
-  margin: 0 auto; // ⬅️ THIS dynamically centers the grid horizontally within its parent
+  max-width: 1550px;
+  margin: 0 auto;
+  position: relative;
   background-color: var(--color-bg);
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5); // Add subtle depth against body bg
-  overflow: hidden;
-
-  @media (max-width: 64em) {
-    display: flex;
-    flex-direction: column;
-    height: 100dvh; // Force mobile viewport
-    overflow: hidden; // Prevent body scroll
-    position: relative;
-  }
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  min-height: 100vh;
 }
 
 
 // ===================================================
 // SIDEBAR — Column 1 of the Desktop Grid
 // ===================================================
-.pf-sidebar {
+.pf-sidebar-controller {
+  position: fixed;
+  top: 0;
+  left: 0; // Or whatever is needed to align with max-width container, but since it's centered, we might need a calc
   height: 100vh;
-  width: var(--sidebar-width); // Grid respects this implicitly, but it's good for internal sizing
+  width: var(--sidebar-width);
   display: flex;
   flex-direction: column;
-  justify-content: center; // Vertically center the card and the nav within the sidebar
+  justify-content: center;
   padding: space(xl) space(lg);
-  overflow: hidden;
   gap: space(md);
+  z-index: 50;
   pointer-events: none; // let clicks pass through to slider
-  background: transparent; // completely transparent as requested
+  background: transparent;
+  will-change: transform, opacity;
+
+  // On large screens where container is centered, the fixed sidebar needs to align left with the max-width container 
+  @media (min-width: 1550px) {
+    left: calc((100vw - 1550px) / 2);
+  }
 
   & > * {
     pointer-events: auto; // re-enable clicks for card and nav
@@ -62,23 +62,23 @@
 // ===================================================
 // SCROLL CONTAINER — right column (1fr), 100vh per section
 // ===================================================
-.pf-scroll-container {
-  width: 100%; // Takes up exactly it's 1fr grid track
-  min-width: 0; // Prevent flex/grid blowouts from wide children (like Sliders)
-  height: 100vh;
-  overflow-y: scroll;
-  overflow-x: hidden; // Keep horizontal tight
-  -webkit-overflow-scrolling: touch;
-  // NOTE: scroll-snap-type removed — snap handled entirely by useDiscreteScroll JS
+.pf-main-content {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  
+  // Transition so that if you navigate Home -> About, the content shifts smoothly
+  transition: padding-left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 
-  // hide native scrollbar
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
+  &--with-sidebar {
+    padding-left: var(--sidebar-width);
+  }
 
   @media (max-width: 64em) {
-    height: 100dvh;
-    width: 100%;
-    padding-bottom: 7rem; // increased space for bottom nav
+    padding-left: 0; // Sidebar doesn't exist on mobile
+    padding-bottom: 7rem; // Space for bottom nav
   }
 }
 
