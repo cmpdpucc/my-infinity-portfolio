@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { User, Briefcase, Layers } from "lucide-react";
+import { User, Briefcase, Layers, Home } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { PORTFOLIO_ROUTES } from "@/data/routes.config";
 
@@ -23,6 +23,33 @@ export default function MobileNav() {
       aria-label="Mobile navigation"
     >
       <ul className="pf-mobile-nav__list">
+        {/* Static Home Link */}
+        <li className="pf-mobile-nav__item">
+          <NavLink
+            to="/"
+            className={({ isActive }) => 
+              `pf-mobile-nav__button ${isActive ? "pf-mobile-nav__button--active" : ""}`
+            }
+            aria-label="Home"
+          >
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <motion.div
+                    layoutId="mobile-nav-active-indicator"
+                    className="pf-mobile-nav__active-bg"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span className="pf-mobile-nav__icon">
+                  <Home size={20} />
+                </span>
+                <span className="pf-mobile-nav__label">Home</span>
+              </>
+            )}
+          </NavLink>
+        </li>
+
         {PORTFOLIO_ROUTES.map(({ id, path, label }) => {
           return (
             <li key={id} className="pf-mobile-nav__item">

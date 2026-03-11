@@ -189,7 +189,7 @@
 > **Obiettivo:** Costruire la top nav bar globale e convertire le nav esistenti a route-based.
 
 ### 4.1. Build `NavigationBar.tsx`
-- [ ] Creare `src/components/layout/NavigationBar.tsx` — top nav bar frosted glass.
+- [x] Creare `src/components/layout/NavigationBar.tsx` — top nav bar frosted glass.
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`, `ui-ux-pro-max`
   - DoD: Presente su TUTTE le pagine (Home inclusc).
   - DoD: Su Home: inizia trasparente, frosted glass on scroll (`backdrop-blur: 20px`).
@@ -200,7 +200,7 @@
   - DoD: Transizione opacità smooth (300ms ease).
 
 ### 4.2. Convert `SectionNav.tsx` → Route-Based
-- [ ] Modificare `src/components/SectionNav.tsx` per usare `react-router-dom` `Link` invece di `smoothScrollTo`.
+- [x] Modificare `src/components/SectionNav.tsx` per usare `react-router-dom` `Link` invece di `smoothScrollTo`.
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
   - DoD: `smoothScrollTo()` rimosso, sostituito con `<Link to="/about">`.
   - DoD: Active state via `useLocation().pathname` al posto di `useScrollSpy`.
@@ -208,7 +208,7 @@
   - DoD: JSDoc aggiornato.
 
 ### 4.3. Convert `MobileNav.tsx` → Route-Based
-- [ ] Modificare `src/components/MobileNav.tsx` per routing + aggiungere Home.
+- [x] Modificare `src/components/MobileNav.tsx` per routing + aggiungere Home.
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `mobile-design`, `clean-code`
   - DoD: `smoothScrollTo()` rimosso, sostituito con `<Link>` da react-router-dom.
   - DoD: Aggiunto item "Home" (🏠 icona `Home` da Lucide) come primo elemento.
@@ -218,7 +218,7 @@
   - DoD: JSDoc aggiornato.
 
 ### 4.4. Navigation SCSS
-- [ ] Creare `src/styles/components/_navigation.scss`.
+- [x] Creare `src/styles/components/_navigation.scss`.
   - **Agente:** `@frontend-specialist` | Skills: `frontend-design`, `clean-code`
   - DoD: `.pf-nav-bar` — frosted glass top bar, posizionamento fixed.
   - DoD: `.pf-nav-bar--transparent` modifier per stato hero Home.

@@ -5,6 +5,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Spotlight from "@/components/Spotlight";
 import ClickSpark from "@/components/ClickSpark";
 import SidebarController from "@/components/layout/SidebarController";
+import NavigationBar from "@/components/layout/NavigationBar";
 import MobileIdentityBar from "@/components/MobileIdentityBar";
 import MobileNav from "@/components/MobileNav";
 
@@ -29,6 +30,9 @@ export default function PortfolioLayout() {
 
   return (
     <ClickSpark sparkColor="#3b82f6" sparkCount={10} sparkRadius={20}>
+      {/* Global Top Navigation Bar */}
+      <NavigationBar />
+      
       <div className="pf-page-layout">
         <Spotlight />
 

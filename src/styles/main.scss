@@ -17,7 +17,7 @@
 @use 'components/project-card';
 @use 'components/floating-lines';
 @use 'components/home';
-
+@use 'components/navigation';
 *, *::before, *::after {
   box-sizing: border-box;
 }
