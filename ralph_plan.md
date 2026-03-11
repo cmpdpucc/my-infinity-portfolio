@@ -290,6 +290,35 @@
 
 ---
 
+### 4.8. NavigationCardBar Polish & Bug Fixes
+- [x] **Task 4.8.1: Expanded-Content Background, Border & Shadow**
+  - **Agente:** `@frontend-specialist` | Skills: `frontend-design`
+  - **File:** `_navigation-card-bar.scss`
+  - DoD: `pf-nav-card-bar__expanded` background DEVE ereditare lo stesso `rgba(30, 41, 59, 0.7)` + `backdrop-filter: blur(12px)` di `__top` (non più `rgba(15, 23, 42, 0.95)`).
+  - DoD: Quando `__expanded` esiste, aggiungere un sottile `border-bottom: 1px solid rgba(255,255,255,0.08)` a `__top` per separare visivamente la barra dal menu.
+  - DoD: `pf-nav-card-bar__expanded` DEVE avere una `box-shadow` sul bottom edge (es. `0 8px 32px rgba(0,0,0,0.4)`) per dargli senso di elevazione rispetto al contenuto sottostante.
+- [x] **Task 4.8.2: Logica Hover-Close vs Click-Persist**
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`
+  - **File:** `NavigationCardBar.tsx`
+  - DoD: Introdurre stato `openedBy: 'hover' | 'click' | null` che traccia COME il menù è stato aperto.
+  - DoD: Se `openedBy === 'hover'` → al `mouseLeave` dell'intero `<header>` il menù si chiude automaticamente.
+  - DoD: Se `openedBy === 'click'` → il menù resta aperto finché: (a) l'utente clicca un link interno, OPPURE (b) clicca "fuori" dalla `pf-nav-card-bar` (useOnClickOutside).
+  - DoD: L'hover sull'hamburger (onMouseEnter) apre immediatamente con `openedBy = 'hover'`. Il click (onClick) apre con `openedBy = 'click'`.
+- [x] **Task 4.8.3: GooeyNav — Rimuovere Alone Nero**
+  - **Agente:** `@frontend-specialist` | Skills: `frontend-design`
+  - **File:** `_gooey-nav.scss`
+  - Root cause: `&--filter::before` ha `background: black` + `inset: -75px`, che crea quel rettangolo nero visibile. Il `mix-blend-mode: lighten` lo maschererebbe su sfondo nero, ma non su sfondi semi-trasparenti/frosted glass.
+  - DoD: Rendere `::before` completamente trasparente (rimuovere `background: black` o disabilitare l'intero pseudo-elemento) in modo che non ci sia alcun alone visibile.
+  - DoD: Se rimuovendo il background nero il gooey-effect smette di funzionare visivamente, trovare una soluzione alternativa (es. `isolation: isolate` sul container, cambiare `mix-blend-mode`).
+- [x] **Task 4.8.4: IdentityBar — Fissare Width per evitare Layout Shift**
+  - **Agente:** `@frontend-specialist` | Skills: `frontend-design`, `clean-code`
+  - **Files:** `_identity.scss`, `IdentityBar.tsx`
+  - Root cause: `DecryptedText` anima le lettere una per volta, cambiando il width del `<span>` contenitore che è inline. Questo sposta tutto il layout nella navbar.
+  - DoD: Aggiungere `min-width` fisso (es. `min-width: 10rem`) a `.pf-identity__name` per riservare spazio sufficiente a "Daniele Puccio" PRIMA che l'animazione parta, oppure usare una tecnica a "invisible placeholder" dove il testo completo è reso invisibile e il testo animato è sovrapposto in assoluto.
+  - DoD: Verificare che il fix funzioni sia al primo caricamento che al re-trigger di DecryptedText dopo chiusura ProfileCard.
+
+---
+
 ## Phase 5 — Route Page Wrappers & Section Cleanup
 > **🎯 Supervisore:** `@frontend-specialist` (skills: `react-patterns`, `clean-code`)
 > **Obiettivo:** Creare i wrapper per ogni route e pulire le sezioni dal vecchio scroll-based code.

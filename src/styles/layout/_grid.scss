@@ -12,7 +12,7 @@
 .pf-page-layout {
   display: flex;
   width: 100%;
-  max-width: 1550px;
+  // max-width: 1550px;
   margin: 0 auto;
   position: relative;
   background-color: var(--color-bg);
@@ -77,7 +77,7 @@
   position: relative;
   width: 100%;
   min-width: 100%; // ensures it doesn't shrink-wrap inside center-aligned parents
-  max-width: 90rem; // Cap the readable content width
+  max-width: 1550px; // Cap the readable content width
   margin: 0 auto; // Center it inside the fluid section container
   height: 100%;
   padding: space(3xl) space(xl); // Removed legacy padding-left calc hack

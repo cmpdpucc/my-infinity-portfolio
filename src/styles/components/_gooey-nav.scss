@@ -5,6 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  isolation: isolate; // Contains mix-blend-mode within this stacking context
 
   &__container {
     display: flex;
@@ -93,16 +94,18 @@
     }
 
     &--filter {
-      // The filter relies on High Contrast to create the gooey effect.
+      // Gooey effect via high contrast blur trick.
+      // Removed mix-blend-mode: lighten and the black ::before backdrop
+      // to prevent the visible black halo on frosted-glass backgrounds.
       filter: blur(7px) contrast(100) blur(0);
-      mix-blend-mode: lighten;
 
       &::before {
+        // Kept as structural element but transparent
         content: '';
         position: absolute;
         inset: -75px;
         z-index: -2;
-        background: black;
+        background: transparent;
       }
 
       &::after {
