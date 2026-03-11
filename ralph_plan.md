@@ -265,6 +265,31 @@
 
 ---
 
+### 4.7. Unified NavigationCardBar & GooeyNav Integration (NEW)
+- [x] **Task 4.7.1: Struttura NavigationCardBar & Pulizia**
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `clean-code`
+  - DoD: Creare `NavigationCardBar.tsx` fondendo i concetti di `NavigationBar` e `NavCard`. Questa sarà la top bar unica.
+  - DoD: Posizionare `IdentityBar` a sinistra, `GooeyNav` al centro, e il bottone Hamburger a destra (rimuovendo il CTA "Get Started").
+- [x] **Task 4.7.2: Refactoring GooeyNav Center**
+  - **Agente:** `@frontend-specialist` | Skills: `ui-ux-pro-max`, `react-patterns`
+  - DoD: Modificare `GooeyNav.tsx` per rimuovere bordi superflui o layout forzati; deve essere solo un componente di link.
+  - DoD: integrare il css di `_gooey-nav.scss` per rimuovere tutti gli stili superflui e convertirli in BEM scss.
+  - DoD: Passare in pasto a `GooeyNav` i `PORTFOLIO_ROUTES` in modo che renderizzi Home, About, Experience, Projects come link cliccabili a centro pagina.
+- [x] **Task 4.7.3: Logica di Espansione Hover/Click**
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`
+  - DoD: Implementare espansione del menù al click sull'Hamburger.
+  - DoD: Implementare espansione del menù all'hover sull'Hamburger.
+  - DoD: Implementare un timeout: se l'utente fa hover *su qualsiasi* parte della `NavigationCardBar` per almeno 3 secondi, il menù si srotola/espande.
+- [x] **Task 4.7.4: Contenuto Interno Espanso (Fake Links)**
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`
+  - DoD: Quando la barra è espansa, mostrare le sezioni delle routes ("Home", "Projects") contenenti dei finti sotto-link (es. "Progetto A", "Progetto B") in attesa dei link definitivi.
+- [x] **Task 4.7.5: CSS Styling & Layout Swap**
+  - **Agente:** `@frontend-specialist` | Skills: `frontend-design`, `clean-code`
+  - DoD: Creare `_navigation-card-bar.scss` unendo l'estetica frosted glass a quella animata. Supporto responsive (Desktop orizzontale vs Mobile verticale).
+  - DoD: Sostituire `<NavigationBar>` con `<NavigationCardBar>` in `PortfolioLayout.tsx`. Eliminare quindi `NavigationBar.tsx`, `NavCard.tsx` e file CSS spuri.
+
+---
+
 ## Phase 5 — Route Page Wrappers & Section Cleanup
 > **🎯 Supervisore:** `@frontend-specialist` (skills: `react-patterns`, `clean-code`)
 > **Obiettivo:** Creare i wrapper per ogni route e pulire le sezioni dal vecchio scroll-based code.

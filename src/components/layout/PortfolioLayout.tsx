@@ -4,14 +4,14 @@ import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Spotlight from "@/components/Spotlight";
 import ClickSpark from "@/components/ClickSpark";
-import NavigationBar from "@/components/layout/NavigationBar";
+import NavigationCardBar from "@/components/layout/NavigationCardBar";
 import MobileNav from "@/components/MobileNav";
 
 /**
  * PortfolioLayout — Shared layout wrapping ALL pages (Home, About, Experience, Projects).
  *
  * Architecture:
- * - Desktop: NavigationBar (top) + main content area (<Outlet />)
+ * - Desktop: NavigationCardBar (top) + main content area (<Outlet />)
  * - Mobile: NavigationBar (top, modal identity) + <Outlet /> + MobileNav (bottom)
  */
 export default function PortfolioLayout() {
@@ -21,7 +21,7 @@ export default function PortfolioLayout() {
   return (
     <ClickSpark sparkColor="#3b82f6" sparkCount={10} sparkRadius={20}>
       {/* Global Top Navigation Bar */}
-      <NavigationBar />
+      <NavigationCardBar />
       
       <div className="pf-page-layout">
         <Spotlight />
