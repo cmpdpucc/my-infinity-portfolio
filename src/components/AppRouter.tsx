@@ -1,28 +1,45 @@
 "use client";
 
-import React, { Suspense, lazy, useEffect } from "react";
+import React, { Suspense, useEffect, useState, ComponentType } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { PORTFOLIO_ROUTES } from "@/data/routes.config";
+import PortfolioLayout from "@/components/layout/PortfolioLayout";
+
+// Global cache for component modules to bypass React.lazy Suspense flash
+const componentCache: Record<string, ComponentType<any>> = {};
 
 /**
- * AppRouter — Core SPA routing using react-router-dom.
- *
- * Architecture:
- * - `/` → HomePage (standalone, no sidebar, full-screen immersion)
- * - `/about`, `/experience`, `/projects` → PortfolioLayout (sidebar + content)
- * - React.lazy() for code splitting on every route component
- * - BrowserRouter for client-side navigation
- *
- * This component is dynamically imported in `app/page.tsx` with `ssr: false`
- * to avoid hydration mismatches (BrowserRouter is client-only).
+ * Custom AsyncRoute wrapper.
+ * This completely bypasses <Suspense> if the component is already in the cache.
  */
+function AsyncRoute({ routeId, importFn }: { routeId: string, importFn: () => Promise<{ default: ComponentType<any> }> }) {
+  const [Comp, setComp] = useState<ComponentType<any> | null>(() => componentCache[routeId] || null);
 
-const HomePage = lazy(() => import("@/components/routes/HomePage"));
-const PortfolioLayout = lazy(() => import("@/components/layout/PortfolioLayout"));
+  useEffect(() => {
+    // If the route changed and Comp is still the old one, or if Comp is missing
+    if (!componentCache[routeId]) {
+      importFn().then((m) => {
+        componentCache[routeId] = m.default;
+        setComp(() => m.default);
+      }).catch(console.error);
+    } else if (Comp !== componentCache[routeId]) {
+      setComp(() => componentCache[routeId]);
+    }
+  }, [Comp, importFn, routeId]);
+
+  if (!Comp) {
+    return <LoadingFallback />;
+  }
+
+  return <Comp />;
+}
+
+// Ensure Home is cached the exact same way
+const HOME_ROUTE_ID = "home";
+const homeImportFn = () => import("@/components/routes/HomePage");
 
 /**
- * Minimal loading fallback displayed while lazy components are loading.
- * Matches the portfolio's dark background to avoid flash of white.
+ * Minimal loading fallback displayed only if the chunk isn't cached yet.
  */
 function LoadingFallback() {
   return (
@@ -32,7 +49,7 @@ function LoadingFallback() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "var(--color-background, #0F172A)",
+        backgroundColor: "var(--color-bg, #0B1120)",
         color: "var(--color-text-muted, #94A3B8)",
         fontFamily: "var(--font-sans), 'DM Sans', sans-serif",
         fontSize: "0.85rem",
@@ -46,38 +63,42 @@ function LoadingFallback() {
 
 export default function AppRouter() {
   // Eagerly preload all routes in the background after the initial render.
-  // This ensures the initial load is fast (only loading the requested route),
-  // but subsequent navigations are instant without showing the Suspense fallback.
+  // This populates the componentCache, ensuring subsequent navigations are mathematically instant.
   useEffect(() => {
-    // We use setTimeout or requestIdleCallback to ensure this happens AFTER
-    // the main UI thread has finished painting the current screen.
     const preloadAll = () => {
       PORTFOLIO_ROUTES.forEach((route) => {
-        // Call the dynamic import function, discarding the result.
-        // The browser network layer will fetch and cache the JS chunk.
-        route.preload().catch(console.error);
+        if (!componentCache[route.id]) {
+          route.importFn().then((m) => {
+            componentCache[route.id] = m.default;
+          }).catch(console.error);
+        }
       });
+      if (!componentCache[HOME_ROUTE_ID]) {
+         homeImportFn().then((m) => {
+            componentCache[HOME_ROUTE_ID] = m.default;
+         }).catch(console.error);
+      }
     };
 
     if ('requestIdleCallback' in window) {
       window.requestIdleCallback(preloadAll);
     } else {
-      setTimeout(preloadAll, 2000);
+      setTimeout(preloadAll, 1500);
     }
   }, []);
 
   return (
     <BrowserRouter>
+      {/* Suspense is kept only as a safety net for deep child components */}
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
-          {/* All pages — share the global PortfolioLayout structure */}
           <Route element={<PortfolioLayout />}>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<AsyncRoute key={HOME_ROUTE_ID} routeId={HOME_ROUTE_ID} importFn={homeImportFn} />} />
             {PORTFOLIO_ROUTES.map((route) => (
               <Route 
                 key={route.id} 
                 path={route.path} 
-                element={<route.component />} 
+                element={<AsyncRoute key={route.id} routeId={route.id} importFn={route.importFn} />} 
               />
             ))}
           </Route>
