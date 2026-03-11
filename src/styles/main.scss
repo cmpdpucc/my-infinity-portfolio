@@ -15,6 +15,10 @@
 @use 'components/experience';
 @use 'components/blur-slider';
 @use 'components/project-card';
+@use 'components/floating-lines';
+@use 'components/home';
+@use 'components/navigation-card-bar';
+@use 'components/gooey-nav';
 
 *, *::before, *::after {
   box-sizing: border-box;

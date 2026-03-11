@@ -110,10 +110,12 @@ function renderProjectCard(project: Project) {
 
 export default function ProjectsSection() {
   return (
-    <BlurSlider<Project>
-      items={PROJECTS}
-      renderItem={renderProjectCard}
-    />
+    <section className="pf-scroll-section" id="projects-section">
+      <BlurSlider<Project>
+        items={PROJECTS}
+        renderItem={renderProjectCard}
+      />
+    </section>
   );
 }
 

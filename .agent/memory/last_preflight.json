@@ -1,0 +1,51 @@
+{
+  "passed": false,
+  "project_path": "C:\\Users\\danyp\\CODE\\project-devs-team\\portfolio",
+  "project_type": "node",
+  "timestamp": "2026-03-11T17:30:55.517085",
+  "total_duration_s": 0.42,
+  "gates": [
+    {
+      "gate": "git",
+      "status": "FAIL",
+      "message": "2 tracked file(s) modified/staged",
+      "detail": " M src/components/AppRouter.tsx\n M src/data/routes.config.ts",
+      "duration_s": 0.34299999999348074,
+      "recovery": "commit"
+    },
+    {
+      "gate": "build",
+      "status": "FAIL",
+      "message": "Build failed (exit 1)",
+      "detail": "Command not found: [WinError 2] The system cannot find the file specified",
+      "duration_s": 0.01600000000325963,
+      "recovery": "opencode"
+    },
+    {
+      "gate": "tests",
+      "status": "SKIP",
+      "message": "No test runner for 'node' project",
+      "detail": "",
+      "duration_s": 0.0,
+      "recovery": null
+    },
+    {
+      "gate": "deps",
+      "status": "FAIL",
+      "message": "0 dependency issue(s)",
+      "detail": "",
+      "duration_s": 0.01600000000325963,
+      "recovery": "install"
+    }
+  ],
+  "failed_gates": [
+    "git",
+    "build",
+    "deps"
+  ],
+  "recovery_actions": {
+    "git": "commit",
+    "build": "opencode",
+    "deps": "install"
+  }
+}

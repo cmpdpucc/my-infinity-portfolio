@@ -2,35 +2,17 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { smoothScrollTo, easings } from "@/utils/smoothScroll";
-import type { SectionConfig } from "@/data/sections.data";
+import { NavLink } from "react-router-dom";
+import { PORTFOLIO_ROUTES } from "@/data/routes.config";
 
 /**
  * SectionNav — Desktop sidebar navigation links.
  *
- * Renders a vertical list of section links with animated indicators.
+ * Renders a vertical list of section links dynamically from PORTFOLIO_ROUTES.
+ * Uses react-router-dom NavLink for automatic active state management.
  * Hidden on mobile (< 64em) — MobileNav handles navigation there.
  */
-
-interface SectionNavProps {
-  sections: SectionConfig[];
-  activeSectionId: string;
-}
-
-export default function SectionNav({ sections, activeSectionId }: SectionNavProps) {
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    const container = document.getElementById("scroll-container");
-    if (el && container) {
-      smoothScrollTo({
-        container,
-        targetY: el.offsetTop,
-        duration: 950,
-        easing: easings.easeInOutQuart,
-      });
-    }
-  };
-
+export default function SectionNav() {
   return (
     <motion.nav
       initial={{ opacity: 0 }}
@@ -40,16 +22,17 @@ export default function SectionNav({ sections, activeSectionId }: SectionNavProp
       aria-label="Portfolio sections"
     >
       <ul className="pf-section-nav__list">
-        {sections.map(({ id, navLabel }) => (
+        {PORTFOLIO_ROUTES.map(({ id, path, label }) => (
           <li key={id}>
-            <button
-              className={`pf-section-nav__link ${activeSectionId === id ? "pf-section-nav__link--active" : ""}`}
-              onClick={() => scrollToSection(id)}
-              aria-current={activeSectionId === id ? "true" : undefined}
+            <NavLink
+              to={path}
+              className={({ isActive }) =>
+                `pf-section-nav__link ${isActive ? "pf-section-nav__link--active" : ""}`
+              }
             >
               <span className="pf-section-nav__indicator" />
-              <span className="pf-section-nav__text">{navLabel}</span>
-            </button>
+              <span className="pf-section-nav__text">{label}</span>
+            </NavLink>
           </li>
         ))}
       </ul>

@@ -1,0 +1,324 @@
+@use '../colors' as *;
+@use '../tokens' as *;
+
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  _home.scss — Landing page styles                               ║
+// ║  Sections: Hero (100vh) + Bento Skill Showcase                  ║
+// ╚══════════════════════════════════════════════════════════════════╝
+
+// ── Container ──
+.pf-home {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--color-background);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  HERO SECTION
+// ══════════════════════════════════════════════════════════════
+
+.pf-home__hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+// FloatingLines WebGL background
+.pf-home__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  // Darkened overlay so text is legible over the shader
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at 50% 40%,
+      rgba(15, 23, 42, 0.35) 0%,
+      rgba(15, 23, 42, 0.75) 70%,
+      rgba(15, 23, 42, 0.92) 100%
+    );
+    pointer-events: none;
+  }
+}
+
+// Content overlay
+.pf-home__overlay {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-xl);
+  max-width: 52rem;
+}
+
+// ── Status pill ──
+.pf-home__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  color: color(primary);
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  margin-bottom: var(--space-xl);
+  font-family: var(--font-sans), "DM Sans", sans-serif;
+}
+
+.pf-home__pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: color(primary);
+  animation: pf-pulse 2s ease-in-out infinite;
+}
+
+@keyframes pf-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.6); }
+}
+
+// ── Title ──
+.pf-home__title {
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  margin-bottom: var(--space-lg);
+}
+
+.pf-home__title-accent {
+  background: linear-gradient(135deg, color(primary) 0%, #60a5fa 50%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+// ── Subtitle ──
+.pf-home__subtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  max-width: 38rem;
+  margin-bottom: var(--space-2xl);
+  font-family: var(--font-sans), "DM Sans", sans-serif;
+}
+
+// ── CTAs ──
+.pf-home__cta-group {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pf-home__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.6rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: var(--font-sans), "DM Sans", sans-serif;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+
+  &--primary {
+    background: color(primary);
+    color: #fff;
+    box-shadow: 0 0 24px rgba(59, 130, 246, 0.25), 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 36px rgba(59, 130, 246, 0.4), 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  &--secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// ── Scroll hint ──
+.pf-home__scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pf-home__scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, transparent, var(--color-text-muted));
+  animation: pf-scroll-line 2s ease-in-out infinite;
+}
+
+@keyframes pf-scroll-line {
+  0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
+  50%  { opacity: 1; transform: scaleY(1); transform-origin: top; }
+  100% { opacity: 0; transform: scaleY(1); transform-origin: bottom; }
+}
+
+
+// ══════════════════════════════════════════════════════════════
+//  BENTO SKILL SHOWCASE
+// ══════════════════════════════════════════════════════════════
+
+.pf-home__bento-section {
+  padding: var(--space-5xl) var(--space-xl);
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.pf-home__bento-header {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.pf-home__bento-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-sm);
+}
+
+.pf-home__bento-subtitle {
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  color: var(--color-text-muted);
+  font-family: var(--font-sans), "DM Sans", sans-serif;
+}
+
+// ── Grid ──
+.pf-home__bento-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+
+  @media (max-width: 64em) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 36em) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Card ──
+.pf-home__bento-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      ellipse at 30% 0%,
+      rgba(59, 130, 246, 0.06) 0%,
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  &:hover {
+    border-color: rgba(59, 130, 246, 0.2);
+    transform: translateY(-4px);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &--wide {
+    grid-column: span 2;
+
+    @media (max-width: 36em) {
+      grid-column: span 1;
+    }
+  }
+}
+
+.pf-home__bento-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.1);
+  color: color(primary);
+  margin-bottom: var(--space-xs);
+}
+
+.pf-home__bento-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.pf-home__bento-card-desc {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  font-family: var(--font-sans), "DM Sans", sans-serif;
+}
+
+.pf-home__bento-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: var(--space-sm);
+}
+
+.pf-home__bento-tag {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(59, 130, 246, 0.08);
+  color: color(primary);
+  font-family: var(--font-sans), "DM Sans", sans-serif;
+  letter-spacing: 0.02em;
+}

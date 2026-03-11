@@ -122,6 +122,7 @@ function TimelineItem({ experience, index }: { experience: Experience; index: nu
 
 export default function ExperienceSection() {
   return (
+    <section className="pf-scroll-section pf-scroll-section--free" id="experience-section">
     <div className="pf-section-content pf-section-content--scrollable">
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
@@ -141,5 +142,6 @@ export default function ExperienceSection() {
         </div>
       </div>
     </div>
+    </section>
   );
 }

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function DecryptedText({ text, speed = 50 }: { text: string; speed?: number }) {
   const [displayText, setDisplayText] = useState("");
-  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%^&*()+";
 
   useEffect(() => {
     let iteration = 0;

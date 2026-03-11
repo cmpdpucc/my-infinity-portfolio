@@ -17,6 +17,16 @@ export const metadata: Metadata = {
   description: "Senior Developer Portfolio inspired by Top Tiers",
 };
 
+/**
+ * RootLayout — Minimal global shell.
+ *
+ * Responsibilities:
+ * - Load Google Fonts (DM Sans + Space Grotesk) as CSS variables
+ * - Import the SCSS design system via main.scss
+ * - Render children (AppRouter handles all routing)
+ *
+ * No UI components here — navigation/sidebar are inside AppRouter.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{

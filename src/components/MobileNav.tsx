@@ -2,14 +2,9 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { User, Briefcase, Layers } from "lucide-react";
-import { smoothScrollTo, easings } from "@/utils/smoothScroll";
-import type { SectionConfig } from "@/data/sections.data";
-
-interface MobileNavProps {
-  sections: SectionConfig[];
-  activeSectionId: string;
-}
+import { User, Briefcase, Layers, Home } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { PORTFOLIO_ROUTES } from "@/data/routes.config";
 
 // Map section IDs to specific Lucide icons
 const iconMap: Record<string, React.ReactNode> = {
@@ -18,20 +13,7 @@ const iconMap: Record<string, React.ReactNode> = {
   projects: <Layers size={20} />,
 };
 
-export default function MobileNav({ sections, activeSectionId }: MobileNavProps) {
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    const container = document.getElementById("scroll-container");
-    if (el && container) {
-      smoothScrollTo({
-        container,
-        targetY: el.offsetTop,
-        duration: 950,
-        easing: easings.easeInOutQuart,
-      });
-    }
-  };
-
+export default function MobileNav() {
   return (
     <motion.nav
       initial={{ y: 100, opacity: 0 }}
@@ -41,17 +23,17 @@ export default function MobileNav({ sections, activeSectionId }: MobileNavProps)
       aria-label="Mobile navigation"
     >
       <ul className="pf-mobile-nav__list">
-        {sections.map(({ id, navLabel }) => {
-          const isActive = activeSectionId === id;
-          return (
-            <li key={id} className="pf-mobile-nav__item">
-              <button
-                className={`pf-mobile-nav__button ${isActive ? "pf-mobile-nav__button--active" : ""}`}
-                onClick={() => scrollToSection(id)}
-                aria-current={isActive ? "page" : undefined}
-                aria-label={navLabel}
-              >
-                {/* Visual indicator dot for active state */}
+        {/* Static Home Link */}
+        <li className="pf-mobile-nav__item">
+          <NavLink
+            to="/"
+            className={({ isActive }) => 
+              `pf-mobile-nav__button ${isActive ? "pf-mobile-nav__button--active" : ""}`
+            }
+            aria-label="Home"
+          >
+            {({ isActive }) => (
+              <>
                 {isActive && (
                   <motion.div
                     layoutId="mobile-nav-active-indicator"
@@ -59,12 +41,43 @@ export default function MobileNav({ sections, activeSectionId }: MobileNavProps)
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
                 )}
-                
                 <span className="pf-mobile-nav__icon">
-                  {iconMap[id.toLowerCase()] || <Layers size={20} />}
+                  <Home size={20} />
                 </span>
-                <span className="pf-mobile-nav__label">{navLabel}</span>
-              </button>
+                <span className="pf-mobile-nav__label">Home</span>
+              </>
+            )}
+          </NavLink>
+        </li>
+
+        {PORTFOLIO_ROUTES.map(({ id, path, label }) => {
+          return (
+            <li key={id} className="pf-mobile-nav__item">
+              <NavLink
+                to={path}
+                className={({ isActive }) => 
+                  `pf-mobile-nav__button ${isActive ? "pf-mobile-nav__button--active" : ""}`
+                }
+                aria-label={label}
+              >
+                {({ isActive }) => (
+                  <>
+                    {/* Visual indicator dot for active state */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="mobile-nav-active-indicator"
+                        className="pf-mobile-nav__active-bg"
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      />
+                    )}
+                    
+                    <span className="pf-mobile-nav__icon">
+                      {iconMap[id.toLowerCase()] || <Layers size={20} />}
+                    </span>
+                    <span className="pf-mobile-nav__label">{label}</span>
+                  </>
+                )}
+              </NavLink>
             </li>
           );
         })}
