@@ -21,43 +21,7 @@
 }
 
 
-// ===================================================
-// SIDEBAR — Column 1 of the Desktop Grid
-// ===================================================
-.pf-sidebar-controller {
-  position: fixed;
-  top: 0;
-  left: 0; // Or whatever is needed to align with max-width container, but since it's centered, we might need a calc
-  height: 100vh;
-  width: var(--sidebar-width);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: space(xl) space(lg);
-  gap: space(md);
-  z-index: 50;
-  pointer-events: none; // let clicks pass through to slider
-  background: transparent;
-  will-change: transform, opacity;
-
-  // On large screens where container is centered, the fixed sidebar needs to align left with the max-width container 
-  @media (min-width: 1550px) {
-    left: calc((100vw - 1550px) / 2);
-  }
-
-  & > * {
-    pointer-events: auto; // re-enable clicks for card and nav
-  }
-
-  &__card {
-    flex-shrink: 0;
-    will-change: transform;
-  }
-
-  @media (max-width: 64em) {
-    display: none; // Hidden on mobile — MobileIdentityBar + MobileNav replace it
-  }
-}
+// Sidebar removed in favor of NavigationBar top menu
 
 // ===================================================
 // SCROLL CONTAINER — right column (1fr), 100vh per section
@@ -69,12 +33,11 @@
   flex-direction: column;
   position: relative;
   
+  // Add some padding-top to account for the fixed Navigation Bar (4.5rem = ~72px)
+  padding-top: 5rem;
+  
   // Transition so that if you navigate Home -> About, the content shifts smoothly
-  transition: padding-left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-
-  &--with-sidebar {
-    padding-left: var(--sidebar-width);
-  }
+  transition: padding 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 
   @media (max-width: 64em) {
     padding-left: 0; // Sidebar doesn't exist on mobile

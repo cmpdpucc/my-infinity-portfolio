@@ -228,6 +228,13 @@
   - DoD: Usa variabili CSS da `_colors.scss`, zero hardcoded.
   - DoD: Import aggiunto in `main.scss`.
 
+### 4.5. IdentityBar & Layout Refactoring
+- [x] Rinominare `MobileIdentityBar.tsx` in `IdentityBar.tsx` e aggiungere logica Dropdown per Desktop (click-outside) e Fullscreen Modal per Mobile.
+- [x] Integrare `IdentityBar` all'interno di `NavigationBar` al posto del logo di testo.
+- [x] Rimuovere `MobileIdentityBar` e `SidebarController` da `PortfolioLayout.tsx` e fixare il grid layout spegnendo il padding per la sidebar.
+- [x] Eliminare i file obsoleti: `SidebarController.tsx` e `SectionNav.tsx`.
+- [x] Rinominare e aggiornare `_mobile-identity.scss` in `_identity.scss` applicando i break point per Desktop (absolute dropdown) e Mobile (fixed fullscreen).
+
 ---
 
 ## Phase 5 — Route Page Wrappers & Section Cleanup

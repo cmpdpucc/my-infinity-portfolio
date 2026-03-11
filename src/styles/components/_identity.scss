@@ -1,116 +1,122 @@
-@use '../colors' as *;
 @use '../tokens' as *;
 
-// =====================================
-// DEVELOPER IDENTITY — branding card
-// =====================================
 .pf-identity {
-  display: flex;
-  flex-direction: column;
-
-  // ─── Sidebar variant (desktop) ───
-  &--sidebar {
-    justify-content: space-between;
-    height: 100%;
-
-    .pf-identity__info {
-      flex: 1;
-      margin-top: 33vh;
-    }
-
-    @media (max-width: 64em) {
-      display: none; // Hidden on mobile — hero variant shown instead
-    }
-  }
-
-  // ─── Hero variant (mobile/tablet) ───
-  &--hero {
-    display: none; // Hidden on desktop
-
-    @media (max-width: 64em) {
-      display: flex;
-      align-items: center;
-      text-align: center;
-      padding: space(2xl) space(lg) space(lg);
-      gap: space(sm);
-
-      .pf-identity__info {
-        width: 100%;
-      }
-
-      .pf-identity__name {
-        font-size: clamp(1.75rem, 5vw, 2.5rem);
-      }
-
-      .pf-identity__title {
-        font-size: clamp(0.85rem, 2vw, 1rem);
-      }
-
-      .pf-identity__tagline {
-        max-width: 100%;
-        font-size: 0.875rem;
-      }
-
-      .pf-identity__cta {
-        margin-top: space(md);
-      }
-
-      .pf-identity__social {
-        justify-content: center;
-        margin-top: space(md);
-      }
-    }
-  }
-
-  // ─── Child elements ───
-  &__name {
-    font-size: clamp(2.25rem, 6vw, 3.5rem);
-    font-weight: 700;
-    line-height: 1.1;
-    color: var(--color-text);
-    margin-bottom: space(xs);
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-  }
-
-  &__title {
-    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-    font-weight: 500;
-    color: var(--color-text);
-    margin-top: space(sm);
-  }
-
-  &__tagline {
-    max-width: 20rem;
-    margin-top: space(md);
-    color: var(--color-text-muted);
-    line-height: 1.5;
-  }
-
-  &__cta {
-    margin-top: space(md);
-  }
-
-  &__social {
+  position: relative;
+  
+  &__trigger {
     display: flex;
     align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: space(xl) 0 0 0;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
 
-    li {
-      margin-right: space(lg);
-      font-size: 0.875rem;
-      color: var(--color-text-muted);
+    &:hover, &--active {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  &__avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  &__name {
+    color: var(--color-text);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+  }
+
+  // Common wrapper for the expanded view
+  &__expanded {
+    z-index: 2000; // Above everything when expanded
+  }
+
+  /* --- DESKTOP SPECIFIC (Absolute Dropdown) --- */
+  @media (min-width: 64.01em) {
+    &__expanded {
+      position: absolute;
+      top: calc(100% + 1rem);
+      left: 0;
+      width: 340px;
+      // No standard background/blur since the ProfileCard provides its own UI
+    }
+
+    &__backdrop {
+      display: none; // No blur modal background on desktop
+    }
+
+    &__close {
+      display: none; // No close button on desktop
+    }
+
+    &__card-container {
+      width: 100%;
+    }
+  }
+
+  /* --- MOBILE SPECIFIC (Fullscreen Modal with Blur) --- */
+  @media (max-width: 64em) {
+    &__expanded {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    &__backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(11, 17, 32, 0.75);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      z-index: -1;
+    }
+
+    &__close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--color-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      transition: color 200ms ease;
-
+      z-index: 10;
+      
       &:hover {
-        color: var(--color-text);
+        background: rgba(255, 255, 255, 0.2);
       }
+    }
+
+    &__card-container {
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      z-index: 5;
     }
   }
 }

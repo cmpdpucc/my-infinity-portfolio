@@ -3,7 +3,15 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { PORTFOLIO_ROUTES } from "@/data/routes.config";
-import { Terminal } from "lucide-react"; // Using Terminal as a logo placeholder
+import IdentityBar from "@/components/IdentityBar";
+
+const DEV_PROFILE = {
+  avatarUrl: "/avatar.svg",
+  name: "DanyP",
+  title: "Senior Developer",
+  handle: "danyp",
+  status: "Available for work",
+} as const;
 
 export default function NavigationBar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -38,10 +46,14 @@ export default function NavigationBar() {
     >
       <div className="pf-nav-bar__container">
         {/* Logo Area */}
-        <NavLink to="/" className="pf-nav-bar__logo" aria-label="Go to Home">
-          <Terminal size={24} className="pf-nav-bar__logo-icon" />
-          <span className="pf-nav-bar__logo-text">Dan.P</span>
-        </NavLink>
+        {/* Identity Logo Dropdown */}
+        <IdentityBar
+            avatarUrl={DEV_PROFILE.avatarUrl}
+            name={DEV_PROFILE.name}
+            title={DEV_PROFILE.title}
+            handle={DEV_PROFILE.handle}
+            status={DEV_PROFILE.status}
+        />
 
         {/* Desktop Navigation Links */}
         <nav className="pf-nav-bar__links">
