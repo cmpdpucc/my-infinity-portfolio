@@ -4,10 +4,11 @@ import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { PORTFOLIO_ROUTES } from "@/data/routes.config";
 import IdentityBar from "@/components/IdentityBar";
+import NavCard, { NavCardItem } from "@/components/NavCard";
 
 const DEV_PROFILE = {
   avatarUrl: "/avatar.svg",
-  name: "DanyP",
+  name: "Daniele Puccio",
   title: "Senior Developer",
   handle: "danyp",
   status: "Available for work",
@@ -17,6 +18,18 @@ export default function NavigationBar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
+
+  // Dynamic orientation for NavCard
+  const [navOrientation, setNavOrientation] = useState<"horizontal" | "vertical">("horizontal");
+
+  useEffect(() => {
+    const handleResize = () => {
+      setNavOrientation(window.innerWidth <= 1024 ? "vertical" : "horizontal");
+    };
+    handleResize(); // Init
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Handle scroll detection for the frosted glass effect on Home page
   useEffect(() => {
@@ -38,6 +51,22 @@ export default function NavigationBar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isHome]);
 
+  const navItems: NavCardItem[] = [
+    {
+      label: "Navigation",
+      bgColor: "var(--color-bg-light, #1e293b)",
+      textColor: "var(--color-text, #f8fafc)",
+      links: [
+        { label: "Home", href: "/", ariaLabel: "Go to Home" },
+        ...PORTFOLIO_ROUTES.map((route) => ({
+          label: route.label,
+          href: route.path,
+          ariaLabel: `Go to ${route.label}`,
+        })),
+      ],
+    },
+  ];
+
   return (
     <header
       className={`pf-nav-bar ${
@@ -55,31 +84,17 @@ export default function NavigationBar() {
             status={DEV_PROFILE.status}
         />
 
-        {/* Desktop Navigation Links */}
-        <nav className="pf-nav-bar__links">
-          {/* Home Link */}
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `pf-nav-bar__link ${isActive ? "pf-nav-bar__link--active" : ""}`
-            }
-          >
-            Home
-          </NavLink>
-          
-          {/* Dynamic Portfolio Links */}
-          {PORTFOLIO_ROUTES.map((route) => (
-            <NavLink
-              key={route.id}
-              to={route.path}
-              className={({ isActive }) =>
-                `pf-nav-bar__link ${isActive ? "pf-nav-bar__link--active" : ""}`
-              }
-            >
-              {route.label}
-            </NavLink>
-          ))}
-        </nav>
+        {/* Desktop & Mobile Navigation via NavCard */}
+        <NavCard
+          logo=""
+          items={navItems}
+          orientation={navOrientation}
+          className="pf-nav-bar__card"
+          baseColor="rgba(255, 255, 255, 0.05)"
+          menuColor="var(--color-text)"
+          buttonBgColor="var(--color-primary)"
+          buttonTextColor="#fff"
+        />
       </div>
     </header>
   );

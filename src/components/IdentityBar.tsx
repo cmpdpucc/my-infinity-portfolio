@@ -42,17 +42,31 @@ function useOnClickOutside(ref: React.RefObject<HTMLElement | null>, handler: ()
 
 export default function IdentityBar({ avatarUrl, name, title, handle, status }: IdentityBarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [animationKey, setAnimationKey] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const closeDropdown = () => {
+    setIsExpanded(false);
+    setAnimationKey((prev) => prev + 1);
+  };
+
+  const toggleDropdown = () => {
+    if (isExpanded) {
+      closeDropdown();
+    } else {
+      setIsExpanded(true);
+    }
+  };
+
   useOnClickOutside(containerRef, () => {
-    if (isExpanded) setIsExpanded(false);
+    if (isExpanded) closeDropdown();
   });
 
   return (
     <div className="pf-identity" ref={containerRef}>
       <motion.button
         className={`pf-identity__trigger ${isExpanded ? "pf-identity__trigger--active" : ""}`}
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={toggleDropdown}
         aria-label="View developer profile"
         aria-expanded={isExpanded}
         type="button"
@@ -65,7 +79,7 @@ export default function IdentityBar({ avatarUrl, name, title, handle, status }: 
           className="pf-identity__avatar"
         />
         <span className="pf-identity__name">
-          <DecryptedText text={name} speed={50} />
+          <DecryptedText key={animationKey} text={name} speed={50} />
         </span>
       </motion.button>
 
@@ -80,13 +94,13 @@ export default function IdentityBar({ avatarUrl, name, title, handle, status }: 
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              onClick={() => setIsExpanded(false)}
+              onClick={closeDropdown}
             />
 
             {/* Close Button: Only visible on mobile via CSS */}
             <motion.button
               className="pf-identity__close"
-              onClick={() => setIsExpanded(false)}
+              onClick={closeDropdown}
               aria-label="Close profile"
               type="button"
               initial={{ opacity: 0 }}
@@ -99,6 +113,7 @@ export default function IdentityBar({ avatarUrl, name, title, handle, status }: 
             {/* Profile Card Container */}
             <motion.div 
               className="pf-identity__card-container"
+              style={{ transformOrigin: "top left" }}
               initial={{ opacity: 0, scale: 0.9, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -5, transition: { duration: 0.15 } }}

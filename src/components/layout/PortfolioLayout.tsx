@@ -26,8 +26,8 @@ export default function PortfolioLayout() {
       <div className="pf-page-layout">
         <Spotlight />
 
-        {/* BOTTOM: Floating mobile nav (< 1024px) (Hidden on Home) */}
-        {!isHome && <MobileNav />}
+        {/* BOTTOM: Floating mobile nav (< 1024px) (Hidden on Home) 
+        {!isHome && <MobileNav />} */}
 
         {/* MAIN CONTENT AREA */}
         <main className="pf-main-content">

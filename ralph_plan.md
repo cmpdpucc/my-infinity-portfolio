@@ -235,6 +235,34 @@
 - [x] Eliminare i file obsoleti: `SidebarController.tsx` e `SectionNav.tsx`.
 - [x] Rinominare e aggiornare `_mobile-identity.scss` in `_identity.scss` applicando i break point per Desktop (absolute dropdown) e Mobile (fixed fullscreen).
 
+### 4.6. NavCard Integration & IdentityBar Polish
+- [x] **Task 4.6.1: IdentityBar Content & Layout Left-Align**
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`
+  - DoD: Sostituire "DanyP" con "Daniele Puccio" in `NavigationBar.tsx`/`IdentityBar.tsx`. 
+  - DoD: In `_navigation.scss` impostare il container con `justify-content: space-between` e rimuovere fix centrati che sposterebbero l'IdentityBar su mobile.
+- [x] **Task 4.6.2: DecryptedText Re-animation on Close**
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`
+  - DoD: In `IdentityBar.tsx`, aggiungere uno state `animationKey` (numero).
+  - DoD: Incrementare questo `key` ogni volta che `isExpanded` passa da `true` a `false`.
+  - DoD: Passare il `key` al componente `<DecryptedText>` per forzarne il remount/ri-animazione.
+- [x] **Task 4.6.3: ProfileCard Emerge Animation**
+  - **Agente:** `@frontend-specialist` | Skills: `ui-ux-pro-max`, `react-patterns`
+  - DoD: Modificare le prop di `framer-motion` in `IdentityBar.tsx` (`pf-identity__card-container`).
+  - DoD: Aggiungere `style={{ transformOrigin: "top left" }}` o logica simile per fargli scalare/emergere fluidamente dallo stesso punto del trigger.
+- [x] **Task 4.6.4: Integrazione NavCard in NavigationBar**
+  - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`
+  - DoD: Rimuovere i vecchi `NavLink` testuali da `NavigationBar.tsx`.
+  - DoD: Costruire l'oggetto `items` per `<NavCard>` usando i dati di `SectionNav.tsx`/`PORTFOLIO_ROUTES`.
+  - DoD: Aggiungere un hook (es. `window.matchMedia`) in `NavigationBar.tsx` per passare `orientation="horizontal"` su Desktop e `"vertical"` su Mobile.
+- [x] **Task 4.6.5: NavCard CSS Refinement**
+  - **Agente:** `@frontend-specialist` | Skills: `frontend-design`, `clean-code`
+  - DoD: Nascondere il logo ridondante in `<NavCard>` (perché abbiamo l'IdentityBar come brand).
+  - DoD: Rimuovere o sistemare i `position: fixed` in `_nav-card.scss` affinché conviva armoniosamente (padding, z-index) con la logica della top bar frosted.
+- [x] **Task 4.6.6: File Cleanup & Layout Adjustments**
+  - **Agente:** `@frontend-specialist` | Skills: `clean-code`
+  - DoD: In `PortfolioLayout.tsx`, commentare temporaneamente `<MobileNav />`.
+  - DoD: Spostare `SectionNav.tsx` in `to-be-deleted/`.
+
 ---
 
 ## Phase 5 — Route Page Wrappers & Section Cleanup
