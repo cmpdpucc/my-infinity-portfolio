@@ -201,6 +201,17 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
       </nav>
       <span className="pf-gooey-nav__effect pf-gooey-nav__effect--filter" ref={filterRef} />
       <span className="pf-gooey-nav__effect pf-gooey-nav__effect--text" ref={textRef} />
+
+      {/* SVG Filter for sharp gooey effect on transparent/dark backgrounds */}
+      <svg style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }} aria-hidden="true">
+        <defs>
+          <filter id="pf-gooey-filter">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+        </defs>
+      </svg>
     </div>
   );
 };
