@@ -19,6 +19,7 @@
 @use 'components/home';
 @use 'components/navigation-card-bar';
 @use 'components/gooey-nav';
+@use 'components/scroll-velocity';
 
 *, *::before, *::after {
   box-sizing: border-box;
