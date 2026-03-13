@@ -6,19 +6,27 @@
   &__trigger {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    // gap: 0.5rem;
     padding: 0.5rem 0.75rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    
+    // Matched exactly to the scrolled/vertical NavCardBar for consistent floating effect
+    background-color: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border-radius: 100px;
     cursor: pointer;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: all 0.2s ease;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: all 0.3s ease;
+
+    // @media (max-width: 64em) {
+    //  gap: 0;
+    // }
 
     &:hover, &--active {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.15);
+      background-color: rgba(15, 23, 42, 0.8);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
   }
 

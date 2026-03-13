@@ -2,10 +2,70 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+
 import { PORTFOLIO_ROUTES } from "@/data/routes.config";
+
 import IdentityBar from "@/components/IdentityBar";
 import GooeyNav from "@/components/GooeyNav";
-import { motion, AnimatePresence } from "framer-motion";
+
+// --- Inline SVG Icon (from NavCard) ---
+const ArrowUpRightIcon = () => (
+  <svg
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M7 17L17 7M7 7h10v10" />
+  </svg>
+);
+
+/**
+ * Dynamically builds the nav card items from PORTFOLIO_ROUTES.
+ * Only routes with `navCard` metadata get a colored card.
+ * In the future this data will come from a backend API —
+ * at that point just replace PORTFOLIO_ROUTES with the API response.
+ */
+const NAV_CARD_ITEMS = PORTFOLIO_ROUTES
+  .filter((route) => route.navCard != null)
+  .map((route) => ({
+    label: route.label,
+    bgColor: route.navCard!.bgColor,
+    textColor: route.navCard!.textColor,
+    links: route.navCard!.subLinks,
+  }));
+
+// --- Framer Motion variants for stagger ---
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+  exit: {},
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] as const },
+  },
+  exit: {
+    opacity: 0,
+    y: 12,
+    scale: 0.97,
+    transition: { duration: 0.2, ease: "easeIn" as const },
+  },
+};
 
 const DEV_PROFILE = {
   avatarUrl: "/avatar.svg",
@@ -21,6 +81,7 @@ export default function NavigationCardBar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [openedBy, setOpenedBy] = useState<OpenedBy>(null);
+  const [orientation, setOrientation] = useState<"horizontal" | "vertical">("horizontal");
   const location = useLocation();
   const isHome = location.pathname === "/";
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -71,6 +132,24 @@ export default function NavigationCardBar() {
       hoverTimeoutRef.current = null;
     }
   }, []);
+
+  // Handle window resize for orientation
+  useEffect(() => {
+    const handleResize = () => {
+      setOrientation(window.innerWidth <= 1024 ? "vertical" : "horizontal");
+    };
+    handleResize(); // Init immediately
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Cleanup on orientation change
+  useEffect(() => {
+    if (isExpanded) {
+      closeMenu();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orientation]);
 
   // 3-second hover timer on the entire bar
   const handleMouseEnter = () => {
@@ -137,27 +216,75 @@ export default function NavigationCardBar() {
     "pf-nav-card-bar",
     isScrolled ? "pf-nav-card-bar--scrolled" : "pf-nav-card-bar--transparent",
     isExpanded ? "pf-nav-card-bar--has-expanded" : "",
+    orientation === "vertical" ? "pf-nav-card-bar--vertical" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
+  const verticalHeaderVariants = {
+    closed: {
+      width: 60,
+      height: 60,
+      transition: { duration: 0.35, ease: "easeInOut" as const }
+    },
+    open: {
+      width: "calc(100vw - 2rem)",
+      height: "auto",
+      transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as const }
+    }
+  };
+
   return (
-    <header
-      ref={headerRef}
-      className={headerClasses}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div className="pf-nav-card-bar__top">
-        {/* Left: Identity Logo */}
-        <div className="pf-nav-card-bar__left">
-          <IdentityBar
-            avatarUrl={DEV_PROFILE.avatarUrl}
-            name={DEV_PROFILE.name}
-            title={DEV_PROFILE.title}
-            handle={DEV_PROFILE.handle}
-            status={DEV_PROFILE.status}
-          />
+    <>
+      <AnimatePresence>
+        {orientation === "vertical" && (
+          <motion.div 
+            className="pf-nav-card-bar__mobile-identity"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+          >
+            <IdentityBar
+              avatarUrl={DEV_PROFILE.avatarUrl}
+              name={DEV_PROFILE.name}
+              title={DEV_PROFILE.title}
+              handle={DEV_PROFILE.handle}
+              status={DEV_PROFILE.status}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.header
+        ref={headerRef}
+        className={headerClasses}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        initial={false}
+        animate={orientation === "vertical" ? (isExpanded ? "open" : "closed") : "horizontal"}
+        variants={{
+          ...verticalHeaderVariants,
+          horizontal: {
+             width: "100%",
+             height: "auto",
+             transition: { duration: 0.2 }
+          }
+        }}
+        style={orientation === "vertical" ? { overflow: "hidden", maxHeight: "calc(100vh - 2rem)" } : { width: "100%", height: "auto" }}
+      >
+        <div className="pf-nav-card-bar__top">
+          {/* Left: Identity Logo */}
+          <div className="pf-nav-card-bar__left">
+          {orientation === "horizontal" && (
+            <IdentityBar
+              avatarUrl={DEV_PROFILE.avatarUrl}
+              name={DEV_PROFILE.name}
+              title={DEV_PROFILE.title}
+              handle={DEV_PROFILE.handle}
+              status={DEV_PROFILE.status}
+            />
+          )}
         </div>
 
         {/* Center: GooeyNav (Desktop only) */}
@@ -180,7 +307,7 @@ export default function NavigationCardBar() {
         </div>
       </div>
 
-      {/* Expanded Menu */}
+      {/* Expanded Menu — Colored Card Grid with Stagger */}
       <AnimatePresence>
         {isExpanded && (
           <motion.div
@@ -190,30 +317,55 @@ export default function NavigationCardBar() {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="pf-expanded-content">
-              {/* Fake inner links for the demo, representing sub-pages eventually */}
-              <div className="pf-expanded-content__section">
-                <div className="pf-expanded-content__title">Projects</div>
-                <NavLink to="/projects" onClick={closeMenu}>All Projects</NavLink>
-                <a href="#" onClick={(e) => e.preventDefault()}>E-commerce Platform</a>
-                <a href="#" onClick={(e) => e.preventDefault()}>Fintech Dashboard</a>
-              </div>
-              <div className="pf-expanded-content__section">
-                <div className="pf-expanded-content__title">Experience</div>
-                <NavLink to="/experience" onClick={closeMenu}>Full Timeline</NavLink>
-                <a href="#" onClick={(e) => e.preventDefault()}>Frontend Lead</a>
-                <a href="#" onClick={(e) => e.preventDefault()}>Full Stack Dev</a>
-              </div>
-              <div className="pf-expanded-content__section">
-                <div className="pf-expanded-content__title">About</div>
-                <NavLink to="/about" onClick={closeMenu}>About Me</NavLink>
-                <a href="#" onClick={(e) => e.preventDefault()}>Tech Stack</a>
-                <a href="#" onClick={(e) => e.preventDefault()}>Setup</a>
-              </div>
-            </div>
+            <motion.div
+              className="pf-expanded-content"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              {NAV_CARD_ITEMS.map((item, idx) => (
+                <motion.div
+                  key={`${item.label}-${idx}`}
+                  className="pf-nav-card"
+                  variants={cardVariants}
+                  style={{ backgroundColor: item.bgColor, color: item.textColor }}
+                >
+                  <div className="pf-nav-card__label">{item.label}</div>
+                  <div className="pf-nav-card__links">
+                    {item.links.map((lnk, i) =>
+                      lnk.isRoute ? (
+                        <NavLink
+                          key={`${lnk.label}-${i}`}
+                          className="pf-nav-card__link"
+                          to={lnk.href}
+                          aria-label={lnk.ariaLabel}
+                          onClick={closeMenu}
+                        >
+                          <ArrowUpRightIcon />
+                          {lnk.label}
+                        </NavLink>
+                      ) : (
+                        <a
+                          key={`${lnk.label}-${i}`}
+                          className="pf-nav-card__link"
+                          href={lnk.href}
+                          aria-label={lnk.ariaLabel}
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          <ArrowUpRightIcon />
+                          {lnk.label}
+                        </a>
+                      )
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
+    </>
   );
 }

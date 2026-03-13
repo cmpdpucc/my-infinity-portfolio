@@ -12,12 +12,13 @@ import { ArrowDown } from "lucide-react";
  */
 export default function AboutSection() {
   return (
-    <div className="pf-section-content">
+    <div className="pf-section-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
         className="pf-section__title"
+        style={{ width: '100%', marginBottom: '1rem' }}
       >
         About
       </motion.h2>
