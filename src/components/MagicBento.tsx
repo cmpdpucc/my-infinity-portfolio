@@ -28,7 +28,7 @@ export interface BentoProps {
 }
 
 const DEFAULT_PARTICLE_COUNT = 12;
-const DEFAULT_SPOTLIGHT_RADIUS = 300;
+const DEFAULT_SPOTLIGHT_RADIUS = 400;
 const DEFAULT_GLOW_COLOR = '132, 0, 255';
 const MOBILE_BREAKPOINT = 768;
 
@@ -175,11 +175,11 @@ const ParticleCard: React.FC<{
 
       if (enableTilt) {
         gsap.to(element, {
-          rotateX: 5,
-          rotateY: 5,
-          duration: 0.3,
+          rotateX: 0.5,
+          rotateY: 0.5,
+          duration: 0.25,
           ease: 'power2.out',
-          transformPerspective: 1000
+          transformPerspective: 800
         });
       }
     };
@@ -192,7 +192,7 @@ const ParticleCard: React.FC<{
         gsap.to(element, {
           rotateX: 0,
           rotateY: 0,
-          duration: 0.3,
+          duration: 0.25,
           ease: 'power2.out'
         });
       }
@@ -475,10 +475,10 @@ const MagicBento: React.FC<BentoProps> = ({
   disableAnimations = false,
   spotlightRadius = DEFAULT_SPOTLIGHT_RADIUS,
   particleCount = DEFAULT_PARTICLE_COUNT,
-  enableTilt = true,
+  enableTilt = false,
   glowColor = DEFAULT_GLOW_COLOR,
   clickEffect = true,
-  enableMagnetism = true
+  enableMagnetism = false
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobileDetection();
