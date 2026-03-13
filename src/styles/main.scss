@@ -20,6 +20,7 @@
 @use 'components/navigation-card-bar';
 @use 'components/gooey-nav';
 @use 'components/scroll-velocity';
+@use 'components/magic-bento';
 
 *, *::before, *::after {
   box-sizing: border-box;

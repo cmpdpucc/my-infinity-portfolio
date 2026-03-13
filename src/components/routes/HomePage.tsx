@@ -15,6 +15,7 @@ import {
   Mail,
 } from "lucide-react";
 import FloatingLines from "@/components/FloatingLines";
+import MagicBento from "@/components/MagicBento";
 
 /** Framer-motion stagger container */
 const stagger = {
@@ -202,36 +203,7 @@ export default function HomePage() {
           </p>
         </motion.div>
 
-        <motion.div
-          className="pf-home__bento-grid"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={stagger}
-        >
-          {SKILLS.map(({ icon: Icon, title, description, tags, span }) => (
-            <motion.article
-              key={title}
-              className={`pf-home__bento-card ${
-                span === "wide" ? "pf-home__bento-card--wide" : ""
-              }`}
-              variants={fadeUp}
-            >
-              <div className="pf-home__bento-card-icon">
-                <Icon size={24} />
-              </div>
-              <h3 className="pf-home__bento-card-title">{title}</h3>
-              <p className="pf-home__bento-card-desc">{description}</p>
-              <div className="pf-home__bento-card-tags">
-                {tags.map((tag) => (
-                  <span key={tag} className="pf-home__bento-tag">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </motion.article>
-          ))}
-        </motion.div>
+        <MagicBento items={SKILLS} />
       </section>
     </div>
   );
