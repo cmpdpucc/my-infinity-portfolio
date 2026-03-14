@@ -55,15 +55,19 @@ const calculateSpotlightValues = (radius: number) => ({
   fadeDistance: radius * 0.75
 });
 
-const updateCardGlowProperties = (card: HTMLElement, mouseX: number, mouseY: number, glow: number, radius: number) => {
-  const rect = card.getBoundingClientRect();
-  const relativeX = ((mouseX - rect.left) / rect.width) * 100;
-  const relativeY = ((mouseY - rect.top) / rect.height) * 100;
+const updateCardGlowProperties = (card: HTMLElement, mouseX: number, mouseY: number, glow: number, radius: number, cardRect: DOMRect) => {
+  const relativeX = mouseX - cardRect.left;
+  const relativeY = mouseY - cardRect.top;
 
-  card.style.setProperty('--glow-x', `${relativeX}%`);
-  card.style.setProperty('--glow-y', `${relativeY}%`);
-  card.style.setProperty('--glow-intensity', glow.toString());
-  card.style.setProperty('--glow-radius', `${radius}px`);
+  gsap.to(card, {
+    '--glow-x': `${relativeX}px`,
+    '--glow-y': `${relativeY}px`,
+    '--glow-intensity': glow.toString(),
+    '--glow-radius': `${radius}px`,
+    duration: 0.4,
+    ease: 'power3.out',
+    overwrite: 'auto'
+  });
 };
 
 const ParticleCard: React.FC<{
@@ -379,12 +383,15 @@ const GlobalSpotlight: React.FC<{
         return;
       }
 
+      const cardsArr = Array.from(cards).map(card => {
+        const cardElement = card as HTMLElement;
+        return { cardElement, cardRect: cardElement.getBoundingClientRect() };
+      });
+
       const { proximity, fadeDistance } = calculateSpotlightValues(spotlightRadius);
       let minDistance = Infinity;
 
-      cards.forEach(card => {
-        const cardElement = card as HTMLElement;
-        const cardRect = cardElement.getBoundingClientRect();
+      cardsArr.forEach(({ cardElement, cardRect }) => {
         const centerX = cardRect.left + cardRect.width / 2;
         const centerY = cardRect.top + cardRect.height / 2;
         const distance =
@@ -400,14 +407,15 @@ const GlobalSpotlight: React.FC<{
           glowIntensity = (fadeDistance - effectiveDistance) / (fadeDistance - proximity);
         }
 
-        updateCardGlowProperties(cardElement, e.clientX, e.clientY, glowIntensity, spotlightRadius);
+        updateCardGlowProperties(cardElement, e.clientX, e.clientY, glowIntensity, spotlightRadius, cardRect);
       });
 
       gsap.to(spotlightRef.current, {
         left: e.clientX,
         top: e.clientY,
-        duration: 0.05,
-        ease: 'power2.out'
+        duration: 0.4,
+        ease: 'power3.out',
+        overwrite: 'auto'
       });
 
       const targetOpacity =
