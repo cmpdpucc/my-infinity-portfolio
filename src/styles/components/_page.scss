@@ -53,16 +53,16 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: space(xl);
-  background: rgba(color(surface), 0.4);
-  border: 1px solid rgba(color(border), 0.4);
+  padding: get-space(xl);
+  background: rgba(get-color(surface), 0.4);
+  border: 1px solid rgba(get-color(border), 0.4);
   border-radius: 12px;
   backdrop-filter: blur(8px);
   transition: border-color 300ms ease, box-shadow 300ms ease;
 
   &:hover {
-    border-color: rgba(color(primary), 0.3);
-    box-shadow: 0 0 20px rgba(color(cta), 0.05);
+    border-color: rgba(get-color(primary), 0.3);
+    box-shadow: 0 0 20px rgba(get-color(cta), 0.05);
   }
 
   &__category {
@@ -70,7 +70,7 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--color-text-muted);
-    margin-bottom: space(sm);
+    margin-bottom: get-space(sm);
   }
 
   &__title {
@@ -80,7 +80,7 @@
   }
 
   &__desc {
-    margin-top: space(sm);
+    margin-top: get-space(sm);
     font-size: 0.85rem;
     color: var(--color-text-muted);
     line-height: 1.6;
@@ -88,14 +88,14 @@
 
   &__tags {
     display: flex;
-    gap: space(sm);
-    margin-top: space(md);
+    gap: get-space(sm);
+    margin-top: get-space(md);
     flex-wrap: wrap;
   }
 
   &__tag {
     font-size: 0.7rem;
-    background: rgba(color(primary), 0.1);
+    background: rgba(get-color(primary), 0.1);
     color: var(--color-cta);
     padding: 0.2rem 0.5rem;
     border-radius: 4px;

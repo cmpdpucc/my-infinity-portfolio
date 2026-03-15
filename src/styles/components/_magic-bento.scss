@@ -1,0 +1,197 @@
+@use '../colors' as *;
+@use '../tokens' as *;
+
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  _magic-bento.scss                                               ║
+// ║  High-performance interactive grid component                     ║
+// ╚══════════════════════════════════════════════════════════════════╝
+
+.pf-magic-bento__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  width: 100%;
+  perspective: 1000px;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 64em) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 36em) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pf-magic-bento__card-container {
+  position: relative;
+  z-index: 1;
+  transition: z-index 0.3s ease;
+
+  &:hover {
+    z-index: 10;
+  }
+}
+
+.pf-magic-bento__card {
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-intensity: 0;
+  --glow-radius: 300px;
+  --glow-color: 132, 0, 255;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  padding: var(--space-xl);
+  border-radius: 20px;
+  background-color: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  overflow: hidden;
+  transition: 
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  
+  // Glass Effect
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  // Wide span logic
+  &--wide {
+    grid-column: span 2;
+
+    @media (max-width: 36em) {
+      grid-column: span 1;
+    }
+  }
+
+  // Border glow effect
+  &--border-glow {
+    &::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: radial-gradient(
+        var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+        rgba(var(--glow-color), calc(var(--glow-intensity) * 0.8)),
+        transparent 100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      opacity: var(--glow-intensity);
+      transition: opacity 0.4s ease;
+    }
+  }
+
+  // Hover state enhancement
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(var(--glow-color), 0.3);
+    box-shadow: 
+      0 10px 30px -10px rgba(0, 0, 0, 0.5),
+      0 0 20px rgba(var(--glow-color), calc(var(--glow-intensity) * 0.15));
+  }
+}
+
+// ── Header (Icon) ──
+.pf-magic-bento__card-header {
+  margin-bottom: var(--space-xs);
+}
+
+.pf-magic-bento__card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(var(--glow-color), 0.12);
+  color: rgb(var(--glow-color));
+  box-shadow: inset 0 0 12px rgba(var(--glow-color), 0.2);
+  border: 1px solid rgba(var(--glow-color), 0.2);
+  transition: all 0.3s ease;
+
+  .pf-magic-bento__card:hover & {
+    transform: scale(1.1) rotate(5deg);
+    background: rgba(var(--glow-color), 0.2);
+    box-shadow: 0 0 20px rgba(var(--glow-color), 0.3);
+  }
+}
+
+// ── Content ──
+.pf-magic-bento__card-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1;
+}
+
+.pf-magic-bento__card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+
+.pf-magic-bento__card-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  font-family: var(--font-sans), "DM Sans", sans-serif;
+}
+
+// ── Tags ──
+.pf-magic-bento__card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: var(--space-sm);
+}
+
+.pf-magic-bento__card-tag {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-muted);
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+
+  &:hover {
+    background: rgba(var(--glow-color), 0.1);
+    border-color: rgba(var(--glow-color), 0.3);
+    color: rgb(var(--glow-color));
+    transform: translateY(-1px);
+  }
+}
+
+// ── Effects ──
+.pf-magic-bento__particle {
+  pointer-events: none;
+  filter: blur(1px);
+}
+
+.pf-magic-bento__ripple {
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.pf-magic-bento__global-spotlight {
+  pointer-events: none;
+  mix-blend-mode: screen;
+  filter: blur(60px);
+}

@@ -9,6 +9,6 @@ $ux-colors: (
   border: #334155,
 );
 
-@function color($name) {
+@function get-color($name) {
   @return map-get($ux-colors, $name);
 }

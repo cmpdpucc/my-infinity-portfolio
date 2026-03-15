@@ -94,10 +94,10 @@
     }
 
     &--filter {
-      // Gooey effect via high contrast blur trick.
-      // Removed mix-blend-mode: lighten and the black ::before backdrop
-      // to prevent the visible black halo on frosted-glass backgrounds.
-      filter: blur(7px) contrast(100) blur(0);
+      // Gooey effect sharpened + Premium Drop Shadow
+      // Reduced blur from 7px to 4px for sharper "nitidi" connections.
+      // Final drop-shadow gives depth to the composite mass.
+      filter: blur(2px) contrast(100) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
 
       &::before {
         // Kept as structural element but transparent
@@ -137,9 +137,9 @@
 .pf-gooey-nav__point {
   display: block;
   opacity: 0;
-  width: 20px;
-  height: 20px;
-  border-radius: 100%;
+  width: 16px; // Slightly smaller for crisper particles
+  height: 16px;
+  border-radius: 50%;
   transform-origin: center;
 }
 

@@ -47,43 +47,6 @@
   }
 }
 
-// =====================================
-// SCROLL VELOCITY (React Bits)
-// =====================================
-.pf-scroll-velocity {
-  overflow: hidden;
-  padding: 0.5rem 0;
-  // Create a soft fade-out at the horizontal edges
-  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-
-  &__parallax {
-    position: relative;
-    overflow: hidden;
-    padding: 0.25rem 0;
-  }
-
-  &__scroller {
-    display: flex;
-    white-space: nowrap;
-    font-family: var(--font-serif), "Space Grotesk", sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-
-    span {
-      flex-shrink: 0;
-      padding: 0 1rem;
-    }
-  }
-
-  &__tag {
-    color: var(--color-text-muted);
-    font-size: 0.7rem;
-  }
-}
 
 // =====================================
 // BENTO GRID (Projects)

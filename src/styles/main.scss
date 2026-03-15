@@ -8,9 +8,7 @@
 @use 'components/mobile-nav';
 @use 'components/pixel-ripple';
 @use 'components/identity';
-@use 'components/section-nav';
 @use 'components/profile-card';
-@use 'components/mobile-identity';
 @use 'components/animated-terminal';
 @use 'components/experience';
 @use 'components/blur-slider';
@@ -19,6 +17,8 @@
 @use 'components/home';
 @use 'components/navigation-card-bar';
 @use 'components/gooey-nav';
+@use 'components/scroll-velocity';
+@use 'components/magic-bento';
 
 *, *::before, *::after {
   box-sizing: border-box;
