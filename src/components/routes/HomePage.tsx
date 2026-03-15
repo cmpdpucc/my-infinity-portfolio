@@ -13,6 +13,7 @@ import {
   Cpu,
   Rocket,
   Mail,
+  ArrowDown,
 } from "lucide-react";
 import FloatingLines from "@/components/FloatingLines";
 import MagicBento from "@/components/MagicBento";
@@ -177,19 +178,34 @@ export default function HomePage() {
           </motion.div>
         </motion.div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          className="pf-home__scroll-hint"
+        {/* Scroll indicator — scrolls to MagicBento */}
+        <motion.button
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8, duration: 0.8 }}
+          className="pf-home__scroll-indicator"
+          onClick={() => {
+            const bentoSection = document.getElementById("magic-bento");
+            if (bentoSection) {
+              bentoSection.scrollIntoView({ behavior: "smooth" });
+            }
+          }}
+          type="button"
+          aria-label="Scroll to skills section"
         >
-          <span className="pf-home__scroll-line" />
-        </motion.div>
+          <motion.span
+            className="pf-home__scroll-icon"
+            animate={{ y: [0, 6, 0] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+          >
+            <ArrowDown size={18} />
+          </motion.span>
+          <span className="pf-home__scroll-text">View Skills</span>
+        </motion.button>
       </section>
 
       {/* ─── BENTO SKILL SHOWCASE ─── */}
-      <section className="pf-home__bento-section">
+      <section id="magic-bento" className="pf-home__bento-section">
         <motion.div
           className="pf-home__bento-header"
           initial={{ opacity: 0, y: 20 }}

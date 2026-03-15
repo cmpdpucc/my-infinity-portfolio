@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 
 /**
+ * @deprecated THIS HOOK IS DEPRECATED.
+ * The portfolio has moved from a single-page scroll architecture to a multi-page routing
+ * architecture. NavigationCardBar now handles active states via route matching.
+ * 
  * useScrollSpy
  *
  * Tracks which section is currently visible using IntersectionObserver.

@@ -1,0 +1,43 @@
+@use '../colors' as *;
+
+/**
+ * _view-transitions.scss
+ * Provides Apple-style slide-fade transitions for the View Transitions API.
+ */
+
+::view-transition-old(root) {
+  animation: 400ms cubic-bezier(0.4, 0, 0.2, 1) both pf-fade-out,
+             400ms cubic-bezier(0.4, 0, 0.2, 1) both pf-slide-to-left;
+}
+
+::view-transition-new(root) {
+  animation: 400ms cubic-bezier(0.4, 0, 0.2, 1) both pf-fade-in,
+             400ms cubic-bezier(0.4, 0, 0.2, 1) both pf-slide-from-right;
+}
+
+// Keyframes
+@keyframes pf-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pf-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes pf-slide-from-right {
+  from { transform: translateX(30px); }
+  to { transform: translateX(0); }
+}
+
+@keyframes pf-slide-to-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-30px); }
+}
+
+// Ensure smooth transitions for specific elements if needed
+.pf-nav-card-bar,
+.pf-identity {
+  view-transition-name: pf-nav-identity;
+}

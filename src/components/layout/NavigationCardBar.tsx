@@ -341,6 +341,7 @@ export default function NavigationCardBar() {
                           to={lnk.href}
                           aria-label={lnk.ariaLabel}
                           onClick={closeMenu}
+                          viewTransition={true}
                         >
                           <ArrowUpRightIcon />
                           {lnk.label}

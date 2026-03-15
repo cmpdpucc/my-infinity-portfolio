@@ -2,9 +2,7 @@
 
 import React from "react";
 import ScrollVelocity from "@/components/ScrollVelocity";
-import { smoothScrollTo, easings } from "@/utils/smoothScroll";
 import { motion } from "framer-motion";
-import { ArrowDown } from "lucide-react";
 
 /**
  * AboutSection — prima sezione fullscreen del portfolio.
@@ -54,48 +52,6 @@ export default function AboutSection() {
         />
       </motion.div>
 
-      {/* Scroll to next section — clickable button, visible on all viewports */}
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="pf-scroll-indicator"
-        onClick={() => {
-          const nextSection = document.getElementById("experience");
-          const container = document.getElementById("scroll-container");
-          if (nextSection && container) {
-            smoothScrollTo({
-              container,
-              targetY: nextSection.offsetTop,
-              duration: 850,
-              easing: easings.easeInOutCubic,
-            });
-          } else if (nextSection) {
-            nextSection.scrollIntoView({ behavior: "smooth" });
-          }
-        }}
-        type="button"
-        aria-label="Scroll to experience section"
-        style={{
-          color: "var(--color-text-muted)",
-          fontSize: "0.7rem",
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          fontFamily: "inherit",
-          padding: "0.5rem 1rem",
-        }}
-      >
-        <motion.span
-          animate={{ y: [0, 6, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-        >
-          <ArrowDown size={13} />
-        </motion.span>
-        Scroll to explore
-      </motion.button>
     </div>
   );
 }

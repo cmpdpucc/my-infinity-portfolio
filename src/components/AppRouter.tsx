@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Suspense, useEffect, useState, ComponentType } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { PORTFOLIO_ROUTES } from "@/data/routes.config";
 import PortfolioLayout from "@/components/layout/PortfolioLayout";
 
@@ -61,9 +61,20 @@ function LoadingFallback() {
   );
 }
 
+/**
+ * ScrollToTop — Helper to ensure every route change starts at the top.
+ * This is needed because ScrollRestoration requires a data router (createBrowserRouter).
+ */
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 export default function AppRouter() {
   // Eagerly preload all routes in the background after the initial render.
-  // This populates the componentCache, ensuring subsequent navigations are mathematically instant.
   useEffect(() => {
     const preloadAll = () => {
       PORTFOLIO_ROUTES.forEach((route) => {
@@ -89,6 +100,7 @@ export default function AppRouter() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       {/* Suspense is kept only as a safety net for deep child components */}
       <Suspense fallback={<LoadingFallback />}>
         <Routes>

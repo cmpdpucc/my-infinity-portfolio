@@ -2,6 +2,10 @@ import { useEffect, useRef } from 'react';
 import { smoothScrollTo, easings } from '@/utils/smoothScroll';
 
 /**
+ * @deprecated THIS HOOK IS DEPRECATED.
+ * The portfolio has moved from a single-page scroll architecture to a multi-page routing
+ * architecture. react-router-dom and native platform scroll now handle navigation.
+ * 
  * useDiscreteScroll — Hybrid scroll: snap sections + free-scroll zones.
  *
  * Sections marked with `data-free-scroll="true"` allow native scrolling.

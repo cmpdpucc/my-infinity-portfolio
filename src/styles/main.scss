@@ -19,6 +19,7 @@
 @use 'components/gooey-nav';
 @use 'components/scroll-velocity';
 @use 'components/magic-bento';
+@use 'components/view-transitions';
 
 *, *::before, *::after {
   box-sizing: border-box;

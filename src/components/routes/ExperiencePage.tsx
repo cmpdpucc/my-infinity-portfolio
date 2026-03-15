@@ -1,12 +1,13 @@
-"use client";
-
-import React from "react";
 import ExperienceSection from "@/sections/ExperienceSection";
+import PageTransition from "@/components/PageTransition";
 
 /**
  * ExperiencePage — Route wrapper for the Experience section.
- * Renders ExperienceSection inside the PortfolioLayout via react-router-dom Outlet.
  */
 export default function ExperiencePage() {
-  return <ExperienceSection />;
+  return (
+    <PageTransition>
+      <ExperienceSection />
+    </PageTransition>
+  );
 }

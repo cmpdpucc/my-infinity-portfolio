@@ -1,12 +1,13 @@
-"use client";
-
-import React from "react";
 import AboutSection from "@/sections/AboutSection";
+import PageTransition from "@/components/PageTransition";
 
 /**
  * AboutPage — Route wrapper for the About section.
- * Renders AboutSection inside the PortfolioLayout via react-router-dom Outlet.
  */
 export default function AboutPage() {
-  return <AboutSection />;
+  return (
+    <PageTransition>
+      <AboutSection />
+    </PageTransition>
+  );
 }

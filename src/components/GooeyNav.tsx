@@ -192,6 +192,7 @@ const GooeyNav: React.FC<GooeyNavProps> = ({
                 className="pf-gooey-nav__link"
                 onClick={e => handleClick(e as any, index)} 
                 onKeyDown={e => handleKeyDown(e as any, index)}
+                viewTransition={true}
               >
                 {item.label}
               </NavLink>
