@@ -391,7 +391,7 @@
   - DoD: Ogni pagina inizia dal top. ✅
   - DoD: Browser back/forward gestisce lo scroll correttamente. ✅ (Fix implemented with ScrollToTop component due to BrowserRouter constraints)
 
----
+- [x] Fix ClickSpark alignment and squeezing issues. ✅ (Refactored for global viewport sizing and DPR scaling)
 
 ## Phase 7 — SCSS Integration & Cleanup
 > **🎯 Supervisore:** `@frontend-specialist` (skills: `frontend-design`, `clean-code`)

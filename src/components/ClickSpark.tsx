@@ -10,7 +10,6 @@ interface ClickSparkProps {
   duration?: number;
   easing?: 'linear' | 'ease-in' | 'ease-out' | 'ease-in-out';
   extraScale?: number;
-  children?: React.ReactNode;
 }
 
 interface Spark {
@@ -20,6 +19,10 @@ interface Spark {
   startTime: number;
 }
 
+/**
+ * ClickSpark — A global click effect component that renders sparks at click coordinates.
+ * This version is designed to be a global singleton in the root layout.
+ */
 const ClickSpark: React.FC<ClickSparkProps> = ({
   sparkColor = '#3b82f6',
   sparkSize = 10,
@@ -28,42 +31,34 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   duration = 400,
   easing = 'ease-out',
   extraScale = 1.0,
-  children
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sparksRef = useRef<Spark[]>([]);
   const startTimeRef = useRef<number | null>(null);
 
+  // Resize handling: Canvas stays synced with full viewport
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const parent = canvas.parentElement;
-    if (!parent) return;
-
-    let resizeTimeout: ReturnType<typeof setTimeout>;
-
     const resizeCanvas = () => {
-      const { width, height } = parent.getBoundingClientRect();
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
-      }
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      
+      const ctx = canvas.getContext('2d');
+      if (ctx) ctx.scale(dpr, dpr);
     };
 
-    const handleResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(resizeCanvas, 100);
-    };
-
-    const ro = new ResizeObserver(handleResize);
-    ro.observe(parent);
+    window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    return () => {
-      ro.disconnect();
-      clearTimeout(resizeTimeout);
-    };
+    return () => window.removeEventListener('resize', resizeCanvas);
   }, []);
 
   const easeFunc = useCallback(
@@ -88,7 +83,9 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
 
     const draw = (timestamp: number) => {
       if (!startTimeRef.current) startTimeRef.current = timestamp;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      const dpr = window.devicePixelRatio || 1;
+      ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
 
       sparksRef.current = sparksRef.current.filter((spark: Spark) => {
         const elapsed = timestamp - spark.startTime;
@@ -106,6 +103,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
 
         ctx.strokeStyle = sparkColor;
         ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
         ctx.globalAlpha = 1 - eased;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -121,36 +119,40 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
 
     animationId = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(animationId);
-  }, [sparkColor, sparkSize, sparkRadius, sparkCount, duration, easeFunc, extraScale]);
+  }, [sparkColor, sparkSize, sparkRadius, duration, easeFunc, extraScale]);
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const now = performance.now();
+  // Use a global pointerdown listener for better responsiveness
+  useEffect(() => {
+    const handleGlobalClick = (e: PointerEvent) => {
+      const x = e.clientX;
+      const y = e.clientY;
+      const now = performance.now();
 
-    const newSparks: Spark[] = Array.from({ length: sparkCount }, (_, i) => ({
-      x, y,
-      angle: (2 * Math.PI * i) / sparkCount,
-      startTime: now
-    }));
+      const newSparks: Spark[] = Array.from({ length: sparkCount }, (_, i) => ({
+        x, y,
+        angle: (2 * Math.PI * i) / sparkCount,
+        startTime: now
+      }));
 
-    sparksRef.current.push(...newSparks);
-  };
+      sparksRef.current.push(...newSparks);
+    };
+
+    window.addEventListener('pointerdown', handleGlobalClick);
+    return () => window.removeEventListener('pointerdown', handleGlobalClick);
+  }, [sparkCount]);
 
   return (
-    <div
-      style={{ width: '100%', height: '100%', position: 'relative' }}
-      onClick={handleClick}
-    >
-      <canvas
-        ref={canvasRef}
-        style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 9998, width: '100vw', height: '100vh' }}
-      />
-      {children}
-    </div>
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        pointerEvents: 'none',
+        zIndex: 9999, 
+        display: 'block'
+      }}
+    />
   );
 };
 
