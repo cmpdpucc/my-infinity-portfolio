@@ -4,7 +4,7 @@
 .pf-card {
   background: var(--color-surface);
   border-radius: radius(md);
-  padding: space(lg);
+  padding: get-space(lg);
   box-shadow: var(--shadow-md);
   transition: all 200ms ease;
   cursor: pointer;

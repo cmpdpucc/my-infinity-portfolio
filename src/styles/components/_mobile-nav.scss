@@ -7,7 +7,7 @@
   @media (max-width: 64em) {
     display: block;
     position: fixed;
-    bottom: space(lg);
+    bottom: get-space(lg);
     left: 1rem;
     right: 1rem;
     margin: 0 auto;

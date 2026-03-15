@@ -5,7 +5,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: space(sm) space(lg);
+  padding: get-space(sm) get-space(lg);
   border-radius: 0.5rem; // 8px
   font-weight: 600;
   transition: all 200ms ease;

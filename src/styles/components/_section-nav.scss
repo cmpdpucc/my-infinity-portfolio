@@ -6,7 +6,7 @@
 // =====================================
 .pf-section-nav {
   display: none;
-  margin-top: space(3xl);
+  margin-top: get-space(3xl);
 
   @media (min-width: 64em) {
     display: block;
@@ -22,7 +22,7 @@
   &__link {
     display: flex;
     align-items: center;
-    padding: space(sm) 0;
+    padding: get-space(sm) 0;
     cursor: pointer;
     background: transparent;
     border: none;
@@ -58,7 +58,7 @@
     height: 1px;
     width: 2rem;
     background-color: var(--color-border);
-    margin-right: space(md);
+    margin-right: get-space(md);
     transition: all 200ms ease;
   }
 

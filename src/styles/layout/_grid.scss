@@ -66,7 +66,7 @@
   @media (max-width: 64em) {
     height: auto;
     min-height: 100dvh;
-    padding: space(3xl) 0; // more vertical breathing room on mobile
+    padding: get-space(3xl) 0; // more vertical breathing room on mobile
   }
 }
 
@@ -80,7 +80,7 @@
   max-width: 1550px; // Cap the readable content width
   margin: 0 auto; // Center it inside the fluid section container
   height: 100%;
-  padding: space(3xl) space(xl); // Removed legacy padding-left calc hack
+  padding: get-space(3xl) get-space(xl); // Removed legacy padding-left calc hack
   display: flex;
   flex-direction: column;
   justify-content: center; // Vertical center based on content
@@ -90,15 +90,15 @@
   &--scrollable {
     justify-content: flex-start;
     overflow-y: auto;
-    padding-top: space(4xl);
-    padding-bottom: space(4xl);
+    padding-top: get-space(4xl);
+    padding-bottom: get-space(4xl);
     scrollbar-width: none;
     &::-webkit-scrollbar { display: none; }
   }
 
   @media (max-width: 64em) { // 1024px
     // Safe areas to clear MobileIdentityBar (top) and MobileNav (bottom)
-    padding: 7rem space(lg) 7rem space(lg); 
+    padding: 7rem get-space(lg) 7rem get-space(lg); 
   }
 }
 
@@ -111,7 +111,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-text);
-  margin-bottom: space(md);
+  margin-bottom: get-space(md);
 
   @media (min-width: 64em) {
     display: none;

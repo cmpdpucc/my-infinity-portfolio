@@ -17,10 +17,10 @@ $ux-shadows: (
   xl: 0 20px 25px rgba(0,0,0,0.15),
 );
 
-@function space($name) {
+@function get-space($name) {
   @return map-get($ux-spacing, $name);
 }
 
-@function shadow($name) {
+@function get-shadow($name) {
   @return map-get($ux-shadows, $name);
 }

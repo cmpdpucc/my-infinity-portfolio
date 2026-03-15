@@ -16,8 +16,8 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   width: 100%;
   background: $terminal-bg;
   border-radius: $terminal-radius;
-  border: 1px solid rgba(color(border), 0.5);
-  box-shadow: shadow(xl), 0 0 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(get-color(border), 0.5);
+  box-shadow: get-shadow(xl), 0 0 40px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   height: 240px; // MOBILE: compact terminal
@@ -31,7 +31,7 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   }
 
   &:hover {
-    box-shadow: shadow(xl), 0 0 60px rgba(color(cta), 0.05);
+    box-shadow: get-shadow(xl), 0 0 60px rgba(get-color(cta), 0.05);
     transform: translateY(-2px);
   }
 
@@ -39,10 +39,10 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   &__header {
     height: 48px;
     background: $terminal-header-bg;
-    border-bottom: 1px solid rgba(color(border), 0.5);
+    border-bottom: 1px solid rgba(get-color(border), 0.5);
     display: flex;
     align-items: center;
-    padding: 0 space(md);
+    padding: 0 get-space(md);
     position: relative;
     flex-shrink: 0;
   }
@@ -51,7 +51,7 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
     display: flex;
     gap: 8px;
     position: absolute;
-    left: space(md);
+    left: get-space(md);
   }
 
   &__dot {
@@ -73,12 +73,12 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: space(sm);
+    gap: get-space(sm);
   }
 
   // ----- BODY -----
   &__body {
-    padding: space(md);
+    padding: get-space(md);
     flex: 1;
     overflow-y: auto;
     font-family: $terminal-font;
@@ -87,7 +87,7 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
     flex-direction: column;
 
     @media (min-width: 64em) {
-      padding: space(lg);
+      padding: get-space(lg);
       font-size: 0.8125rem;
     }
 
@@ -97,7 +97,7 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
     }
     &::-webkit-scrollbar-track {
       background: $terminal-bg;
-      border-left: 1px solid rgba(color(border), 0.3);
+      border-left: 1px solid rgba(get-color(border), 0.3);
     }
     &::-webkit-scrollbar-thumb {
       background-color: rgba(255, 255, 255, 0.15);
@@ -111,7 +111,7 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: space(lg);
+    margin-bottom: get-space(lg);
     height: 32px;
     flex-shrink: 0;
   }
@@ -141,12 +141,12 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   }
 
   &__tech-badge {
-    padding: space(xs) space(sm);
-    background: rgba(color(surface), 0.8);
+    padding: get-space(xs) get-space(sm);
+    background: rgba(get-color(surface), 0.8);
     color: var(--color-primary);
     border-radius: 6px;
     font-size: 0.7rem;
-    border: 1px solid rgba(color(border), 0.5);
+    border: 1px solid rgba(get-color(border), 0.5);
     opacity: 0;
     transition: opacity 500ms ease;
 
@@ -200,9 +200,9 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
 
   // ----- INTERACTIVE CLI -----
   &__cli {
-    margin-top: space(lg);
-    padding-top: space(lg);
-    border-top: 1px solid rgba(color(border), 0.5);
+    margin-top: get-space(lg);
+    padding-top: get-space(lg);
+    border-top: 1px solid rgba(get-color(border), 0.5);
     flex-shrink: 0;
     opacity: 0;
     transform: translateY(16px);
@@ -219,13 +219,13 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   &__cli-idle {
     display: flex;
     flex-direction: column;
-    gap: space(sm);
+    gap: get-space(sm);
   }
 
   &__cli-ready {
     display: flex;
     align-items: center;
-    gap: space(sm);
+    gap: get-space(sm);
     color: var(--color-text-muted);
     font-size: 0.75rem;
   }
@@ -238,25 +238,25 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   &__cli-buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: space(sm);
+    gap: get-space(sm);
   }
 
   &__cmd-btn {
     font-family: $terminal-font;
     font-size: 0.75rem;
-    padding: space(xs) space(sm);
+    padding: get-space(xs) get-space(sm);
     background: $terminal-header-bg;
-    color: rgba(color(primary), 0.8);
-    border: 1px solid rgba(color(border), 0.5);
+    color: rgba(get-color(primary), 0.8);
+    border: 1px solid rgba(get-color(border), 0.5);
     border-radius: 6px;
     cursor: pointer;
     transition: all 200ms ease;
 
     &:hover {
-      background: rgba(color(surface), 0.8);
+      background: rgba(get-color(surface), 0.8);
       color: var(--color-primary);
-      border-color: rgba(color(cta), 0.5);
-      box-shadow: 0 0 8px rgba(color(cta), 0.1);
+      border-color: rgba(get-color(cta), 0.5);
+      box-shadow: 0 0 8px rgba(get-color(cta), 0.1);
     }
 
     &:active {
@@ -269,7 +269,7 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
     font-size: 0.75rem;
     display: flex;
     align-items: center;
-    gap: space(sm);
+    gap: get-space(sm);
 
     &--muted {
       color: var(--color-text-muted);
@@ -279,13 +279,13 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   &__cli-running {
     display: flex;
     flex-direction: column;
-    gap: space(xs);
+    gap: get-space(xs);
   }
 
   &__cli-spinner {
     color: var(--color-text-muted);
-    padding-left: space(md);
-    margin-top: space(sm);
+    padding-left: get-space(md);
+    margin-top: get-space(sm);
     font-size: 0.75rem;
   }
 
@@ -300,17 +300,17 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   &__cli-output {
     color: var(--color-primary);
     background: rgba(0, 10, 20, 0.6);
-    border: 1px solid rgba(color(cta), 0.2);
-    padding: space(sm);
+    border: 1px solid rgba(get-color(cta), 0.2);
+    padding: get-space(sm);
     border-radius: 6px;
-    margin-top: space(sm);
+    margin-top: get-space(sm);
     font-size: 0.75rem;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
   }
 
   &__cli-clear {
     display: block;
-    margin-top: space(md);
+    margin-top: get-space(md);
     font-family: $terminal-font;
     font-size: 0.625rem;
     text-transform: uppercase;
@@ -330,7 +330,7 @@ $terminal-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
   }
 
   &__anchor {
-    height: space(md);
+    height: get-space(md);
     flex-shrink: 0;
   }
 
