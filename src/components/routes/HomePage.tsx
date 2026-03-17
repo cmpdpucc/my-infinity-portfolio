@@ -13,10 +13,10 @@ import {
   Cpu,
   Rocket,
   Mail,
-  ArrowDown,
 } from "lucide-react";
 import FloatingLines from "@/components/FloatingLines";
 import MagicBento from "@/components/MagicBento";
+import { smoothScrollTo, easings } from "@/utils/smoothScroll";
 
 /** Framer-motion stagger container */
 const stagger = {
@@ -112,6 +112,122 @@ const SKILLS = [
  * Section 2: Bento Skill Showcase — scroll-reveal grid cards
  */
 export default function HomePage() {
+  const isAnimating = React.useRef(false);
+
+  React.useEffect(() => {
+    const bentoSection = document.getElementById("magic-bento");
+    
+    const handleWheel = (e: WheelEvent) => {
+      const scrollY = window.scrollY;
+      const bentoOffset = bentoSection?.offsetTop || window.innerHeight;
+
+      // 1. From Hero -> Bento
+      if (!isAnimating.current && scrollY < 10 && e.deltaY > 0) {
+        e.preventDefault();
+        isAnimating.current = true;
+        smoothScrollTo({
+          container: window,
+          targetY: bentoOffset,
+          duration: 1000,
+          easing: easings.easeInOutQuart,
+          onComplete: () => {
+            isAnimating.current = false;
+          }
+        });
+        return;
+      }
+
+      // 2. From Bento -> Hero
+      // Allow a small margin (20px) for the bento top position
+      if (!isAnimating.current && Math.abs(scrollY - bentoOffset) < 20 && e.deltaY < 0) {
+        e.preventDefault();
+        isAnimating.current = true;
+        smoothScrollTo({
+          container: window,
+          targetY: 0,
+          duration: 1000,
+          easing: easings.easeInOutQuart,
+          onComplete: () => {
+            isAnimating.current = false;
+          }
+        });
+        return;
+      }
+
+      // 3. Prevent any native scroll while an animation is in progress
+      if (isAnimating.current) {
+        e.preventDefault();
+      }
+    };
+
+    // Touch support for mobile hijacking
+    let touchStart = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStart = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const touchEnd = e.touches[0].clientY;
+      const deltaY = touchStart - touchEnd;
+      const scrollY = window.scrollY;
+      const bentoOffset = bentoSection?.offsetTop || window.innerHeight;
+
+      if (!isAnimating.current && scrollY < 10 && deltaY > 10) {
+        e.preventDefault();
+        isAnimating.current = true;
+        smoothScrollTo({
+          container: window,
+          targetY: bentoOffset,
+          duration: 800,
+          easing: easings.easeInOutQuart,
+          onComplete: () => {
+            isAnimating.current = false;
+          }
+        });
+      } else if (!isAnimating.current && Math.abs(scrollY - bentoOffset) < 20 && deltaY < -10) {
+        e.preventDefault();
+        isAnimating.current = true;
+        smoothScrollTo({
+          container: window,
+          targetY: 0,
+          duration: 800,
+          easing: easings.easeInOutQuart,
+          onComplete: () => {
+            isAnimating.current = false;
+          }
+        });
+      } else if (isAnimating.current) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("touchstart", handleTouchStart, { passive: false });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, []);
+
+  const scrollToBento = () => {
+    const bentoSection = document.getElementById("magic-bento");
+    if (bentoSection && !isAnimating.current) {
+      isAnimating.current = true;
+      smoothScrollTo({
+        container: window,
+        targetY: bentoSection.offsetTop,
+        duration: 1200,
+        easing: easings.easeInOutQuart,
+        onComplete: () => {
+          isAnimating.current = false;
+        }
+      });
+    }
+  };
+
   return (
     <div className="pf-home">
       {/* ─── HERO ─── */}
@@ -178,30 +294,20 @@ export default function HomePage() {
           </motion.div>
         </motion.div>
 
-        {/* Scroll indicator — scrolls to MagicBento */}
-        <motion.button
+        {/* Scroll indicator — restored clean look */}
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8, duration: 0.8 }}
-          className="pf-home__scroll-indicator"
-          onClick={() => {
-            const bentoSection = document.getElementById("magic-bento");
-            if (bentoSection) {
-              bentoSection.scrollIntoView({ behavior: "smooth" });
-            }
-          }}
-          type="button"
+          className="pf-home__scroll-hint"
+          onClick={scrollToBento}
+          role="button"
+          tabIndex={0}
           aria-label="Scroll to skills section"
         >
-          <motion.span
-            className="pf-home__scroll-icon"
-            animate={{ y: [0, 6, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          >
-            <ArrowDown size={18} />
-          </motion.span>
+          <span className="pf-home__scroll-line" />
           <span className="pf-home__scroll-text">View Skills</span>
-        </motion.button>
+        </motion.div>
       </section>
 
       {/* ─── BENTO SKILL SHOWCASE ─── */}

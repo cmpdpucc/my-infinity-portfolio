@@ -166,8 +166,8 @@
   }
 }
 
-// ── Scroll indicator ──
-.pf-home__scroll-indicator {
+// ── Scroll hint ──
+.pf-home__scroll-hint {
   position: absolute;
   bottom: 2.5rem;
   left: 50%;
@@ -176,27 +176,31 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
+  cursor: pointer;
   background: none;
   border: none;
-  cursor: pointer;
-  padding: 1rem;
-  transition: transform 0.3s ease;
+  padding: 0;
+  transition: opacity 0.3s ease;
 
   &:hover {
-    transform: translateX(-50%) translateY(5px);
     .pf-home__scroll-text {
-      opacity: 1;
-      transform: translateY(0);
+      color: var(--color-text);
     }
   }
 }
 
-.pf-home__scroll-icon {
-  color: var(--color-text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.pf-home__scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, transparent, var(--color-text-muted));
+  animation: pf-scroll-line 2s ease-in-out infinite;
+}
+
+@keyframes pf-scroll-line {
+  0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
+  50%  { opacity: 1; transform: scaleY(1); transform-origin: top; }
+  100% { opacity: 0; transform: scaleY(1); transform-origin: bottom; }
 }
 
 .pf-home__scroll-text {
@@ -207,7 +211,6 @@
   font-weight: 500;
   opacity: 0.8;
   transition: all 0.3s ease;
-  transform: translateY(-2px);
 }
 
 

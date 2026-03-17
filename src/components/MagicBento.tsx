@@ -80,9 +80,11 @@ const ParticleCard: React.FC<{
   enableTilt?: boolean;
   clickEffect?: boolean;
   enableMagnetism?: boolean;
+  isActive?: boolean; // Mobile auto-selection
 }> = ({
   children,
   className = '',
+  isActive = false,
   disableAnimations = false,
   style,
   particleCount = DEFAULT_PARTICLE_COUNT,
@@ -174,6 +176,7 @@ const ParticleCard: React.FC<{
     const element = cardRef.current;
 
     const handleMouseEnter = () => {
+      if (disableAnimations && !isActive) return; // Prevent hover effects on mobile unless active
       isHoveredRef.current = true;
       animateParticles();
 
@@ -308,10 +311,32 @@ const ParticleCard: React.FC<{
     };
   }, [animateParticles, clearAllParticles, disableAnimations, enableTilt, enableMagnetism, clickEffect, glowColor]);
 
+  useEffect(() => {
+    if (isActive && cardRef.current) {
+      // Force active styles on mobile when centered
+      cardRef.current.style.setProperty('--glow-intensity', '1');
+      cardRef.current.style.setProperty('--glow-x', '50%');
+      cardRef.current.style.setProperty('--glow-y', '50%');
+      
+      // Start particles for mobile active state
+      isHoveredRef.current = true;
+      animateParticles();
+    } else if (disableAnimations && !isActive) {
+      // On mobile, if not active, definitely clear everything
+      cardRef.current?.style.setProperty('--glow-intensity', '0');
+      isHoveredRef.current = false;
+      clearAllParticles();
+    } else if (!isHoveredRef.current) {
+      // On desktop, regular hover handling
+      cardRef.current?.style.setProperty('--glow-intensity', '0');
+      clearAllParticles();
+    }
+  }, [isActive, animateParticles, clearAllParticles, disableAnimations]);
+
   return (
     <div
       ref={cardRef}
-      className={`${className} pf-magic-bento__card-container`}
+      className={`${className} pf-magic-bento__card-container ${isActive ? 'is-active' : ''}`}
       style={{ ...style, position: 'relative', overflow: 'visible' }}
     >
       {children}
@@ -489,16 +514,52 @@ const MagicBento: React.FC<BentoProps> = ({
   enableMagnetism = true
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
+
+  // Mobile: Track central item on scroll
+  useEffect(() => {
+    if (!isMobile || !gridRef.current) return;
+
+    const handleScroll = () => {
+      const cards = gridRef.current?.querySelectorAll('.pf-magic-bento__card-container');
+      if (!cards) return;
+
+      const viewportCenter = window.innerHeight / 2;
+      let minDistance = Infinity;
+      let closestIndex = -1;
+
+      cards.forEach((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(viewportCenter - cardCenter);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      if (closestIndex !== activeIndex) {
+        setActiveIndex(closestIndex);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Run once on mount to set initial active item
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isMobile, activeIndex]);
 
   return (
     <>
       {enableSpotlight && (
         <GlobalSpotlight
           gridRef={gridRef}
-          disableAnimations={shouldDisableAnimations}
-          enabled={enableSpotlight}
+          disableAnimations={disableAnimations} // Only disable if explicitly asked
+          enabled={!isMobile && enableSpotlight} // Disable global mouse spotlight on mobile
           spotlightRadius={spotlightRadius}
           glowColor={glowColor}
         />
@@ -523,12 +584,13 @@ const MagicBento: React.FC<BentoProps> = ({
               key={index}
               className={baseClassName}
               style={cardStyles}
-              disableAnimations={shouldDisableAnimations}
+              isActive={isMobile && index === activeIndex}
+              disableAnimations={disableAnimations} // Don't disable completely, just handle in ParticleCard
               particleCount={particleCount}
               glowColor={glowColor}
-              enableTilt={enableTilt}
+              enableTilt={!isMobile && enableTilt}
               clickEffect={clickEffect}
-              enableMagnetism={enableMagnetism}
+              enableMagnetism={!isMobile && enableMagnetism}
             >
               <div className="pf-magic-bento__card-header">
                 {Icon && (

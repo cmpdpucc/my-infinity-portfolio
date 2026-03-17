@@ -238,7 +238,7 @@
 ### 4.6. NavCard Integration & IdentityBar Polish
 - [x] **Task 4.6.1: IdentityBar Content & Layout Left-Align**
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`, `frontend-design`
-  - DoD: Sostituire "DanyP" con "Daniele Puccio" in `NavigationBar.tsx`/`IdentityBar.tsx`. 
+  - DoD: Sostituire "DanyP" con "Daniele Puccio" in `NavigationBar.tsx`/`IdentityBar.tsx`.
   - DoD: In `_navigation.scss` impostare il container con `justify-content: space-between` e rimuovere fix centrati che sposterebbero l'IdentityBar su mobile.
 - [x] **Task 4.6.2: DecryptedText Re-animation on Close**
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`
@@ -385,13 +385,16 @@
   - DoD: Children animati: content slides up + de-blur. ✅
 
 ### 6.4. Scroll Restoration
-- [x] Implementare scroll restoration su route change. ✅
+- [x] Implement scroll restoration su route change. ✅
   - **Agente:** `@frontend-specialist` | Skills: `react-patterns`
   - DoD: Usare `<ScrollRestoration />` di react-router-dom OPPURE `useEffect` con `window.scrollTo(0, 0)` su pathname change. ✅
   - DoD: Ogni pagina inizia dal top. ✅
   - DoD: Browser back/forward gestisce lo scroll correttamente. ✅ (Fix implemented with ScrollToTop component due to BrowserRouter constraints)
 
 - [x] Fix ClickSpark alignment and squeezing issues. ✅ (Refactored for global viewport sizing and DPR scaling)
+- [x] Restore vertical scroll hint and implement snap-to-bento glide. ✅ (Added intelligent scroll listener and restored SCSS animation)
+
+---
 
 ## Phase 7 — SCSS Integration & Cleanup
 > **🎯 Supervisore:** `@frontend-specialist` (skills: `frontend-design`, `clean-code`)
